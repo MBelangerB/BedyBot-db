@@ -1,7 +1,7 @@
 'use strict';
 
 const { Model } = require('sequelize');
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 
 
 module.exports = (sequelize, DataTypes) => {
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(36),
             allowNull: false,
             unique: true,
-            default: uuid(),
+            default: uuidv4(),
         },
         clientSecret: {
             type: DataTypes.STRING,
