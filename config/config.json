@@ -1,0 +1,15 @@
+{
+  "development": {
+    "host": "localhost",
+		"dialect": "sqlite",
+    "database": "database_development",
+    "storage": "E:\\database\\dev_mkbot_test.db",
+    "logging": false
+  },
+  "production": {
+    "host": "localhost",
+		"dialect": "sqlite",
+    "database": "database_prod",
+    "storage": "E:\\database\\dev_mkbot_prod.db"
+  }
+}

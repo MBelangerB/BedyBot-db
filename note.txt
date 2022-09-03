@@ -1,0 +1,30 @@
+   
+   Pour créer une nouvelle migration
+   
+        "npx sequelize-cli migration:generate --name="
+   
+
+   Une fois la migration et le modèle de créer. 2 instructions sont possibible
+        "migrate:up": "npx sequelize-cli db:migrate",
+        "migrate:undo": "npx sequelize-cli db:migrate:undo",
+
+
+--------
+https://stackoverflow.com/questions/55560791/build-and-use-npm-package-locally
+
+
+If you have made these changes on your machine. (I'm assuming you have)
+
+     1. Run a build of the DB package
+     2. Run `npm pack` from the package's root folder.  This creates a .tgz zip file of your package with your custom modifications.
+     3. Copy that file into the root (you could put it wherever but root makes things easy) of your project.
+     4. In your `package.json` add the package `"bedybot-db": "file:bedybot-db-1.0.0.tgz"`, or replace the version number to the following 
+               `"file:my-packed-file.tgz"`
+
+     5. Run an npm install using your new package.json
+
+you should have your modified copy loaded in as a dependency in node_modules.
+
+
+
+npm pack --pack-destination=".\dist"
