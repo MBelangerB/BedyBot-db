@@ -61,5 +61,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'API_Tokens',
     });
 
-    return API_Token;
+    return API_Tokens;
 };
