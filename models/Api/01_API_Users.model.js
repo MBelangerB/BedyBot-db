@@ -1,6 +1,9 @@
 'use strict';
 const { Model } = require('sequelize');
-var CryptoJS = require("crypto-js");
+// var CryptoJS = require("crypto-js");
+
+
+// const { v4: uuidv4 } = require('uuid');
 // const sha512 = require('crypto-js/sha512');
 // const pbkdf2 = require('crypto-js/pbkdf2');
 //https://www.npmjs.com/package/crypto-js
@@ -15,42 +18,63 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            models.API_Users.hasOne(models.API_Tokens, {
+                foreignKey: 'userId',
+                onDelete: 'CASCADE',
+            });
         }
 
-        validatePassword(password) {
-            var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
-            if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        // validatePassword(password) {
+        //     var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
+        //     if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // }
     }
 
     APIUsers.init({
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             primaryKey: true,
-            autoIncrement: true,
-            field: 'id',
+            // autoIncrement: true,
         },
-        username: {
+        source: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        // userId: {
+        //     type: DataTypes.STRING,
+        //     field: 'userId',
+        //     allowNull: false,
+        //     unique: true,
+        // },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: false
+          },
+          username: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+          },
+          discriminator: {
+            type: DataTypes.STRING(4),
+            allowNull: false
+          },
+        // password: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        // },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        salt: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
+        // salt: {
+        //     type: DataTypes.STRING,
+        //     allowNull: true,
+        // },
         joinedAt: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -60,19 +84,19 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'API_Users',
         tableName: 'API_Users',
-        hooks: {
-            beforeValidate: (user, options) => {
-                console.log('before validate')
-            },
-            beforeCreate: (user, options) => {
-                console.log('before Create')
-                user.salt = CryptoJS.lib.WordArray.random(128 / 8).toString();
-                user.password = CryptoJS.TripleDES.encrypt(user.password, user.salt);
-            },
-            // https://javascript.hotexamples.com/fr/examples/crypto-js/-/PBKDF2/javascript-pbkdf2-function-examples.html
-            // https://cryptojs.gitbook.io/docs/
-            // https://www.npmjs.com/package/crypto-js
-        }
+        // hooks: {
+        //     beforeValidate: (user, options) => {
+        //         console.log('before validate')
+        //     },
+        //     beforeCreate: (user, options) => {
+        //         console.log('before Create')
+        //         user.salt = CryptoJS.lib.WordArray.random(128 / 8).toString();
+        //         user.password = CryptoJS.TripleDES.encrypt(user.password, user.salt);
+        //     },
+        //     // https://javascript.hotexamples.com/fr/examples/crypto-js/-/PBKDF2/javascript-pbkdf2-function-examples.html
+        //     // https://cryptojs.gitbook.io/docs/
+        //     // https://www.npmjs.com/package/crypto-js
+        // }
     });
 
     return APIUsers;

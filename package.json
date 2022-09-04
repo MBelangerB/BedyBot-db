@@ -1,0 +1,31 @@
+{
+  "name": "bedybot-db",
+  "version": "1.0.0",
+  "description": "Database model and migration or BedyBot tools",
+  "main": "dbSchema.js",
+  "scripts": { "eslint": "eslint .",
+  "eslintFix": "eslint . --fix",
+  "cleanState": "npm ci",
+  "migrate:up": "npx sequelize-cli db:migrate",
+  "migrate:undo": "npx sequelize-cli db:migrate:undo",
+  "migrate:create": "npx sequelize-cli migration:generate --name=",
+  "package:pack": "npm pack --pack-destination ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MBelangerB/BedyBot-db.git"
+  },
+  "author": "Elmat90",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MBelangerB/BedyBot-db/issues"
+  },
+  "homepage": "https://github.com/MBelangerB/BedyBot-db#readme",
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "eslint": "^8.13.0",
+    "sequelize": "^6.21.4",
+    "sqlite3": "^5.0.11",
+    "uuid": "^8.3.2"
+  }
+}
