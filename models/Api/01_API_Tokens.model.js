@@ -24,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
           },
           userId: {
             type: DataTypes.STRING,
-            field: 'userId',
             allowNull: false,
           },
           source: {
