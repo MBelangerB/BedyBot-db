@@ -52,17 +52,17 @@ module.exports = (sequelize, DataTypes) => {
         // },
         avatar: {
             type: DataTypes.STRING,
-            allowNull: false
-          },
-          username: {
+            allowNull: true
+        },
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-          },
-          discriminator: {
+        },
+        discriminator: {
             type: DataTypes.STRING(4),
             allowNull: false
-          },
+        },
         // password: {
         //     type: DataTypes.STRING,
         //     allowNull: false,

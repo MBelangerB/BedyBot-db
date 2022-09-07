@@ -33,7 +33,7 @@ module.exports = {
       avatar: {
         type: DataTypes.STRING,
         field: 'avatar',
-        allowNull: false
+        allowNull: true
       },
       username: {
         type: DataTypes.STRING,
