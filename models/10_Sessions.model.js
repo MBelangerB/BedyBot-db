@@ -70,9 +70,9 @@ module.exports = (sequelize, DataTypes) => {
             field: 'tournamentId',
           },
     }, {
-        sequelize, 
+        sequelize,
         modelName: 'Sessions',
-        tableName: 'MK_Sessions'
+        tableName: 'MK_Sessions',
     });
     return Sessions;
 };

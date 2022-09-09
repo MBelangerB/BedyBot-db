@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  /* eslint-disable-next-line no-unused-vars */
   async up (queryInterface, Sequelize) {
     /**
      * Add altering commands here.
@@ -18,6 +19,7 @@ module.exports = {
      queryInterface.renameTable('UserSessions', 'MK_UserSessions');
   },
 
+  /* eslint-disable-next-line no-unused-vars */
   async down (queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
@@ -33,5 +35,5 @@ module.exports = {
      queryInterface.renameTable('MK_Tournaments', 'Tournaments');
      queryInterface.renameTable('MK_Sessions', 'Sessions');
      queryInterface.renameTable('MK_UserSessions', 'UserSessions');
-  }
+  },
 };

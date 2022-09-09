@@ -60,9 +60,9 @@ module.exports = (sequelize, DataTypes) => {
             field: 'ownerId',
           },
     }, {
-        sequelize, 
+        sequelize,
         modelName: 'Tournaments',
-        tableName: 'MK_Tournaments'
+        tableName: 'MK_Tournaments',
     });
     return Tournaments;
 };

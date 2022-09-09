@@ -59,8 +59,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
     }, {
-        sequelize, 
-        modelName: 'UserSessions',       
+        sequelize,
+        modelName: 'UserSessions',
         tableName: 'MK_UserSessions',
         indexes: [
             {

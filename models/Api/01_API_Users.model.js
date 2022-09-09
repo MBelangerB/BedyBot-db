@@ -6,7 +6,7 @@ const { Model } = require('sequelize');
 // const { v4: uuidv4 } = require('uuid');
 // const sha512 = require('crypto-js/sha512');
 // const pbkdf2 = require('crypto-js/pbkdf2');
-//https://www.npmjs.com/package/crypto-js
+// https://www.npmjs.com/package/crypto-js
 // const UserSecret = 'Uas!sdsa4fa';
 
 module.exports = (sequelize, DataTypes) => {
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         // },
         avatar: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: true,
         },
         username: {
             type: DataTypes.STRING,
@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         discriminator: {
             type: DataTypes.STRING(4),
-            allowNull: false
+            allowNull: false,
         },
         // password: {
         //     type: DataTypes.STRING,

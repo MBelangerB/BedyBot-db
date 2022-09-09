@@ -33,7 +33,7 @@ module.exports = {
       avatar: {
         type: DataTypes.STRING,
         field: 'avatar',
-        allowNull: true
+        allowNull: true,
       },
       username: {
         type: DataTypes.STRING,
@@ -44,7 +44,7 @@ module.exports = {
       discriminator: {
         type: DataTypes.STRING(4),
         field: 'discriminator',
-        allowNull: false
+        allowNull: false,
       },
       // password: {
       //   type: DataTypes.STRING,
@@ -69,27 +69,6 @@ module.exports = {
       },
     });
 
-    // await queryInterface.createTable('API_Clients', {
-    //   id: {
-    //     type: DataTypes.INTEGER,
-    //     field: 'id',
-    //     primaryKey: true,
-    //     autoIncrement: true,
-    //     allowNull: false,
-    //   },
-    //   clientId: {
-    //     type: DataTypes.STRING(36),
-    //     field: 'clientId',
-    //     allowNull: false,
-    //     unique: true,
-    //   },
-    //   joinedAt: {
-    //     type: DataTypes.DATE,
-    //     field: 'joinedAt',
-    //     allowNull: false,
-    //     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-    //   },
-    // });
 
     await queryInterface.createTable('API_Tokens', {
       id: {
@@ -144,22 +123,16 @@ module.exports = {
     });
   },
 
-  // "access_token": "6qrZcUqja7812RVdnEKjpzOL4CvHBFG",
-  // "token_type": "Bearer",
-  // "expires_in": 604800,
-  // "refresh_token": "D43f5y0ahjqew82jZ4NViEr2YafMKhue",
-  // "scope": "identify"
-
-  async down(queryInterface, Sequelize) {
+  /* eslint-disable-next-line no-unused-vars */
+  async down(queryInterface, dataType) {
     /**
      * Add reverting commands here.
      *
      * Example:
      * await queryInterface.dropTable('users');
      */
-
     await queryInterface.dropTable('API_Tokens');
     await queryInterface.dropTable('API_Users');
     // await queryInterface.dropTable('API_Clients');
-  }
+  },
 };

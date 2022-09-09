@@ -40,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: false,
         },
     }, {
-        sequelize, 
+        sequelize,
         modelName: 'GuildOptions',
-        tableName: 'MK_GuildOptions'
+        tableName: 'MK_GuildOptions',
     });
     return GuildOptions;
 };
