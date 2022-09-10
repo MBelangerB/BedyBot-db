@@ -22,8 +22,15 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId',
                 onDelete: 'CASCADE',
             });
-        }
 
+            models.API_Users.belongsToMany(models.API_Guilds, {
+                through: {
+                    model: models.API_GuildUserPermissions,
+                    unique: false,
+                },
+                foreignKey: 'guildId',
+            });
+        }
         // validatePassword(password) {
         //     var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
         //     if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {

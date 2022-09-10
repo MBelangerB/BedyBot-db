@@ -104,28 +104,6 @@ module.exports = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
-
-    await queryInterface.addConstraint('UserSessions', {
-      fields: ['sessionId'],
-      type: 'foreign key',
-      name: 'UserSessions_sessionId_fkey',
-      references: {
-        table: 'Sessions',
-        field: 'id',
-      },
-    });
-
-    await queryInterface.addConstraint('UserSessions', {
-      fields: ['userId'],
-      type: 'foreign key',
-      name: 'UserSessions_userId_fkey',
-      references: {
-        table: 'Users',
-        field: 'id',
-      },
-    });
-
-
   },
 
   async down(queryInterface) {
@@ -144,7 +122,7 @@ module.exports = {
     await queryInterface.removeConstraint('Sessions', 'Sessions_tournamentId_fkey');
     await queryInterface.removeConstraint('UserSessions', 'UserSessions_sessionId_fkey');
     await queryInterface.removeConstraint('UserSessions', 'UserSessions_userId_fkey');
-    await queryInterface.removeConstraint('UserSessions', 'UserSessions_sessionsId_fkey');
-    await queryInterface.removeConstraint('UserSessions', 'UserSessions_usersId_fkey');
+    // await queryInterface.removeConstraint('UserSessions', 'UserSessions_sessionsId_fkey');
+    // await queryInterface.removeConstraint('UserSessions', 'UserSessions_usersId_fkey');
   },
 };
