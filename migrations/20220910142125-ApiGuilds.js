@@ -33,23 +33,33 @@ module.exports = {
       userId: {
         type: DataTypes.STRING,
         field: 'userId',
+        allowNull: false,
       },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
+        allowNull: false,
       },
-
       permissions: {
         type: DataTypes.STRING,
         field: 'permissions',
+        allowNull: false,
       },
       permissions_new: {
         type: DataTypes.STRING,
         field: 'permissions_new',
+        allowNull: true,
       },
       owner: {
         type: DataTypes.INTEGER,
         field: 'owner',
+        allowNull: false,
+      },
+      ts: {
+        type: DataTypes.DATE,
+        field: 'ts',
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
 

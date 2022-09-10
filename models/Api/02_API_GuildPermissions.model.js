@@ -37,6 +37,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             field: 'owner',
         },
+        ts: {
+            type: DataTypes.DATE,
+            field: 'ts',
+            allowNull: false,
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        },
     }, {
         sequelize,
         modelName: 'API_GuildUserPermissions',
