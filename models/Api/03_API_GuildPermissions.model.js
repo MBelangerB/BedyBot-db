@@ -3,7 +3,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class API_GuildPermissions extends Model {
+    class API_GuildUserPermissions extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -21,18 +21,18 @@ module.exports = (sequelize, DataTypes) => {
             //     onDelete: 'CASCADE',
             // });
 
-            models.API_GuildPermissions.belongsTo(models.API_Guilds, {
+            models.API_GuildUserPermissions.belongsTo(models.API_Guilds, {
                 foreignKey: 'guildId',
                 as: 'guild',
               });
-              models.API_GuildPermissions.belongsTo(models.API_Users, {
+              models.API_GuildUserPermissions.belongsTo(models.API_Users, {
                 foreignKey: 'userId',
                 as: 'user',
               });
         }
     }
 
-    API_GuildPermissions.init({
+    API_GuildUserPermissions.init({
         userId: {
             type: DataTypes.STRING,
             field: 'userId',
@@ -66,5 +66,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'API_GuildUserPermissions',
     });
 
-    return API_GuildPermissions;
+    return API_GuildUserPermissions;
 };
