@@ -4,56 +4,17 @@
 const Sequelize = require('sequelize');
 
 module.exports = {
-  up: async (queryInterface, DateTypes) => {
+  up: async (queryInterface, DataTypes) => {
     /**
      * Add altering commands here.
      *
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.addColumn('API_Guilds', 'ownerId', // new field name
-      {
-        type: DateTypes.STRING,
-        allowNull: true,
-      },
-    );
-    await queryInterface.addColumn('API_Guilds', 'region', // new field name
-      {
-        type: DateTypes.STRING,
-        allowNull: true,
-      },
-    );
-    await queryInterface.addColumn('API_Guilds', 'preferred_locale', // new field name
-      {
-        type: DateTypes.STRING,
-        allowNull: true,
-      },
-    );
-
-    await queryInterface.addColumn('API_Tokens', 'scope',
-      {
-        type: DateTypes.STRING,
-        allowNull: false,
-      },
-    );
-    await queryInterface.addColumn('API_Tokens', 'expireAt',
-      {
-        type: DateTypes.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
-    );
-    await queryInterface.addColumn('API_Tokens', 'guildId',
-      {
-        type: DateTypes.STRING,
-        allowNull: true,
-      },
-    );
-
-
     await queryInterface.createTable('API_GuildRoles', {
       id: {
         type: DataTypes.STRING,
+        primaryKey: true,
         field: 'id',
         allowNull: false,
       },
@@ -106,7 +67,7 @@ module.exports = {
   },
 
   /* eslint-disable-next-line no-unused-vars */
-  down: async (queryInterface, DateTypes) => {
+  down: async (queryInterface, DataTypes) => {
     /**
      * Add reverting commands here.
      *
@@ -116,12 +77,12 @@ module.exports = {
      await queryInterface.removeConstraint('API_GuildRoles', 'GuildRoles_guildId_fkey');
      await queryInterface.dropTable('API_GuildRoles');
 
-    await queryInterface.removeColumn('API_Tokens', 'scope');
-    await queryInterface.removeColumn('API_Tokens', 'expireAt');
-    await queryInterface.removeColumn('API_Tokens', 'guildId');
+    // await queryInterface.removeColumn('API_Tokens', 'scope');
+    // await queryInterface.removeColumn('API_Tokens', 'expireAt');
+    // await queryInterface.removeColumn('API_Tokens', 'guildId');
 
-    await queryInterface.removeColumn('API_Guilds', 'ownerId');
-    await queryInterface.removeColumn('API_Guilds', 'region');
-    await queryInterface.removeColumn('API_Guilds', 'preferred_locale');
+    // await queryInterface.removeColumn('API_Guilds', 'ownerId');
+    // await queryInterface.removeColumn('API_Guilds', 'region');
+    // await queryInterface.removeColumn('API_Guilds', 'preferred_locale');
   }
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-// const Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, DataTypes) => {
@@ -25,6 +25,21 @@ module.exports = {
       icon: {
         type: DataTypes.STRING,
         field: 'icon',
+        allowNull: true,
+      },
+      ownerId: {
+        type: DataTypes.STRING,
+        field: 'ownerId',
+        allowNull: true,
+      },
+      region: {
+        type: DataTypes.STRING,
+        field: 'region',
+        allowNull: true,
+      },
+      preferred_locale: {
+        type: DataTypes.STRING,
+        field: 'preferred_locale',
         allowNull: true,
       },
     });
@@ -62,6 +77,9 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
+
+    await queryInterface.addIndex('API_GuildUserPermissions', ['guildId', 'userId']);
+
 
     await queryInterface.addConstraint('API_GuildUserPermissions', {
       fields: ['userId'],

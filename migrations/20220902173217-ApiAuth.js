@@ -24,12 +24,6 @@ module.exports = {
         field: 'source',
         allowNull: false,
       },
-      // userId: {
-      //   type: DataTypes.STRING,
-      //   field: 'userId',
-      //   allowNull: false,
-      //   unique: true,
-      // },
       avatar: {
         type: DataTypes.STRING,
         field: 'avatar',
@@ -46,21 +40,11 @@ module.exports = {
         field: 'discriminator',
         allowNull: false,
       },
-      // password: {
-      //   type: DataTypes.STRING,
-      //   field: 'password',
-      //   allowNull: false,
-      // },
       email: {
         type: DataTypes.STRING,
         field: 'email',
         allowNull: false,
       },
-      // salt: {
-      //   type: DataTypes.STRING,
-      //   field: 'salt',
-      //   allowNull: true,
-      // },
       joinedAt: {
         type: DataTypes.DATE,
         field: 'joinedAt',
@@ -83,6 +67,11 @@ module.exports = {
         field: 'userId',
         allowNull: false,
       },
+      guildId: {
+        type: DataTypes.STRING,
+        field: 'guildId',
+        allowNull: true,
+      },
       // 1 => Discord - 2 => Twitch
       source: {
         type: DataTypes.INTEGER,
@@ -99,21 +88,22 @@ module.exports = {
         field: 'refreshToken',
         allowNull: false,
       },
-      // scope: {
-      //   type: DataTypes.STRING,
-      //   field: 'scope',
-      //   allowNull: false,
-      // },
+      scope: {
+        type: DataTypes.STRING,
+        field: 'scope',
+        allowNull: false,
+      },
       tokenType: {
         type: DataTypes.STRING,
         field: 'tokenType',
         allowNull: false,
+        defaultValue: 'Bearer'
       },
-      // expireAt: {
-      //   type: DataTypes.DATE,
-      //   field: 'expireAt',
-      //   allowNull: false,
-      // },
+      expireAt: {
+        type: DataTypes.DATE,
+        field: 'expireAt',
+        allowNull: false,
+      },
       joinedAt: {
         type: DataTypes.DATE,
         field: 'joinedAt',
