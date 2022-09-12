@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId',
             });
 
+            models.API_Guilds.hasOne(models.API_GuildRoles, {
+                foreignKey: 'guildId',
+                onDelete: 'CASCADE',
+            });
         }
     }
 
@@ -39,6 +43,21 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             field: 'icon',
             allowNull: true,
+        },
+        ownerId: {
+            type: DataTypes.STRING,
+            field: 'ownerId',
+            allowNull: false,
+        },
+        region: {
+            type: DataTypes.STRING,
+            field: 'region',
+            allowNull: false,
+        },
+        preferred_locale: {
+            type: DataTypes.STRING,
+            field: 'preferred_locale',
+            allowNull: false,
         },
     }, {
         sequelize,

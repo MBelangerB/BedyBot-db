@@ -3,7 +3,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class API_Tokens extends Model {
+    class API_GuildRoles extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -15,55 +15,48 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    API_Tokens.init({
+    API_GuildRoles.init({
         id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-          },
-          userId: {
             type: DataTypes.STRING,
-            allowNull: false,
-          },
-          source: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-          },
-          accessToken: {
-            type: DataTypes.STRING,
-            allowNull: false,
-          },
-          refreshToken: {
-            type: DataTypes.STRING,
-            allowNull: false,
-          },
-          scope: {
-            type: DataTypes.STRING,
-            allowNull: false,
-          },
-          tokenType: {
-            type: DataTypes.STRING,
-            allowNull: false,
-          },
-          expireAt: {
-            type: DataTypes.DATE,
+            field: 'id',
             allowNull: false,
           },
           guildId: {
             type: DataTypes.STRING,
-            allowNull: true,
-        },
-        joinedAt: {
+            field: 'guildId',
+            allowNull: false,
+          },
+          name: {
+            type: DataTypes.STRING,
+            field: 'name',
+            allowNull: false,
+          },
+          permissions: {
+            type: DataTypes.STRING,
+            field: 'permissions',
+            allowNull: false,
+          },
+          position: {
+            type: DataTypes.INTEGER,
+            field: 'position',
+            allowNull: false,
+          },
+          color: {
+            type: DataTypes.STRING,
+            field: 'color',
+            allowNull: false,
+          },
+          ts: {
             type: DataTypes.DATE,
+            field: 'ts',
             allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-        },
+          },
     }, {
         sequelize,
-        modelName: 'API_Tokens',
-        tableName: 'API_Tokens',
+        modelName: 'API_GuildRoles',
+        tableName: 'API_GuildRoles',
     });
 
-    return API_Tokens;
+    return API_GuildRoles;
 };
