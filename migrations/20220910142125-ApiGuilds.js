@@ -80,7 +80,6 @@ module.exports = {
 
     await queryInterface.addIndex('API_GuildUserPermissions', ['guildId', 'userId']);
 
-
     await queryInterface.addConstraint('API_GuildUserPermissions', {
       fields: ['userId'],
       type: 'foreign key',
@@ -104,6 +103,33 @@ module.exports = {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
+
+
+
+    await queryInterface.addConstraint('API_Tokens', {
+      fields: ['guildId'],
+      type: 'foreign key',
+      name: 'Tokens_guildId_fkey',
+      references: {
+        table: 'API_Guilds',
+        field: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    });
+    await queryInterface.addConstraint('API_Tokens', {
+      fields: ['userId'],
+      type: 'foreign key',
+      name: 'Tokens_userId_fkey',
+      references: {
+        table: 'API_Users',
+        field: 'id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    });
+
+
   },
 
   /* eslint-disable-next-line no-unused-vars */
@@ -114,8 +140,11 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+     await queryInterface.removeConstraint('API_GuildUserPermissions', 'Tokens_guildId_fkey');
+     await queryInterface.removeConstraint('API_GuildUserPermissions', 'Tokens_userId_fkey');
      await queryInterface.removeConstraint('API_GuildUserPermissions', 'GuildUserPermissions_userId_fkey');
      await queryInterface.removeConstraint('API_GuildUserPermissions', 'GuildUserPermissions_guildId_fkey');
+     await queryInterface.removeIndex('API_GuildUserPermissions', ['guildId', 'userId']);
      await queryInterface.dropTable('API_Guilds');
      await queryInterface.dropTable('API_GuildUserPermissions');
   },
