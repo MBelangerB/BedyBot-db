@@ -47,17 +47,17 @@ module.exports = (sequelize, DataTypes) => {
         ownerId: {
             type: DataTypes.STRING,
             field: 'ownerId',
-            allowNull: false,
+            allowNull: true,
         },
         region: {
             type: DataTypes.STRING,
             field: 'region',
-            allowNull: false,
+            allowNull: true,
         },
         preferred_locale: {
             type: DataTypes.STRING,
             field: 'preferred_locale',
-            allowNull: false,
+            allowNull: true,
         },
     }, {
         sequelize,

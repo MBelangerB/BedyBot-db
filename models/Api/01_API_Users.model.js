@@ -45,18 +45,11 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: DataTypes.STRING,
             primaryKey: true,
-            // autoIncrement: true,
         },
         source: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        // userId: {
-        //     type: DataTypes.STRING,
-        //     field: 'userId',
-        //     allowNull: false,
-        //     unique: true,
-        // },
         avatar: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -70,18 +63,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(4),
             allowNull: false,
         },
-        // password: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        // },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        // salt: {
-        //     type: DataTypes.STRING,
-        //     allowNull: true,
-        // },
         joinedAt: {
             type: DataTypes.DATE,
             allowNull: false,

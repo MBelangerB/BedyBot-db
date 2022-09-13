@@ -12,23 +12,14 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            // models.API_GuildPermissions.hasOne(models.API_Guild, {
-            //     foreignKey: 'guildId',
-            //     onDelete: 'CASCADE',
-            // });
-            // models.API_GuildPermissions.hasOne(models.API_Users, {
-            //     foreignKey: 'userId',
-            //     onDelete: 'CASCADE',
-            // });
-
             models.API_GuildUserPermissions.belongsTo(models.API_Guilds, {
                 foreignKey: 'guildId',
                 as: 'guild',
-              });
-              models.API_GuildUserPermissions.belongsTo(models.API_Users, {
+            });
+            models.API_GuildUserPermissions.belongsTo(models.API_Users, {
                 foreignKey: 'userId',
                 as: 'user',
-              });
+            });
         }
     }
 
