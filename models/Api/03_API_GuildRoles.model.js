@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     API_GuildRoles.init({
         id: {
             type: DataTypes.STRING,
+            primaryKey: true,
             field: 'id',
             allowNull: false,
           },
