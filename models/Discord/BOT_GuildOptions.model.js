@@ -28,9 +28,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
-        static async initOptionForGuildId(guildId) {
+        static async initOptionForGuildId(id) {
             return await this.create({
-                guildId: guildId,
+                guildId: id,
+                maxPlayerPerLobby: 12
             });
         }
     }
