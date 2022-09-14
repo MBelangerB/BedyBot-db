@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
-                foreignKey: 'guildId',
-                as: 'guild',
-            });
+            // models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
+            //     foreignKey: 'guildId',
+            //     as: 'guild',
+            // });
         }
 
         static async initOptionForGuildId(id) {
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         guildId: {
             type: DataTypes.STRING,
             allowNull: false,
-            field: 'guildId',
+            // field: 'guildId',
         },
         announcementChannelId: {
             type: DataTypes.STRING,
