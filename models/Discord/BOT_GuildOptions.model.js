@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
+            models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId',
+                onDelete: 'CASCADE',
+            });
         }
 
         static async initOptionForGuildId(guildId) {
