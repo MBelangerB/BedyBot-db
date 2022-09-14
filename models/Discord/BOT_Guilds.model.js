@@ -24,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getGuildById(id, withInclude = true) {
             if (withInclude) {
-                return await this.Guilds.findOne({ where: { id: id }, include: [BOT_GuildOptions] });
+                return await this.findOne({ where: { id: id }, include: [BOT_GuildOptions] });
             } else {
-                return await this.Guilds.findOne({ where: { id: id } });
+                return await this.findOne({ where: { id: id } });
             }
         }
 
@@ -38,15 +38,24 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getGuildByGuildId(guildId, withInclude = true) {
             if (withInclude) {
-                return await this.Guilds.findOne({ where: { guildId: guildId }, include: [BOT_GuildOptions] });
+                return await this.findOne({ where: { guildId: guildId }, include: [BOT_GuildOptions] });
             } else {
-                return await this.Guilds.findOne({ where: { guildId: guildId } });
+                return await this.findOne({ where: { guildId: guildId } });
             }
         }
 
         /**
+         * Return the guild option by a guildId
+         * @param {integer} guildId 
+         * @returns {BOT_GuildOptions}
+         */
+        static async getGuildOptionByGuildId(guildId) {
+            return await this.getGuildByGuildId(guildId)?.BOT_GuildOptions;
+        }
+
+        /**
          * Update the guild statut and date param
-         * @param {string} guildId 
+         * @param {boolean} isActive new guild Statut 
          * @returns {BOT_Guilds}
          */
         async updateGuildStatut(isActive) {
@@ -67,6 +76,14 @@ module.exports = (sequelize, DataTypes) => {
                 });
                 return await this.save();
             }
+        }
+
+        async updateGuildName(newName) {
+            // On update pour raison X
+            this.set({
+                guildName: newName,
+            });
+            await this.save();
         }
     }
 
