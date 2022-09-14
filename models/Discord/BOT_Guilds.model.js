@@ -1,6 +1,11 @@
 'use strict';
 const { Model } = require('sequelize');
 
+/*
+        Ship.belongsTo(Captain, { targetKey: 'name', foreignKey: 'captainName' });
+        // This creates a foreign key called `captainName` in the source model (Ship)
+        // which references the `name` field from the target model (Captain).
+*/
 module.exports = (sequelize, DataTypes) => {
     class BOT_Guilds extends Model {
         /**
@@ -12,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             models.BOT_Guilds.hasOne(models.BOT_GuildOptions, {
                 foreignKey: 'guildId',  // Set FK name
-                targetKey: 'guildId',
+                sourceKey: 'guildId',   // Source Key In BOT_Guilds
                 onDelete: 'CASCADE',
             });
         }
