@@ -57,19 +57,19 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'voiceChannelId',
         allowNull: true,
-        references: {
-          model: 'BOT_Channels',
-          key: 'id',
-        },
+        // references: {
+        //   model: 'BOT_Channels',
+        //   key: 'id',
+        // },
       },
       textChannelId: {
         type: DataTypes.INTEGER,
         field: 'textChannelId',
         allowNull: true,
-        references: {
-          model: 'BOT_Channels',
-          key: 'id',
-        },
+        // references: {
+        //   model: 'BOT_Channels',
+        //   key: 'id',
+        // },
       },
       ts: {
         type: DataTypes.DATE,
