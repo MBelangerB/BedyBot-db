@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     tokenType: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'Bearer'
+      defaultValue: 'Bearer',
     },
     expireAt: {
       type: DataTypes.DATE,
