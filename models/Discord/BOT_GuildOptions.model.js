@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
             //     foreignKey: 'guildId',
             //     as: 'guild',
             // });
+
+            models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId',  // Set FK name
+                targetKey: 'guildId',   // Key name on BOT_Guilds
+                onDelete: 'CASCADE',
+            });
         }
 
         static async initOptionForGuildId(id) {

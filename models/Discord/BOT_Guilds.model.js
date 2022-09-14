@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.BOT_Guilds.hasOne(models.BOT_GuildOptions, {
-                foreignKey: 'guildId',
+                foreignKey: 'guildId',  // Set FK name
+                targetKey: 'guildId',
                 onDelete: 'CASCADE',
             });
         }
