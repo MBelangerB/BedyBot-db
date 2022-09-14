@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
                 foreignKey: 'guildId',
-                onDelete: 'CASCADE',
+                as: 'guild',
             });
         }
 

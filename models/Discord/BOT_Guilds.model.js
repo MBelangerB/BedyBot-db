@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             models.BOT_Guilds.hasOne(models.BOT_GuildOptions, {
                 foreignKey: 'guildId',
-                onDelete: 'CASCADE',
             });
         }
 
@@ -106,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
             });
             await this.save();
         }
+        
         /**
          * Update the guild owner id
          * @param {*} ownerId 
