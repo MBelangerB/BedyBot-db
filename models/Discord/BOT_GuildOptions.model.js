@@ -22,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            // A {BOT_GuildOptions} has one {BOT_Guilds} [1..1]
-            // this.belongTo(parent, relation)
-            // models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
-            //     foreignKey: 'guildId',
-            //     as: 'guild',
-            // });
+        }
+
+        static async initOptionForGuildId(guildId) {
+            return await this.create({
+                guildId: guildId,
+            });
         }
     }
 

@@ -106,6 +106,17 @@ module.exports = (sequelize, DataTypes) => {
             });
             await this.save();
         }
+        /**
+         * Update the guild owner id
+         * @param {*} ownerId 
+         */
+        async updateGuildOwner(ownerId) {
+            // On update pour raison X
+            this.set({
+                guildOwnerId: ownerId,
+            });
+            await this.save();
+        }
     }
 
     BOT_Guilds.init({
