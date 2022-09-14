@@ -1,7 +1,5 @@
 'use strict';
 
-const Sequelize = require('sequelize');
-
 /*
   Create a new migration : npx sequelize-cli migration:generate --name ${NAME}
 */
@@ -36,6 +34,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'userId',
         allowNull: false,
+        unique: true,
       },
       defaultUsername: {
         type: DataTypes.STRING,
@@ -65,6 +64,7 @@ module.exports = {
       },
     });
 
+    await queryInterface.addIndex('BOT_Users', ['userId']);
   },
 
   async down(queryInterface) {
@@ -75,6 +75,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+     await queryInterface.removeIndex('BOT_Users', ['userId']);
     await queryInterface.dropTable('BOT_Users');
   },
 };

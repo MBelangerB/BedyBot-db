@@ -80,6 +80,9 @@ module.exports = {
       {
         comment: 'Discord channels information who are create for a tournament.',
       });
+
+    await queryInterface.addIndex('BOT_Channels', ['guildId']);
+    await queryInterface.addIndex('BOT_Channels', ['sessionId']);
   },
 
   async down(queryInterface) {
@@ -90,6 +93,8 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+    await queryInterface.removeIndex('BOT_Channels', ['guildId']);
+    await queryInterface.removeIndex('BOT_Channels', ['sessionId']);
     await queryInterface.dropTable('BOT_Channels');
   },
 };

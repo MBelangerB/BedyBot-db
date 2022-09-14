@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.BOT_Guilds.hasOne(models.BOT_GuildOptions, {
-                foreignKey: 'guildId',  // Set FK name
-                sourceKey: 'guildId',   // Source Key In BOT_Guilds
+                foreignKey: 'guildId', // Set FK name
+                sourceKey: 'guildId', // Source Key In BOT_Guilds
                 onDelete: 'CASCADE',
             });
         }
@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Get BOT_Guilds by id
-         * @param {integer} id 
-         * @param {boolean} withInclude 
+         * @param {integer} id
+         * @param {boolean} withInclude
          * @returns {BOT_Guilds}
          */
         static async getGuildById(id, withInclude = true) {
@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Get BOT_Guilds by discord guildId
-         * @param {string} guildId 
-         * @param {boolean} withInclude 
+         * @param {string} guildId
+         * @param {boolean} withInclude
          * @returns {BOT_Guilds}
          */
         static async getGuildByGuildId(guildId, withInclude = true) {
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return all active guilds
-         * @param {boolean} withInclude 
+         * @param {boolean} withInclude
          * @returns {BOT_Guilds}
          */
         static async getAllActiveGuild(withInclude = true) {
@@ -69,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return the guild option by a guildId
-         * @param {integer} guildId 
+         * @param {integer} guildId
          * @returns {BOT_GuildOptions}
          */
         static async getGuildOptionByGuildId(guildId) {
@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Update the guild statut and date param
-         * @param {boolean} isActive new guild Statut 
+         * @param {boolean} isActive new guild Statut
          * @returns {BOT_Guilds}
          */
         async updateGuildStatut(isActive) {
@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Update the guild name
-         * @param {*} newName 
+         * @param {*} newName
          */
         async updateGuildName(newName) {
             // On update pour raison X
@@ -115,7 +115,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Update the guild owner id
-         * @param {*} ownerId 
+         * @param {*} ownerId
          */
         async updateGuildOwner(ownerId) {
             // On update pour raison X

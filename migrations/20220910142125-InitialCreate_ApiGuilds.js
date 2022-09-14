@@ -22,6 +22,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        unique: true,
       },
       name: {
         type: DataTypes.STRING,
@@ -62,23 +63,23 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'userId',
         allowNull: false,
-        references: {
-          model: 'API_Users',
-          key: 'externalId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'API_Users',
+        //   key: 'externalId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'API_Guilds',
-          key: 'guildId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'API_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       permissions: {
         type: DataTypes.STRING,

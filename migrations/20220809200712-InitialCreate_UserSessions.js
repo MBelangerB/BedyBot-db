@@ -35,23 +35,23 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'sessionId',
         allowNull: false,
-        references: {
-          model: 'BOT_Sessions',
-          key: 'id',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Sessions',
+        //   key: 'id',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       userId: {
         type: DataTypes.INTEGER,
         field: 'userId',
         allowNull: false,
-        references: {
-          model: 'BOT_Users',
-          key: 'id',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Users',
+        //   key: 'id',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       voiceChannelId: {
         type: DataTypes.INTEGER,

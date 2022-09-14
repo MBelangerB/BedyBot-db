@@ -22,6 +22,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'externalId',
         allowNull: false,
+        unique: true,
       },
       // 1 => Discord - 2 => Twitch
       source: {

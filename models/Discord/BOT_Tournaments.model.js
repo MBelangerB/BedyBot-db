@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         guildId: {
             type: DataTypes.STRING,
             field: 'guildId',
-            allowNull: false
+            allowNull: false,
         },
         ownerId: {
             type: DataTypes.INTEGER,
-            field: 'ownerId'
+            field: 'ownerId',
         },
         announcementChannelId: {
             type: DataTypes.STRING,

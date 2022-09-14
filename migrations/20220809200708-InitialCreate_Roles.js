@@ -33,17 +33,18 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'BOT_Guilds',
-          key: 'guildId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       roleId: {
         type: DataTypes.STRING,
         field: 'roleId',
         allowNull: false,
+        unique: true,
       },
       roleName: {
         type: DataTypes.STRING,
@@ -62,6 +63,8 @@ module.exports = {
         allowNull: false,
       },
     });
+
+    await queryInterface.addIndex('BOT_Roles', ['guildId']);
   },
 
   async down(queryInterface) {
@@ -72,6 +75,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+    await queryInterface.removeIndex('BOT_Roles', ['guildId']);
     await queryInterface.dropTable('BOT_Roles');
   },
 };

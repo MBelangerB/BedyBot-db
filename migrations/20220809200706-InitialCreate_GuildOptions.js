@@ -33,6 +33,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        unique: true,
         // references: {
         //   model: 'BOT_Guilds', // This is a reference to another model
         //   key: 'guildId', // This is the column name of the referenced model
@@ -58,6 +59,7 @@ module.exports = {
       },
     });
 
+    await queryInterface.addIndex('BOT_GuildOptions', ['guildId']);
   },
 
   async down(queryInterface) {
@@ -68,6 +70,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+    await queryInterface.removeIndex('BOT_GuildOptions', ['guildId']);
     await queryInterface.dropTable('BOT_GuildOptions');
   },
 };

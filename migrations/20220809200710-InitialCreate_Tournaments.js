@@ -35,22 +35,22 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'BOT_Guilds',
-          key: 'guildId',
-          onDelete: 'set NULL',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'set NULL',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       ownerId: {
         type: DataTypes.INTEGER,
         field: 'ownerId',
-        references: {
-          model: 'BOT_Users',
-          key: 'id',
-          onDelete: 'set NULL',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Users',
+        //   key: 'id',
+        //   onDelete: 'set NULL',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       announcementChannelId: {
         type: DataTypes.STRING,
@@ -85,6 +85,7 @@ module.exports = {
       },
     });
 
+    await queryInterface.addIndex('BOT_Tournaments', ['guildId']);
   },
 
   async down(queryInterface) {
@@ -95,6 +96,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+    await queryInterface.removeIndex('BOT_Tournaments', ['guildId']);
     await queryInterface.dropTable('BOT_Tournaments');
   },
 };

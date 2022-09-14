@@ -28,8 +28,8 @@ module.exports = (sequelize, DataTypes) => {
             // });
 
             models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
-                foreignKey: 'guildId',  // Set FK name
-                targetKey: 'guildId',   // Key name on BOT_Guilds
+                foreignKey: 'guildId', // Set FK name
+                targetKey: 'guildId', // Key name on BOT_Guilds
                 onDelete: 'CASCADE',
             });
         }
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         static async initOptionForGuildId(id) {
             return await this.create({
                 guildId: id,
-                maxPlayerPerLobby: 12
+                maxPlayerPerLobby: 12,
             });
         }
     }

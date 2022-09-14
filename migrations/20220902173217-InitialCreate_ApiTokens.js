@@ -22,23 +22,23 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'apiUserId',
         allowNull: false,
-        references: {
-          model: 'API_Users',
-          key: 'externalId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'API_Users',
+        //   key: 'externalId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: true,
-        references: {
-          model: 'API_Guilds',
-          key: 'guildId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'API_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       // 1 => Discord - 2 => Twitch
       source: {
@@ -81,6 +81,7 @@ module.exports = {
     });
 
     await queryInterface.addIndex('API_Tokens', ['apiUserId']);
+    await queryInterface.addIndex('API_Tokens', ['guildId']);
   },
 
   /* eslint-disable-next-line no-unused-vars */
@@ -91,6 +92,7 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.removeIndex('API_Tokens', ['guildId']);
     await queryInterface.removeIndex('API_Tokens', ['apiUserId']);
     await queryInterface.dropTable('API_Tokens');
   },

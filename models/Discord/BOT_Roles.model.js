@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.BOT_Roles.hasOne(models.BOT_Guilds, {
-                foreignKey: 'guildId'
+                foreignKey: 'guildId',
             });
         }
     }

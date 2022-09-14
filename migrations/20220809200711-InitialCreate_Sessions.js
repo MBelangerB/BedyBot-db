@@ -53,14 +53,16 @@ module.exports = {
       tournamentId: {
         type: DataTypes.INTEGER,
         field: 'tournamentId',
-        references: {
-          model: 'BOT_Tournaments',
-          key: 'id',
-          onDelete: 'Set NULL',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Tournaments',
+        //   key: 'id',
+        //   onDelete: 'Set NULL',
+        //   onUpdate: 'CASCADE',
+        // },
       },
     });
+
+    await queryInterface.addIndex('BOT_Sessions', ['tournamentId']);
   },
 
   async down(queryInterface) {
@@ -71,6 +73,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
+    await queryInterface.removeIndex('BOT_Sessions', ['tournamentId']);
     await queryInterface.dropTable('BOT_Sessions');
   },
 };

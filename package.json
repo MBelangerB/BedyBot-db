@@ -1,6 +1,6 @@
 {
   "name": "bedybot-db",
-  "version": "1.0.0",
+  "version": "2022.09.1",
   "description": "Database model and migration or BedyBot tools",
   "main": "dbSchema.js",
   "scripts": { "eslint": "eslint .",

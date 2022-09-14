@@ -22,12 +22,12 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'API_Guilds',
-          key: 'guildId',
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
-        },
+        // references: {
+        //   model: 'API_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       name: {
         type: DataTypes.STRING,
