@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
+        static models() {
+            return this.sequelize.models;
+        }
+
         /**
          * Get BOT_Guilds by id
          * @param {integer} id 
@@ -24,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getGuildById(id, withInclude = true) {
             if (withInclude) {
-                return await this.findOne({ where: { id: id }, include: [BOT_GuildOptions] });
+                return await this.findOne({ where: { id: id }, include: [this.models().BOT_GuildOptions] });
             } else {
                 return await this.findOne({ where: { id: id } });
             }
@@ -38,9 +42,22 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getGuildByGuildId(guildId, withInclude = true) {
             if (withInclude) {
-                return await this.findOne({ where: { guildId: guildId }, include: [BOT_GuildOptions] });
+                return await this.findOne({ where: { guildId: guildId }, include: [this.models().BOT_GuildOptions] });
             } else {
                 return await this.findOne({ where: { guildId: guildId } });
+            }
+        }
+
+        /**
+         * Return all active guilds
+         * @param {boolean} withInclude 
+         * @returns {BOT_Guilds}
+         */
+        static async getAllActiveGuild(withInclude = true) {
+            if (withInclude) {
+                return await this.findAll({ where: { isActive: true }, include: [this.models().BOT_GuildOptions] });
+            } else {
+                return await this.findAll({ where: { isActive: true } });
             }
         }
 
@@ -50,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {BOT_GuildOptions}
          */
         static async getGuildOptionByGuildId(guildId) {
-            return await this.getGuildByGuildId(guildId)?.BOT_GuildOptions;
+            return await this.getGuildByGuildId(guildId, true)?.BOT_GuildOptions;
         }
 
         /**
@@ -78,6 +95,10 @@ module.exports = (sequelize, DataTypes) => {
             }
         }
 
+        /**
+         * Update the guild name
+         * @param {*} newName 
+         */
         async updateGuildName(newName) {
             // On update pour raison X
             this.set({
