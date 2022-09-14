@@ -33,32 +33,32 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'BOT_Guilds',
-          key: 'guildId',
-          onDelete: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        // },
       },
       sessionId: {
         type: DataTypes.INTEGER,
         field: 'sessionId',
         allowNull: true,
-        references: {
-          model: 'BOT_Sessions',
-          key: 'id',
-          onUpdate: 'CASCADE',
-          onDelete: 'set NULL',
-        },
+        // references: {
+        //   model: 'BOT_Sessions',
+        //   key: 'id',
+        //   onUpdate: 'CASCADE',
+        //   onDelete: 'set NULL',
+        // },
       },
       parentId: {
         type: DataTypes.INTEGER,
         field: 'parentId',
         allowNull: true,
-        references: {
-          model: 'BOT_Channels',
-          key: 'id',
-          onDelete: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Channels',
+        //   key: 'id',
+        //   onDelete: 'CASCADE',
+        // },
       },
       channelId: {
         type: DataTypes.STRING,

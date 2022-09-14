@@ -33,11 +33,11 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        references: {
-          model: 'BOT_Guilds', // This is a reference to another model
-          key: 'guildId', // This is the column name of the referenced model
-          onDelete: 'CASCADE',
-        },
+        // references: {
+        //   model: 'BOT_Guilds', // This is a reference to another model
+        //   key: 'guildId', // This is the column name of the referenced model
+        //   onDelete: 'CASCADE',
+        // },
       },
       announcementChannelId: {
         type: DataTypes.STRING,
