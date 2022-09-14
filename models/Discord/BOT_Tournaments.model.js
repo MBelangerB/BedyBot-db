@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Tournaments extends Model {
+    class BOT_Tournaments extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,43 +10,58 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.Tournaments.belongsTo(models.Users, {
+            models.BOT_Tournaments.belongsTo(models.BOT_Users, {
                 foreignKey: 'ownerId',
                 as: 'owner',
                 // lors FindOne/FindALl pour include Sequelize il faut utiliser l'alias et nom la table
             });
+
+            models.BOT_Tournaments.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId',
+            });
         }
     }
 
-    Tournaments.init({
+    BOT_Tournaments.init({
         id: {
             type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
             autoIncrement: true,
-            field: 'id',
+            allowNull: false,
         },
         guildId: {
             type: DataTypes.STRING,
+            field: 'guildId',
+            allowNull: false
+        },
+        ownerId: {
+            type: DataTypes.INTEGER,
+            field: 'ownerId'
+        },
+        announcementChannelId: {
+            type: DataTypes.STRING,
+            field: 'announcementChannelId',
             allowNull: false,
         },
-        channelId: {
+        announcementMessageId: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        messageId: {
-            type: DataTypes.STRING,
+            field: 'announcementMessageId',
             allowNull: false,
         },
         startDateTime: {
             type: DataTypes.DATE,
+            field: 'startDateTime',
             allowNull: false,
         },
         sessionCount: {
             type: DataTypes.INTEGER,
+            field: 'sessionCount',
             allowNull: false,
         },
         status: {
             type: DataTypes.INTEGER,
+            field: 'status',
             allowNull: false,
         },
         ts: {
@@ -54,15 +69,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
-        //
-        ownerId: {
-            type: DataTypes.INTEGER,
-            field: 'ownerId',
-          },
     }, {
         sequelize,
-        modelName: 'Tournaments',
-        tableName: 'MK_Tournaments',
+        modelName: 'BOT_Tournaments',
+        tableName: 'BOT_Tournaments',
     });
-    return Tournaments;
+    return BOT_Tournaments;
 };

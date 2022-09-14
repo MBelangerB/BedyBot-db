@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Users extends Model {
+    class BOT_Users extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.Users.belongsToMany(models.Sessions, {
+            models.BOT_Users.belongsToMany(models.BOT_Sessions, {
                 through: {
-                    model: models.UserSessions,
+                    model: models.BOT_UserSessions,
                     unique: false,
                 },
                 foreignKey: 'UserId',
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         getUsername() {
-            return this.username;
+            return (this.BOT_GuildUser && this.BOT_GuildUser.hasUsername() ? this.BOT_GuildUser.username : this.defaultUsername);
         }
 
         getTwitchUsername() {
@@ -34,47 +34,49 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    Users.init({
+    BOT_Users.init({
         id: {
             type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
             autoIncrement: true,
-            field: 'id',
-        },
-        // Id du Discord
-        guildId: {
-            type: DataTypes.STRING,
             allowNull: false,
         },
-        // Id de user Discord
         userId: {
             type: DataTypes.STRING,
+            field: 'userId',
             allowNull: false,
         },
-        username: {
+        defaultUsername: {
             type: DataTypes.STRING,
+            field: 'defaultUsername',
             allowNull: false,
         },
-        tag: {
-            type: DataTypes.STRING,
+        discriminator: {
+            type: DataTypes.STRING(10),
+            field: 'discriminator',
             allowNull: false,
         },
+        // Custom user info. Shared with all guilds
         switchFriendCode: {
             type: DataTypes.STRING,
+            field: 'switchFriendCode',
             allowNull: true,
         },
         switchUsername: {
             type: DataTypes.STRING,
+            field: 'switchUsername',
             allowNull: true,
         },
         twitchUsername: {
             type: DataTypes.STRING,
+            field: 'twitchUsername',
             allowNull: true,
         },
     }, {
         sequelize,
-        modelName: 'Users',
-        tableName: 'MK_Users',
+        modelName: 'BOT_Users',
+        tableName: 'BOT_Users',
     });
-    return Users;
+    return BOT_Users;
 };

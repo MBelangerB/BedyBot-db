@@ -23,7 +23,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('UserSessions', {
+    await queryInterface.createTable('BOT_UserSessions', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -35,19 +35,41 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'sessionId',
         allowNull: false,
+        references: {
+          model: 'BOT_Sessions',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
       userId: {
         type: DataTypes.INTEGER,
         field: 'userId',
         allowNull: false,
+        references: {
+          model: 'BOT_Users',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
       voiceChannelId: {
         type: DataTypes.INTEGER,
         field: 'voiceChannelId',
+        allowNull: true,
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+        },
       },
       textChannelId: {
         type: DataTypes.INTEGER,
         field: 'textChannelId',
+        allowNull: true,
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+        },
       },
       ts: {
         type: DataTypes.DATE,
@@ -55,17 +77,9 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      // sessionsId: {
-      //   type: DataTypes.INTEGER,
-      //   field: 'sessionsId'
-      // },
-      // usersId: {
-      //   type: DataTypes.INTEGER,
-      //   field: 'usersId'
-      // }
     });
 
-    await queryInterface.addIndex('UserSessions', ['UserId', 'SessionId']);
+    await queryInterface.addIndex('BOT_UserSessions', ['userId', 'sessionId']);
   },
 
   async down(queryInterface) {
@@ -76,7 +90,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.removeIndex('UserSessions', ['UserId', 'SessionId']);
-    await queryInterface.dropTable('UserSessions');
+    await queryInterface.removeIndex('BOT_UserSessions', ['UserId', 'sessionId']);
+    await queryInterface.dropTable('BOT_UserSessions');
   },
 };

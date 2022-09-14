@@ -23,7 +23,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('Tournaments', {
+    await queryInterface.createTable('BOT_Tournaments', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -35,15 +35,31 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        references: {
+          model: 'BOT_Guilds',
+          key: 'guildId',
+          onDelete: 'set NULL',
+          onUpdate: 'CASCADE',
+        },
       },
-      channelId: {
+      ownerId: {
+        type: DataTypes.INTEGER,
+        field: 'ownerId',
+        references: {
+          model: 'BOT_Users',
+          key: 'id',
+          onDelete: 'set NULL',
+          onUpdate: 'CASCADE',
+        },
+      },
+      announcementChannelId: {
         type: DataTypes.STRING,
-        field: 'channelId',
+        field: 'announcementChannelId',
         allowNull: false,
       },
-      messageId: {
+      announcementMessageId: {
         type: DataTypes.STRING,
-        field: 'messageId',
+        field: 'announcementMessageId',
         allowNull: false,
       },
       startDateTime: {
@@ -67,10 +83,6 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-      ownerId: {
-        type: DataTypes.INTEGER,
-        field: 'ownerId',
-      },
     });
 
   },
@@ -83,6 +95,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Tournaments');
+    await queryInterface.dropTable('BOT_Tournaments');
   },
 };

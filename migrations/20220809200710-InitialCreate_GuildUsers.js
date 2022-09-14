@@ -1,5 +1,7 @@
 'use strict';
 
+const Sequelize = require('sequelize');
+
 /*
   Create a new migration : npx sequelize-cli migration:generate --name ${NAME}
 */
@@ -21,7 +23,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('GuildOptions', {
+    await queryInterface.createTable('BOT_GuildUsers', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -29,30 +31,40 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
+      userId: {
+        type: DataTypes.STRING,
+        field: 'userId',
+        allowNull: false,
+        references: {
+          model: 'BOT_Users',
+          key: 'userId',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
+      },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        references: {
+          model: 'BOT_Guilds',
+          key: 'guildId',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
-      announcementChannelId: {
+      username: {
         type: DataTypes.STRING,
-        field: 'announcementChannelId',
-        allowNull: true,
-      },
-      maxPlayerPerLobby: {
-        type: DataTypes.INTEGER,
-        field: 'maxPlayerPerLobby',
+        field: 'username',
         allowNull: false,
-        defaultValue: 12,
       },
-      addEveryone: {
-        type: DataTypes.BOOLEAN,
-        field: 'addEveryone',
-        defaultValue: false,
-        allowNull: true,
+      joinedAt: {
+        type: DataTypes.DATE,
+        field: 'joinedAt',
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
-
   },
 
   async down(queryInterface) {
@@ -63,6 +75,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('GuildOptions');
+    await queryInterface.dropTable('BOT_GuildUsers');
   },
 };

@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class GuildOptions extends Model {
+    class BOT_Roles extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,38 +11,50 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
+            models.BOT_Roles.hasOne(models.BOT_Guilds, {
+                foreignKey: 'guildId'
+            });
         }
     }
 
-    GuildOptions.init({
+    BOT_Roles.init({
         id: {
             type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
             autoIncrement: true,
-            field: 'id',
+            allowNull: false,
         },
         guildId: {
             type: DataTypes.STRING,
+            field: 'guildId',
             allowNull: false,
         },
-        announcementChannelId: {
+        roleId: {
             type: DataTypes.STRING,
-            allowNull: true,
-        },
-        maxPlayerPerLobby: {
-            type: DataTypes.INTEGER,
+            field: 'roleId',
             allowNull: false,
-            defaultValue: 12,
         },
-        addEveryone: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
-            defaultValue: false,
+        roleName: {
+            type: DataTypes.STRING,
+            field: 'roleName',
+            allowNull: false,
+        },
+        roleColor: {
+            type: DataTypes.STRING,
+            field: 'roleColor',
+            allowNull: false,
+        },
+        // Manager - PLayer
+        type: {
+            type: DataTypes.INTEGER,
+            field: 'type',
+            allowNull: false,
         },
     }, {
         sequelize,
-        modelName: 'GuildOptions',
-        tableName: 'MK_GuildOptions',
+        modelName: 'BOT_Roles',
+        tableName: 'BOT_Roles',
     });
-    return GuildOptions;
+    return BOT_Roles;
 };

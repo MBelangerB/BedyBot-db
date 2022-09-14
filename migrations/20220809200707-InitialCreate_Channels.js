@@ -21,7 +21,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('Channels', {
+    await queryInterface.createTable('BOT_Channels', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -33,6 +33,32 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        references: {
+          model: 'BOT_Guilds',
+          key: 'guildId',
+          onDelete: 'CASCADE',
+        },
+      },
+      sessionId: {
+        type: DataTypes.INTEGER,
+        field: 'sessionId',
+        allowNull: true,
+        references: {
+          model: 'BOT_Sessions',
+          key: 'id',
+          onUpdate: 'CASCADE',
+          onDelete: 'set NULL',
+        },
+      },
+      parentId: {
+        type: DataTypes.INTEGER,
+        field: 'parentId',
+        allowNull: true,
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+          onDelete: 'CASCADE',
+        },
       },
       channelId: {
         type: DataTypes.STRING,
@@ -50,16 +76,10 @@ module.exports = {
         field: 'channelType',
         allowNull: false,
       },
-      parentId: {
-        type: DataTypes.INTEGER,
-        field: 'parentId',
-        allowNull: true,
-      },
-      sessionId: {
-        type: DataTypes.INTEGER,
-        field: 'sessionId',
-      },
-    });
+    },
+      {
+        comment: 'Discord channels information who are create for a tournament.',
+      });
   },
 
   async down(queryInterface) {
@@ -70,6 +90,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Channels');
+    await queryInterface.dropTable('BOT_Channels');
   },
 };

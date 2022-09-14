@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class UserSessions extends Model {
+    class BOT_UserSessions extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -14,60 +14,66 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    UserSessions.init({
+    BOT_UserSessions.init({
         id: {
             type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
         },
-        SessionId: {
+        sessionId: {
+            allowNull: false,
+            field: 'sessionId',
+            type: DataTypes.INTEGER,
+            references: {
+                model: sequelize.models.BOT_Sessions,
+                key: 'id',
+            },
+        },
+        userId: {
             allowNull: false,
             type: DataTypes.INTEGER,
+            field: 'userId',
             references: {
-                model: sequelize.models.Sessions,
+                model: sequelize.models.BOT_Users,
                 key: 'id',
             },
         },
-        UserId: {
-            allowNull: false,
-            type: DataTypes.INTEGER,
-            references: {
-                model: sequelize.models.Users,
-                key: 'id',
-            },
-        },
-        VoiceChannelId: {
+        voiceChannelId: {
             allowNull: true,
             type: DataTypes.INTEGER,
+            field: 'voiceChannelId',
             references: {
-                model: sequelize.models.Channels,
+                model: sequelize.models.BOT_Channels,
                 key: 'id',
             },
         },
-        TextChannelId: {
+        textChannelId: {
             allowNull: true,
             type: DataTypes.INTEGER,
+            field: 'textChannelId',
             references: {
-                model: sequelize.models.Channels,
+                model: sequelize.models.BOT_Channels,
                 key: 'id',
             },
         },
         ts: {
-            allowNull: false,
             type: DataTypes.DATE,
+            field: 'ts',
+            allowNull: false,    
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
     }, {
         sequelize,
-        modelName: 'UserSessions',
-        tableName: 'MK_UserSessions',
+        modelName: 'BOT_UserSessions',
+        tableName: 'BOT_UserSessions',
         indexes: [
             {
                 unique: true,
-                fields: ['UserId', 'SessionId'],
+                fields: ['userId', 'sessionId'],
             },
         ],
     });
-    return UserSessions;
+    return BOT_UserSessions;
 };

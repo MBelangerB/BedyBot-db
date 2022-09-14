@@ -21,7 +21,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('BOT_Roles', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -33,28 +33,35 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        references: {
+          model: 'BOT_Guilds',
+          key: 'guildId',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
-      userId: {
+      roleId: {
         type: DataTypes.STRING,
-        field: 'userId',
+        field: 'roleId',
         allowNull: false,
       },
-      username: {
+      roleName: {
         type: DataTypes.STRING,
-        field: 'username',
+        field: 'roleName',
         allowNull: false,
       },
-      tag: {
+      roleColor: {
         type: DataTypes.STRING,
-        field: 'tag',
+        field: 'roleColor',
         allowNull: false,
       },
-      switchFriendCode: {
-        type: DataTypes.STRING,
-        field: 'switchFriendCode',
+      // Manager - PLayer
+      type: {
+        type: DataTypes.INTEGER,
+        field: 'type',
+        allowNull: false,
       },
     });
-
   },
 
   async down(queryInterface) {
@@ -65,6 +72,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('BOT_Roles');
   },
 };

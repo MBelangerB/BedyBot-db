@@ -1,5 +1,7 @@
 'use strict';
 
+const Sequelize = require('sequelize');
+
 /*
   Create a new migration : npx sequelize-cli migration:generate --name ${NAME}
 */
@@ -21,7 +23,8 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('BOT_Sessions', {
+    // Common discord value and Shared user info
+    await queryInterface.createTable('BOT_Users', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -29,38 +32,39 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      sessionNumber: {
-        type: DataTypes.INTEGER,
-        field: 'sessionNumber',
+      userId: {
+        type: DataTypes.STRING,
+        field: 'userId',
         allowNull: false,
       },
-      startDateTime: {
-        type: DataTypes.DATE,
-        field: 'startDateTime',
+      defaultUsername: {
+        type: DataTypes.STRING,
+        field: 'defaultUsername',
         allowNull: false,
       },
-      duration: {
-        type: DataTypes.INTEGER,
-        field: 'duration',
+      discriminator: {
+        type: DataTypes.STRING(10),
+        field: 'discriminator',
         allowNull: false,
       },
-      status: {
-        type: DataTypes.INTEGER,
-        field: 'status',
-        allowNull: false,
-        defaultValue: 1,
+      // Custom user info. Shared with all guilds
+      switchFriendCode: {
+        type: DataTypes.STRING,
+        field: 'switchFriendCode',
+        allowNull: true,
       },
-      tournamentId: {
-        type: DataTypes.INTEGER,
-        field: 'tournamentId',
-        references: {
-          model: 'BOT_Tournaments',
-          key: 'id',
-          onDelete: 'Set NULL',
-          onUpdate: 'CASCADE',
-        },
+      switchUsername: {
+        type: DataTypes.STRING,
+        field: 'switchUsername',
+        allowNull: true,
+      },
+      twitchUsername: {
+        type: DataTypes.STRING,
+        field: 'twitchUsername',
+        allowNull: true,
       },
     });
+
   },
 
   async down(queryInterface) {
@@ -71,6 +75,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('BOT_Sessions');
+    await queryInterface.dropTable('BOT_Users');
   },
 };

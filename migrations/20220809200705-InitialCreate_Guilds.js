@@ -22,8 +22,7 @@ module.exports = {
         },
       ),
      */
-
-      await queryInterface.createTable('Guilds', {
+      await queryInterface.createTable('BOT_Guilds', {
         id: {
           type: DataTypes.INTEGER,
           field: 'id',
@@ -66,7 +65,11 @@ module.exports = {
         leftAt: {
           type: DataTypes.DATE,
           field: 'leftAt',
+          allowNull: true,
         },
+      },
+      {
+        comment: 'List of discord guilds where the bot has been installed.',
       });
   },
 
@@ -78,6 +81,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Guilds');
+    await queryInterface.dropTable('BOT_Guilds');
   },
 };
