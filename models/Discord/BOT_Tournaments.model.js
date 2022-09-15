@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
+        static models() {
+            return this.sequelize.models;
+        }
+
         /**
          * Get the BOT_Tournaments for a guild who are attach to a discord message
          * @param {string} guildId
@@ -28,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {BOT_Tournaments}
          */
         static async getTournamentByMessageId(guildId, messageId) {
-            return await this.findOne({ where: { guildId: guildId, messageId: messageId } });
+            return await this.findOne({ where: { guildId: guildId, announcementMessageId: messageId } });
         }
 
         /**
@@ -39,9 +43,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getTournamentById(guildId, tournamentId, withInclude = true) {
             if (withInclude) {
-                return await this.findOne({ where: { guildId: guildId, tournamentId: tournamentId }, include: 'owner' }); // [this.models().BOT_Users] });
+                return await this.findOne({ where: { guildId: guildId, id: tournamentId }, include: 'owner' }); // [this.models().BOT_Users] });
             } else {
-                return await this.findOne({ where: { guildId: guildId, tournamentId: tournamentId } });
+                return await this.findOne({ where: { guildId: guildId, id: tournamentId } });
             }
         }
 

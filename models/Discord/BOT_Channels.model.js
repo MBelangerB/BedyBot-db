@@ -31,8 +31,11 @@ module.exports = (sequelize, DataTypes) => {
      * @param {boolean} withInclude
      * @returns {BOT_Channels}
      */
-    static async getChannelByGuildId(guildId, channelId) {
+    static async getChannelByGuildChannelId(guildId, channelId) {
       return await this.findOne({ where: { guildId: guildId, channelId: channelId } });
+    }
+    static async getChannelById(guildId, channelId) {
+      return await this.findOne({ where: { guildId: guildId, id: channelId } });
     }
 
     /**

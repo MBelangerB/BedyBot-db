@@ -53,10 +53,10 @@ module.exports = {
         //   onUpdate: 'CASCADE',
         // },
       },
-      username: {
+      nickname: {
         type: DataTypes.STRING,
-        field: 'username',
-        allowNull: false,
+        field: 'nickname',
+        allowNull: true,
       },
       joinedAt: {
         type: DataTypes.DATE,

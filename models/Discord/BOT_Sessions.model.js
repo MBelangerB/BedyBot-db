@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.BOT_Sessions.belongsTo(models.BOT_Tournaments, {
-                foreignKey: 'TournamentId',
+                foreignKey: 'tournamentId',
                 as: 'tournament',
             });
             models.BOT_Sessions.belongsToMany(models.BOT_Users, {
@@ -19,8 +19,12 @@ module.exports = (sequelize, DataTypes) => {
                     model: models.BOT_UserSessions,
                     unique: false,
                 },
-                foreignKey: 'SessionId',
+                foreignKey: 'sessionId',
             });
+        }
+
+        static models() {
+            return this.sequelize.models;
         }
 
         /**

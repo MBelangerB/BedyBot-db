@@ -15,8 +15,17 @@ module.exports = (sequelize, DataTypes) => {
                     model: models.BOT_UserSessions,
                     unique: false,
                 },
-                foreignKey: 'UserId',
+                foreignKey: 'userId',
             });
+            models.BOT_Users.hasOne(models.BOT_GuildUsers, {
+                foreignKey: 'userId', // Set FK name
+                sourceKey: 'userId', // Source Key In BOT_Users
+                onDelete: 'CASCADE',
+            });
+        }
+
+        static models() {
+            return this.sequelize.models;
         }
 
         /**
@@ -25,8 +34,22 @@ module.exports = (sequelize, DataTypes) => {
          * @param {string} userId
          * @returns {BOT_Users}
          */
-        static async getUserByUserId(guildId, userId) {
-            return await this.findOne({ where: { guildId: guildId, userId: userId } });
+        static async getUserByUserId(guildId, userId, withInclude = false) {
+            if (withInclude) {
+                // return await this.findOne({ where: { userId: userId, 'BOT_GuildUser.guildId': guildId }, include: [this.models().BOT_GuildUser] });
+                return await this.findOne({
+                    where: { userId: userId },
+                    include: {
+                        model: this.models().BOT_GuildUsers,
+                        where: {
+                            guildId: guildId
+                        }
+                    }
+                });
+            } else {
+                return await this.findOne({ where: { userId: userId } });
+            }
+
         }
 
 
@@ -43,6 +66,17 @@ module.exports = (sequelize, DataTypes) => {
             return this.switchFriendCode ? this.switchFriendCode : 'N/A';
         }
 
+
+        /**
+         * Update the username
+         * @param {string} username
+         */
+        async updateUsername(username) {
+            this.set({
+                defaultUsername: username,
+            });
+            await this.save();
+        }
 
         /**
          * Update the switchUsername

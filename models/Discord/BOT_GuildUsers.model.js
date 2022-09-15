@@ -14,9 +14,42 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'guildId',
       });
 
-      models.BOT_GuildUsers.hasOne(models.BOT_Users, {
-        foreignKey: 'userId',
+      // models.BOT_GuildUsers.hasOne(models.BOT_Users, {
+      //   foreignKey: 'userId',
+      // });
+
+      models.BOT_GuildUsers.belongsTo(models.BOT_Users, {
+        foreignKey: 'userId', // Set FK name
+        targetKey: 'userId', // Key name on BOT_Users
+        onDelete: 'CASCADE',
       });
+
+    }
+
+    /**
+     * 
+     * @param {string} userId 
+     * @returns 
+     */
+    static async initGuildUser(guildId, userId, nickname) {
+      return await this.create({
+        userId: userId,
+        guildId: guildId,
+        nickname: nickname,
+      });
+    }
+
+    /**
+     * Update the guild member nickname
+     * @param {string} nickname
+     */
+    async updateUsername(nickname) {
+      if (nickname) {
+        this.set({
+          nickname: nickname,
+        });
+        await this.save();
+      }
     }
 
     hasUsername() {
@@ -42,10 +75,10 @@ module.exports = (sequelize, DataTypes) => {
       field: 'guildId',
       allowNull: false,
     },
-    username: {
+    nickname: {
       type: DataTypes.STRING,
-      field: 'username',
-      allowNull: false,
+      field: 'nickname',
+      allowNull: true,
     },
     joinedAt: {
       type: DataTypes.DATE,
@@ -58,5 +91,6 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'BOT_GuildUsers',
     tableName: 'BOT_GuildUsers',
   });
+
   return BOT_GuildUsers;
 };

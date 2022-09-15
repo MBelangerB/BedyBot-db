@@ -73,7 +73,8 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {BOT_GuildOptions}
          */
         static async getGuildOptionByGuildId(guildId) {
-            return await this.getGuildByGuildId(guildId, true)?.BOT_GuildOption;
+            const guild = await this.getGuildByGuildId(guildId, true);
+            return guild?.BOT_GuildOption;
         }
 
         /**
@@ -106,7 +107,6 @@ module.exports = (sequelize, DataTypes) => {
          * @param {string} newName
          */
         async updateGuildName(newName) {
-            // On update pour raison X
             this.set({
                 guildName: newName,
             });
@@ -118,7 +118,6 @@ module.exports = (sequelize, DataTypes) => {
          * @param {string} ownerId
          */
         async updateGuildOwner(ownerId) {
-            // On update pour raison X
             this.set({
                 guildOwnerId: ownerId,
             });
