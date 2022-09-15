@@ -20,7 +20,65 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId',
             });
         }
+
+        /**
+         * Get the BOT_Tournaments for a guild who are attach to a discord message
+         * @param {string} guildId
+         * @param {string} messageId
+         * @returns {BOT_Tournaments}
+         */
+        static async getTournamentByMessageId(guildId, messageId) {
+            return await this.findOne({ where: { guildId: guildId, messageId: messageId } });
+        }
+
+        /**
+         * Return a BOT_Tournaments by tournamentId
+         * @param {string} guildId
+         * @param {integer} tournamentId
+         * @returns {BOT_Tournaments}
+         */
+        static async getTournamentById(guildId, tournamentId, withInclude = true) {
+            if (withInclude) {
+                return await this.findOne({ where: { guildId: guildId, tournamentId: tournamentId }, include: 'owner' }); // [this.models().BOT_Users] });
+            } else {
+                return await this.findOne({ where: { guildId: guildId, tournamentId: tournamentId } });
+            }
+        }
+
+        /**
+         * Return All Tournamenet for a guild by a status
+         * @param {string} guildId
+         * @param {integer} status
+         * @param {boolean} withInclude
+         * @returns {BOT_Tournaments}
+         */
+        static async getTournamentsByGuildAndStatus(guildId, status, withInclude = true) {
+            if (withInclude) {
+                return await this.findAll({ where: { guildId: guildId, status: status }, include: 'owner' }); // [this.models().BOT_Users] });
+            } else {
+                return await this.findAll({ where: { guildId: guildId, status: status } });
+            }
+        }
+
+
+        /**
+         * Update the tournament status
+         * @param {BOT_Tournaments.TournamentStatus} newStatut
+         */
+        async updateStatut(newStatut) {
+            // On update pour raison X
+            this.set({
+                status: newStatut,
+            });
+            await this.save();
+        }
     }
+
+    BOT_Tournaments.TournamentStatus = {
+        Active: 1,
+        InProgress: 2,
+        Closed: 3,
+    };
 
     BOT_Tournaments.init({
         id: {

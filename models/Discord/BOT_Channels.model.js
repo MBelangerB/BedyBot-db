@@ -24,6 +24,34 @@ module.exports = (sequelize, DataTypes) => {
         as: 'session',
       });
     }
+
+    /**
+     * Get BOT_Guilds by discord guildId
+     * @param {string} guildId
+     * @param {boolean} withInclude
+     * @returns {BOT_Channels}
+     */
+    static async getChannelByGuildId(guildId, channelId) {
+      return await this.findOne({ where: { guildId: guildId, channelId: channelId } });
+    }
+
+    /**
+     * Get All Channels for a GuildId and SessionId
+     * @param {string} guildId
+     * @param {integer} sessionId
+     * @param {boolean} withLock
+     * @param {*} transaction
+     * @returns {BOT_Channels}
+     */
+    static async getAllChannelsByGuildSession(guildId, sessionId, withLock = false, transaction = null) {
+      if (transaction) {
+        return await this.findAll({ where: { guildId: guildId, sessionId: sessionId }, lock: withLock, transaction: transaction });
+      } else {
+        return await this.findAll({ where: { guildId: guildId, sessionId: sessionId } });
+      }
+    }
+
+
   }
 
   BOT_Channels.init({

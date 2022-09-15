@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Op, Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class BOT_UserSessions extends Model {
@@ -11,6 +11,40 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
+        }
+
+        /**
+         * Return the BOT_UserSessions attach at userSessionId
+         * @param {integer} userSessionId
+         * @returns {BOT_UserSessions}
+         */
+        static async getUserSessionById(userSessionId) {
+            return await this.findOne({ where: { id: userSessionId } });
+        }
+
+        /**
+         * Remove the channelId reference in BOT_UserSessions
+         * @param {id} channelId
+         * @param {*} transaction
+         * @returns
+         */
+        static async cleanChannelInfoByChannelId(channelId, transaction = null) {
+            if (transaction) {
+                return await this.update({ textChannelId: null, voiceChannelId: null },
+                    {
+                        where: {
+                            [Op.or]: [{ textChannelId: channelId }, { voiceChannelId: channelId }],
+                        },
+                        transaction: transaction,
+                    });
+            } else {
+                return await this.update({ textChannelId: null, voiceChannelId: null },
+                    {
+                        where: {
+                            [Op.or]: [{ textChannelId: channelId }, { voiceChannelId: channelId }],
+                        },
+                    });
+            }
         }
     }
 

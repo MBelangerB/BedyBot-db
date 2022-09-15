@@ -19,10 +19,20 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
+        /**
+         * Get the BOT_Users for a guild and userId
+         * @param {string} guildId
+         * @param {string} userId
+         * @returns {BOT_Users}
+         */
+        static async getUserByUserId(guildId, userId) {
+            return await this.findOne({ where: { guildId: guildId, userId: userId } });
+        }
+
+
         getUsername() {
             return (this.BOT_GuildUser && this.BOT_GuildUser.hasUsername() ? this.BOT_GuildUser.username : this.defaultUsername);
         }
-
         getTwitchUsername() {
             return this.twitchUsername ? this.twitchUsername : 'N/A';
         }
@@ -31,6 +41,41 @@ module.exports = (sequelize, DataTypes) => {
         }
         getSwitchFriendCode() {
             return this.switchFriendCode ? this.switchFriendCode : 'N/A';
+        }
+
+
+        /**
+         * Update the switchUsername
+         * @param {string} switchUsername
+         */
+        async updateSwitchUsername(switchUsername) {
+            // On update pour raison X
+            this.set({
+                switchUsername: switchUsername,
+            });
+            await this.save();
+        }
+
+        /**
+         * Update the twitchUsername
+         * @param {string} twitchUsername
+         */
+        async updateTwitchUsername(twitchUsername) {
+            this.set({
+                twitchUsername: twitchUsername,
+            });
+            await this.save();
+        }
+
+        /**
+          * Update the switchFriendCode
+          * @param {string} switchFriendCode
+          */
+        async updateSwitchFriendCode(switchFriendCode) {
+            this.set({
+                switchFriendCode: switchFriendCode,
+            });
+            await this.save();
         }
     }
 

@@ -23,6 +23,39 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
 
+        /**
+         * Return a session array by tournament Id
+         * @param {integer} tournamentId
+         * @param {boolean} withInclude
+         * @returns  {BOT_Sessions[]}
+         */
+        static async getSessionsById(tournamentId, withInclude = true) {
+            if (withInclude) {
+                return await this.findAll({ where: { tournamentId: tournamentId }, include: [this.models().BOT_Users] });
+            } else {
+                return await this.findAll({ where: { tournamentId: tournamentId } });
+            }
+        }
+
+        /**
+         * Return a session by tournament and session
+         * @param {integer} tournamentId
+         * @param {integer} sessionNumber
+         * @param {booolean} withInclude
+         * @returns {BOT_Sessions}
+         */
+        static async getSessionByIdAndSession(tournamentId, sessionNumber, withInclude = true) {
+            if (withInclude) {
+                return await this.findOne({ where: { tournamentId: tournamentId, sessionNumber: sessionNumber }, include: [this.models().BOT_Users] });
+            } else {
+                return await this.findOne({ where: { tournamentId: tournamentId, sessionNumber: sessionNumber } });
+            }
+        }
+
+        /**
+         * Get nb participants are register in the session
+         * @returns {integer}
+         */
         getParticipantsCount() {
             let nbUser = 0;
             if (this.BOT_Users) {
@@ -31,10 +64,26 @@ module.exports = (sequelize, DataTypes) => {
             return nbUser ? nbUser : 0;
         }
 
-        getNbTeam(nbUserPerTeam = 12) {
-            return Math.ceil(this.nbUser / nbUserPerTeam);
+        /**
+         * Get nb lobby for this session
+         * @param {integer} maxPlayerPerLobby
+         * @returns {integer}
+         */
+        getNbLobby(maxPlayerPerLobby = 12) {
+            let maxParticipant = 12;
+            if (maxPlayerPerLobby && Number.isInteger(maxPlayerPerLobby)) {
+                maxParticipant = maxPlayerPerLobby;
+            }
+            const nbTeam = Math.ceil(this.getParticipantsCount() / maxParticipant);
+            return nbTeam;
         }
     }
+
+    BOT_Sessions.SessionStatus = {
+        Active: 1,
+        InProgress: 2,
+        Closed: 3,
+    };
 
     BOT_Sessions.init({
         id: {

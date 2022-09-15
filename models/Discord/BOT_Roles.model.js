@@ -1,4 +1,5 @@
 'use strict';
+
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -15,7 +16,41 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId',
             });
         }
+
+        /**
+         * Get BOT_Roles by id
+         * @param {integer} id
+         * @returns {BOT_Roles}
+         */
+        static async getRoleById(id, roleType = BOT_Roles.RoleTypes.MANAGER) {
+            return await this.findOne({ where: { id: id, type: roleType } });
+        }
+
+        /**
+         * Get BOT_Roles by discord guildId
+         * @param {string} guildId
+         * @param {BOT_Roles.RoleTypes} roleType
+         * @returns {BOT_Roles}
+         */
+        static async getRoleByGuildId(guildId, roleType = BOT_Roles.RoleTypes.MANAGER) {
+            return await this.findOne({ where: { guildId: guildId, type: roleType } });
+        }
+
+        /**
+         * Get BOT_Roles by roleName
+         * @param {string} guildId
+         * @param {string} roleName
+         * @returns {BOT_Roles}
+         */
+        static async getRoleByRoleName(guildId, roleName) {
+            return await this.findOne({ where: { guildId: guildId, roleName: roleName } });
+        }
     }
+
+    BOT_Roles.RoleTypes = {
+        MANAGER: 1,
+        PLAYER: 2,
+    };
 
     BOT_Roles.init({
         id: {
@@ -56,5 +91,6 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'BOT_Roles',
         tableName: 'BOT_Roles',
     });
+
     return BOT_Roles;
 };

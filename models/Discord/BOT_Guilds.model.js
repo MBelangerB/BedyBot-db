@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
          * @param {boolean} withInclude
          * @returns {BOT_Guilds}
          */
-        static async getAllActiveGuild(withInclude = true) {
+        static async getAllActiveGuilds(withInclude = true) {
             if (withInclude) {
                 return await this.findAll({ where: { isActive: true }, include: [this.models().BOT_GuildOptions] });
             } else {
@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {BOT_GuildOptions}
          */
         static async getGuildOptionByGuildId(guildId) {
-            return await this.getGuildByGuildId(guildId, true)?.BOT_GuildOptions;
+            return await this.getGuildByGuildId(guildId, true)?.BOT_GuildOption;
         }
 
         /**
@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Update the guild name
-         * @param {*} newName
+         * @param {string} newName
          */
         async updateGuildName(newName) {
             // On update pour raison X
@@ -115,7 +115,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Update the guild owner id
-         * @param {*} ownerId
+         * @param {string} ownerId
          */
         async updateGuildOwner(ownerId) {
             // On update pour raison X
