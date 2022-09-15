@@ -10,50 +10,6 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable('API_Users', {
-      id: {
-        type: DataTypes.STRING,
-        field: 'id',
-        primaryKey: true,
-        // autoIncrement: true,
-        allowNull: false,
-      },
-      // 1 => Discord - 2 => Twitch
-      source: {
-        type: DataTypes.INTEGER,
-        field: 'source',
-        allowNull: false,
-      },
-      avatar: {
-        type: DataTypes.STRING,
-        field: 'avatar',
-        allowNull: true,
-      },
-      username: {
-        type: DataTypes.STRING,
-        field: 'username',
-        allowNull: false,
-        unique: true,
-      },
-      discriminator: {
-        type: DataTypes.STRING(4),
-        field: 'discriminator',
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        field: 'email',
-        allowNull: false,
-      },
-      joinedAt: {
-        type: DataTypes.DATE,
-        field: 'joinedAt',
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
-    });
-
-
     await queryInterface.createTable('API_Tokens', {
       id: {
         type: DataTypes.INTEGER,
@@ -62,15 +18,27 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      userId: {
+      apiUserId: {
         type: DataTypes.STRING,
-        field: 'userId',
+        field: 'apiUserId',
         allowNull: false,
+        // references: {
+        //   model: 'API_Users',
+        //   key: 'externalId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: true,
+        // references: {
+        //   model: 'API_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       // 1 => Discord - 2 => Twitch
       source: {
@@ -97,7 +65,7 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'tokenType',
         allowNull: false,
-        defaultValue: 'Bearer'
+        defaultValue: 'Bearer',
       },
       expireAt: {
         type: DataTypes.DATE,
@@ -111,6 +79,9 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
+
+    await queryInterface.addIndex('API_Tokens', ['apiUserId']);
+    await queryInterface.addIndex('API_Tokens', ['guildId']);
   },
 
   /* eslint-disable-next-line no-unused-vars */
@@ -121,8 +92,8 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.removeIndex('API_Tokens', ['guildId']);
+    await queryInterface.removeIndex('API_Tokens', ['apiUserId']);
     await queryInterface.dropTable('API_Tokens');
-    await queryInterface.dropTable('API_Users');
-    // await queryInterface.dropTable('API_Clients');
   },
 };

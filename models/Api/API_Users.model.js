@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             models.API_Users.hasOne(models.API_Tokens, {
                 foreignKey: 'userId',
                 onDelete: 'CASCADE',
-            });
+            }); // TODO : Peut-être plus vrai avec le «bot» TOKEN du JOIN
 
             models.API_Users.belongsToMany(models.API_Guilds, {
                 through: {
@@ -60,12 +60,12 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
         },
         discriminator: {
-            type: DataTypes.STRING(4),
+            type: DataTypes.STRING(10),
             allowNull: false,
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         joinedAt: {
             type: DataTypes.DATE,

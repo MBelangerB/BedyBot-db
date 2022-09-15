@@ -22,6 +22,12 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        // references: {
+        //   model: 'API_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
       name: {
         type: DataTypes.STRING,
@@ -51,17 +57,19 @@ module.exports = {
       },
     });
 
-    await queryInterface.addConstraint('API_GuildRoles', {
-      fields: ['guildId'],
-      type: 'foreign key',
-      name: 'GuildRoles_guildId_fkey',
-      references: {
-        table: 'API_Guilds',
-        field: 'id',
-      },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    });
+    await queryInterface.addIndex('API_GuildRoles', ['guildId']);
+
+    // await queryInterface.addConstraint('API_GuildRoles', {
+    //   fields: ['guildId'],
+    //   type: 'foreign key',
+    //   name: 'GuildRoles_guildId_fkey',
+    //   references: {
+    //     table: 'API_Guilds',
+    //     field: 'id',
+    //   },
+    //   onDelete: 'CASCADE',
+    //   onUpdate: 'CASCADE',
+    // });
 
 
   },
@@ -74,8 +82,9 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-     await queryInterface.removeConstraint('API_GuildRoles', 'GuildRoles_guildId_fkey');
-     await queryInterface.dropTable('API_GuildRoles');
+    //  await queryInterface.removeConstraint('API_GuildRoles', 'GuildRoles_guildId_fkey');
+    await queryInterface.removeIndex('API_GuildRoles', ['guildId']);
+    await queryInterface.dropTable('API_GuildRoles');
 
     // await queryInterface.removeColumn('API_Tokens', 'scope');
     // await queryInterface.removeColumn('API_Tokens', 'expireAt');
@@ -84,5 +93,5 @@ module.exports = {
     // await queryInterface.removeColumn('API_Guilds', 'ownerId');
     // await queryInterface.removeColumn('API_Guilds', 'region');
     // await queryInterface.removeColumn('API_Guilds', 'preferred_locale');
-  }
+  },
 };

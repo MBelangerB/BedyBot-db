@@ -22,8 +22,7 @@ module.exports = {
         },
       ),
      */
-
-    await queryInterface.createTable('BOT_Tournaments', {
+    await queryInterface.createTable('BOT_Guilds', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -35,57 +34,46 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Guilds',
-        //   key: 'guildId',
-        //   onDelete: 'set NULL',
-        //   onUpdate: 'CASCADE',
-        // },
+        unique: true,
       },
-      ownerId: {
-        type: DataTypes.INTEGER,
-        field: 'ownerId',
-        // references: {
-        //   model: 'BOT_Users',
-        //   key: 'id',
-        //   onDelete: 'set NULL',
-        //   onUpdate: 'CASCADE',
-        // },
-      },
-      announcementChannelId: {
+      guildName: {
         type: DataTypes.STRING,
-        field: 'announcementChannelId',
+        field: 'guildName',
         allowNull: false,
       },
-      announcementMessageId: {
+      guildIconUrl: {
         type: DataTypes.STRING,
-        field: 'announcementMessageId',
+        field: 'guildIconUrl',
+        allowNull: true,
+      },
+      guildOwnerId: {
+        type: DataTypes.STRING,
+        field: 'guildOwnerId',
         allowNull: false,
       },
-      startDateTime: {
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        field: 'isActive',
+        allowNull: false,
+        defaultValue: true,
+      },
+      joinedAt: {
         type: DataTypes.DATE,
-        field: 'startDateTime',
-        allowNull: false,
-      },
-      sessionCount: {
-        type: DataTypes.INTEGER,
-        field: 'sessionCount',
-        allowNull: false,
-      },
-      status: {
-        type: DataTypes.INTEGER,
-        field: 'status',
-        allowNull: false,
-      },
-      ts: {
-        type: DataTypes.DATE,
-        field: 'ts',
+        field: 'joinedAt',
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
-    });
+      leftAt: {
+        type: DataTypes.DATE,
+        field: 'leftAt',
+        allowNull: true,
+      },
+    },
+      {
+        comment: 'List of discord guilds where the bot has been installed.',
+      });
 
-    await queryInterface.addIndex('BOT_Tournaments', ['guildId']);
+    await queryInterface.addIndex('BOT_Guilds', ['guildId']);
   },
 
   async down(queryInterface) {
@@ -96,7 +84,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.removeIndex('BOT_Tournaments', ['guildId']);
-    await queryInterface.dropTable('BOT_Tournaments');
+    await queryInterface.removeIndex('BOT_Guilds', ['guildId']);
+    await queryInterface.dropTable('BOT_Guilds');
   },
 };

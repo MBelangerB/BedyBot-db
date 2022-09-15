@@ -1,5 +1,7 @@
 'use strict';
 
+const Sequelize = require('sequelize');
+
 /*
   Create a new migration : npx sequelize-cli migration:generate --name ${NAME}
 */
@@ -21,7 +23,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('Channels', {
+    await queryInterface.createTable('BOT_GuildUsers', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -29,37 +31,43 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
+      userId: {
+        type: DataTypes.STRING,
+        field: 'userId',
+        allowNull: false,
+        // references: {
+        //   model: 'BOT_Users',
+        //   key: 'userId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
+      },
       guildId: {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        // references: {
+        //   model: 'BOT_Guilds',
+        //   key: 'guildId',
+        //   onDelete: 'CASCADE',
+        //   onUpdate: 'CASCADE',
+        // },
       },
-      channelId: {
+      nickname: {
         type: DataTypes.STRING,
-        field: 'channelId',
-        allowNull: false,
-        unique: true,
-      },
-      channelName: {
-        type: DataTypes.STRING,
-        field: 'channelName',
-        allowNull: false,
-      },
-      channelType: {
-        type: DataTypes.STRING,
-        field: 'channelType',
-        allowNull: false,
-      },
-      parentId: {
-        type: DataTypes.INTEGER,
-        field: 'parentId',
+        field: 'nickname',
         allowNull: true,
       },
-      sessionId: {
-        type: DataTypes.INTEGER,
-        field: 'sessionId',
+      joinedAt: {
+        type: DataTypes.DATE,
+        field: 'joinedAt',
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
+
+    await queryInterface.addIndex('BOT_GuildUsers', ['guildId']);
+    await queryInterface.addIndex('BOT_GuildUsers', ['userId']);
   },
 
   async down(queryInterface) {
@@ -70,6 +78,8 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Channels');
+    await queryInterface.removeIndex('BOT_GuildUsers', ['guildId']);
+    await queryInterface.removeIndex('BOT_GuildUsers', ['userId']);
+    await queryInterface.dropTable('BOT_GuildUsers');
   },
 };

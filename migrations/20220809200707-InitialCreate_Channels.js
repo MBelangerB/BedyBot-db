@@ -1,7 +1,5 @@
 'use strict';
 
-const Sequelize = require('sequelize');
-
 /*
   Create a new migration : npx sequelize-cli migration:generate --name ${NAME}
 */
@@ -23,7 +21,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('BOT_Tournaments', {
+    await queryInterface.createTable('BOT_Channels', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -38,54 +36,53 @@ module.exports = {
         // references: {
         //   model: 'BOT_Guilds',
         //   key: 'guildId',
-        //   onDelete: 'set NULL',
-        //   onUpdate: 'CASCADE',
+        //   onDelete: 'CASCADE',
         // },
       },
-      ownerId: {
+      sessionId: {
         type: DataTypes.INTEGER,
-        field: 'ownerId',
+        field: 'sessionId',
+        allowNull: true,
         // references: {
-        //   model: 'BOT_Users',
+        //   model: 'BOT_Sessions',
         //   key: 'id',
-        //   onDelete: 'set NULL',
         //   onUpdate: 'CASCADE',
+        //   onDelete: 'set NULL',
         // },
       },
-      announcementChannelId: {
-        type: DataTypes.STRING,
-        field: 'announcementChannelId',
-        allowNull: false,
-      },
-      announcementMessageId: {
-        type: DataTypes.STRING,
-        field: 'announcementMessageId',
-        allowNull: false,
-      },
-      startDateTime: {
-        type: DataTypes.DATE,
-        field: 'startDateTime',
-        allowNull: false,
-      },
-      sessionCount: {
+      parentId: {
         type: DataTypes.INTEGER,
-        field: 'sessionCount',
+        field: 'parentId',
+        allowNull: true,
+        // references: {
+        //   model: 'BOT_Channels',
+        //   key: 'id',
+        //   onDelete: 'CASCADE',
+        // },
+      },
+      channelId: {
+        type: DataTypes.STRING,
+        field: 'channelId',
+        allowNull: false,
+        unique: true,
+      },
+      channelName: {
+        type: DataTypes.STRING,
+        field: 'channelName',
         allowNull: false,
       },
-      status: {
-        type: DataTypes.INTEGER,
-        field: 'status',
+      channelType: {
+        type: DataTypes.STRING,
+        field: 'channelType',
         allowNull: false,
       },
-      ts: {
-        type: DataTypes.DATE,
-        field: 'ts',
-        allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
-    });
+    },
+      {
+        comment: 'Discord channels information who are create for a tournament.',
+      });
 
-    await queryInterface.addIndex('BOT_Tournaments', ['guildId']);
+    await queryInterface.addIndex('BOT_Channels', ['guildId']);
+    await queryInterface.addIndex('BOT_Channels', ['sessionId']);
   },
 
   async down(queryInterface) {
@@ -96,7 +93,8 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.removeIndex('BOT_Tournaments', ['guildId']);
-    await queryInterface.dropTable('BOT_Tournaments');
+    await queryInterface.removeIndex('BOT_Channels', ['guildId']);
+    await queryInterface.removeIndex('BOT_Channels', ['sessionId']);
+    await queryInterface.dropTable('BOT_Channels');
   },
 };

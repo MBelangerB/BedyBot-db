@@ -21,7 +21,8 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('GuildOptions', {
+    // Common discord value and Shared user info
+    await queryInterface.createTable('BOT_Users', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -29,30 +30,41 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      guildId: {
+      userId: {
         type: DataTypes.STRING,
-        field: 'guildId',
+        field: 'userId',
+        allowNull: false,
+        unique: true,
+      },
+      defaultUsername: {
+        type: DataTypes.STRING,
+        field: 'defaultUsername',
         allowNull: false,
       },
-      announcementChannelId: {
+      discriminator: {
+        type: DataTypes.STRING(10),
+        field: 'discriminator',
+        allowNull: false,
+      },
+      // Custom user info. Shared with all guilds
+      switchFriendCode: {
         type: DataTypes.STRING,
-        field: 'announcementChannelId',
+        field: 'switchFriendCode',
         allowNull: true,
       },
-      maxPlayerPerLobby: {
-        type: DataTypes.INTEGER,
-        field: 'maxPlayerPerLobby',
-        allowNull: false,
-        defaultValue: 12,
+      switchUsername: {
+        type: DataTypes.STRING,
+        field: 'switchUsername',
+        allowNull: true,
       },
-      addEveryone: {
-        type: DataTypes.BOOLEAN,
-        field: 'addEveryone',
-        defaultValue: false,
+      twitchUsername: {
+        type: DataTypes.STRING,
+        field: 'twitchUsername',
         allowNull: true,
       },
     });
 
+    await queryInterface.addIndex('BOT_Users', ['userId']);
   },
 
   async down(queryInterface) {
@@ -63,6 +75,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('GuildOptions');
+     await queryInterface.removeIndex('BOT_Users', ['userId']);
+    await queryInterface.dropTable('BOT_Users');
   },
 };

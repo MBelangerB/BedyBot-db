@@ -21,7 +21,7 @@ module.exports = {
       ),
      */
 
-    await queryInterface.createTable('Roles', {
+    await queryInterface.createTable('BOT_GuildOptions', {
       id: {
         type: DataTypes.INTEGER,
         field: 'id',
@@ -33,23 +33,33 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'guildId',
         allowNull: false,
+        unique: true,
+        // references: {
+        //   model: 'BOT_Guilds', // This is a reference to another model
+        //   key: 'guildId', // This is the column name of the referenced model
+        //   onDelete: 'CASCADE',
+        // },
       },
-      roleId: {
+      announcementChannelId: {
         type: DataTypes.STRING,
-        field: 'roleId',
-        allowNull: false,
+        field: 'announcementChannelId',
+        allowNull: true,
       },
-      roleName: {
-        type: DataTypes.STRING,
-        field: 'roleName',
-        allowNull: false,
-      },
-      type: {
+      maxPlayerPerLobby: {
         type: DataTypes.INTEGER,
-        field: 'type',
+        field: 'maxPlayerPerLobby',
         allowNull: false,
+        defaultValue: 12,
+      },
+      addEveryone: {
+        type: DataTypes.BOOLEAN,
+        field: 'addEveryone',
+        defaultValue: false,
+        allowNull: true,
       },
     });
+
+    await queryInterface.addIndex('BOT_GuildOptions', ['guildId']);
   },
 
   async down(queryInterface) {
@@ -60,6 +70,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      * await queryInterface.removeColumn('users', 'linkedin'),
      */
-    await queryInterface.dropTable('Roles');
+    await queryInterface.removeIndex('BOT_GuildOptions', ['guildId']);
+    await queryInterface.dropTable('BOT_GuildOptions');
   },
 };
