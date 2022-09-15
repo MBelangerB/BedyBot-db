@@ -42,9 +42,9 @@ module.exports = (sequelize, DataTypes) => {
                     include: {
                         model: this.models().BOT_GuildUsers,
                         where: {
-                            guildId: guildId
-                        }
-                    }
+                            guildId: guildId,
+                        },
+                    },
                 });
             } else {
                 return await this.findOne({ where: { userId: userId } });

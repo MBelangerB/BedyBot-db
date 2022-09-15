@@ -27,9 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * 
-     * @param {string} userId 
-     * @returns 
+     *
+     * @param {string} userId
+     * @returns
      */
     static async initGuildUser(guildId, userId, nickname) {
       return await this.create({
