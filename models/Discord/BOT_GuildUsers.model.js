@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     *
+     * Init the guild user
      * @param {string} userId
      * @returns
      */
