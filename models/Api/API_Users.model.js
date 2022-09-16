@@ -99,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
                 });
             }
 
-            if (this.changed()) {
+            if (this.changed() && this.changed().length > 0) {
                 await this.save();
             }
         }
