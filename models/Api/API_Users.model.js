@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return a api user by id
-         * @param {integer} id 
+         * @param {integer} id
          * @returns {APIUsers}
          */
         static async getApiUserById(id) {
@@ -58,10 +58,10 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return a api user
-         * @param {string} username 
-         * @param {string} email 
-         * @param {integer} source 
-         * @param {boolean} withInclude 
+         * @param {string} username
+         * @param {string} email
+         * @param {integer} source
+         * @param {boolean} withInclude
          * @returns {APIUsers}
          */
         static async getApiUserByUserInfo(username, email, source, withInclude = true) {
@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return a api user by a payload information
-         * @param {*} payload 
+         * @param {*} payload
          * @returns {APIUsers}
          */
         static async getUserByPayload(payload) {
@@ -84,8 +84,8 @@ module.exports = (sequelize, DataTypes) => {
         /**
          * Update API User
          * @todo a tester
-         * @param {string} newUsername 
-         * @param {string} newAvatar 
+         * @param {string} newUsername
+         * @param {string} newAvatar
          */
         async updateUserInfo(newUsername, newAvatar) {
             if (newUsername !== this.username) {

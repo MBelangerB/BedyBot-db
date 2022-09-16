@@ -34,13 +34,13 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Return API Guild for a ID (PK)
-         * @param {integer} id 
+         * @param {integer} id
          * @returns {API_Guilds}
          */
         static async getApiGuildById(id) {
             return await this.findOne({ where: { id: id } });
         }
-        
+
         /**
          * Return API Guild for a guild id
          * @param {string} guildId Discord guild id

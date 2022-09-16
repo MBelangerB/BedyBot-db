@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.API_GuildUserPermissions.belongsTo(models.API_Guilds, {
-                foreignKey: 'guildId',  // FK in current table
+                foreignKey: 'guildId', // FK in current table
                 targetKey: 'guildId', // Key name on API_Guilds
                 // as: 'guild',
             });
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         /**
          * Return all permissions for a user
          * @param {string} userId  Discord user id
-         * @param {boolean} withInclude 
+         * @param {boolean} withInclude
          * @returns {API_GuildUserPermissions[]}
          */
         static async getAllPermissionUserByUserId(userId, withInclude = true) {

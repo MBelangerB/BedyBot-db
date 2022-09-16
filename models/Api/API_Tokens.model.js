@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Return the token for a specified token for a source
-     * @param {string} token 
-     * @param {integer} source 
+     * @param {string} token
+     * @param {integer} source
      * @returns {API_Tokens}
      */
     static async getTokenByAccessToken(token, source) {
