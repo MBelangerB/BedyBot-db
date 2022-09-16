@@ -135,7 +135,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         guildId: {
             type: DataTypes.STRING,
-            // field: 'guildId',
+            field: 'guildId',
             allowNull: false,
         },
         guildName: {

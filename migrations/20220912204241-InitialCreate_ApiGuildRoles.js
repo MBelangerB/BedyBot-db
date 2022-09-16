@@ -49,9 +49,9 @@ module.exports = {
         field: 'color',
         allowNull: false,
       },
-      ts: {
+      lastUpdate: {
         type: DataTypes.DATE,
-        field: 'ts',
+        field: 'lastUpdate',
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },

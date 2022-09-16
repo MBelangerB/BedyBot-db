@@ -39,10 +39,9 @@ module.exports = {
         type: DataTypes.STRING,
         field: 'username',
         allowNull: false,
-        unique: true,
       },
       discriminator: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(8),
         field: 'discriminator',
         allowNull: true,
       },

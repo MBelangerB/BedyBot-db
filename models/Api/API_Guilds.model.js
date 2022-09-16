@@ -24,15 +24,47 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId',
                 onDelete: 'CASCADE',
             });
+
+            models.API_Guilds.belongsTo(models.API_Tokens, {
+                foreignKey: 'guildId', // Set FK name
+                targetKey: 'guildId', // Key name on API_Tokens
+                onDelete: 'CASCADE',
+            });
         }
+
+        /**
+         * Return API Guild for a ID (PK)
+         * @param {integer} id 
+         * @returns {API_Guilds}
+         */
+        static async getApiGuildById(id) {
+            return await this.findOne({ where: { id: id } });
+        }
+        
+        /**
+         * Return API Guild for a guild id
+         * @param {string} guildId Discord guild id
+         * @returns {API_Guilds}
+         */
+        static async getApiGuildByGuildId(guildId) {
+            return await this.findOne({ where: { guildId: guildId } });
+        }
+
     }
 
     API_Guilds.init({
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             field: 'id',
             primaryKey: true,
+            autoIncrement: true,
             allowNull: false,
+        },
+        guildId: {
+            type: DataTypes.STRING,
+            field: 'guildId',
+            allowNull: false,
+            unique: true,
         },
         name: {
             type: DataTypes.STRING,

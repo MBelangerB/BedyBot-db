@@ -11,6 +11,11 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class APIUsers extends Model {
+
+        static models() {
+            return this.sequelize.models;
+        }
+
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -18,11 +23,6 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.API_Users.hasOne(models.API_Tokens, {
-                foreignKey: 'userId',
-                onDelete: 'CASCADE',
-            }); // TODO : Peut-être plus vrai avec le «bot» TOKEN du JOIN
-
             models.API_Users.belongsToMany(models.API_Guilds, {
                 through: {
                     model: models.API_GuildUserPermissions,
@@ -30,7 +30,80 @@ module.exports = (sequelize, DataTypes) => {
                 },
                 foreignKey: 'guildId',
             });
+
+            models.API_Users.belongsTo(models.API_Tokens, {
+                foreignKey: 'externalId', // Set FK name in current table
+                targetKey: 'apiUserId', // Key name on API_Tokens
+                onDelete: 'CASCADE',
+            });
         }
+
+        /**
+         * Return a api user by id
+         * @param {integer} id 
+         * @returns {APIUsers}
+         */
+        static async getApiUserById(id) {
+            return await this.findOne({ where: { id: id } });
+        }
+
+        /**
+         * Return a api user by external id
+         * @param {string} externalId external user id
+         * @returns {APIUsers}
+         */
+        static async getApiUserByExternalId(externalId) {
+            return await this.findOne({ where: { externalId: externalId } });
+        }
+
+        /**
+         * Return a api user
+         * @param {string} username 
+         * @param {string} email 
+         * @param {integer} source 
+         * @param {boolean} withInclude 
+         * @returns {APIUsers}
+         */
+        static async getApiUserByUserInfo(username, email, source, withInclude = true) {
+            if (withInclude) {
+                return await this.findOne({ where: { username: username, email: email, source: source }, include: [this.models().API_Tokens] });
+            } else {
+                return await this.findOne({ where: { username: username, email: email, source: source } });
+            }
+        }
+
+        /**
+         * Return a api user by a payload information
+         * @param {*} payload 
+         * @returns {APIUsers}
+         */
+        static async getUserByPayload(payload) {
+            return await this.findOne({ where: { id: payload.userid, username: payload.username, email: payload.email } });
+        }
+
+        /**
+         * Update API User
+         * @todo a tester
+         * @param {string} newUsername 
+         * @param {string} newAvatar 
+         */
+        async updateUserInfo(newUsername, newAvatar) {
+            if (newUsername !== this.username) {
+                this.set({
+                    username: newUsername,
+                });
+            }
+            if (newAvatar !== this.avatar) {
+                this.set({
+                    avatar: newAvatar,
+                });
+            }
+
+            if (this.changed()) {
+                await this.save();
+            }
+        }
+
         // validatePassword(password) {
         //     var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
         //     if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {
@@ -43,28 +116,41 @@ module.exports = (sequelize, DataTypes) => {
 
     APIUsers.init({
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
+            autoIncrement: true,
+            allowNull: false,
+        },
+        externalId: {
+            type: DataTypes.STRING,
+            field: 'externalId',
+            allowNull: false,
+            unique: true,
         },
         source: {
             type: DataTypes.INTEGER,
+            field: 'source',
             allowNull: false,
         },
         avatar: {
             type: DataTypes.STRING,
+            field: 'avatar',
             allowNull: true,
         },
         username: {
             type: DataTypes.STRING,
+            field: 'username',
             allowNull: false,
-            unique: true,
         },
         discriminator: {
-            type: DataTypes.STRING(10),
-            allowNull: false,
+            type: DataTypes.STRING(8),
+            field: 'discriminator',
+            allowNull: true,
         },
         email: {
             type: DataTypes.STRING,
+            field: 'email',
             allowNull: true,
         },
         joinedAt: {
