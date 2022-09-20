@@ -76,15 +76,15 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'BOT_GuildOptions',
         indexes: [
             {
-                name: "PK_guildOptions_id",
+                name: 'PK_guildOptions_id',
                 unique: true,
-                fields: [{ name: "id" },]
+                fields: [{ name: 'id' }],
             },
             {
-                name: "IDX_guildOptions_guildId",
-                fields: [{ name: "guildId" },]
+                name: 'IDX_guildOptions_guildId',
+                fields: [{ name: 'guildId' }],
             },
-        ]
+        ],
     });
 
     return BOT_GuildOptions;

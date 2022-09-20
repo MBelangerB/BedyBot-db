@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
                         where: {
                             guildId: guildId,
                         },
-                        required: false
+                        required: false,
                     },
                 });
             } else {
