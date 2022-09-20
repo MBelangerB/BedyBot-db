@@ -22,21 +22,17 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            // models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
-            //     foreignKey: 'guildId',
-            //     as: 'guild',
-            // });
-
-            models.BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
-                foreignKey: 'guildId', // Set FK name
-                targetKey: 'guildId', // Key name on BOT_Guilds
+            BOT_GuildOptions.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
                 onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
             });
         }
 
-        static async initOptionForGuildId(id) {
+        static async initOptionForGuildId(guildId) {
             return await this.create({
-                guildId: id,
+                guildId: guildId,
                 maxPlayerPerLobby: 12,
             });
         }
@@ -45,17 +41,20 @@ module.exports = (sequelize, DataTypes) => {
     BOT_GuildOptions.init({
         id: {
             type: DataTypes.INTEGER,
+            field: 'id',
             primaryKey: true,
             autoIncrement: true,
-            field: 'id',
+            allowNull: false,
+            unique: true,
         },
         guildId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
+            field: 'guildId',
             allowNull: false,
-            // field: 'guildId',
+            unique: true,
         },
         announcementChannelId: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(80),
             field: 'announcementChannelId',
             allowNull: true,
         },
@@ -68,13 +67,25 @@ module.exports = (sequelize, DataTypes) => {
         addEveryone: {
             type: DataTypes.BOOLEAN,
             field: 'addEveryone',
-            allowNull: true,
             defaultValue: false,
+            allowNull: true,
         },
     }, {
         sequelize,
         modelName: 'BOT_GuildOptions',
         tableName: 'BOT_GuildOptions',
+        indexes: [
+            {
+                name: "PK_guildOptions_id",
+                unique: true,
+                fields: [{ name: "id" },]
+            },
+            {
+                name: "IDX_guildOptions_guildId",
+                fields: [{ name: "guildId" },]
+            },
+        ]
     });
+
     return BOT_GuildOptions;
 };

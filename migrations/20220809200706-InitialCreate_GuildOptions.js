@@ -5,22 +5,6 @@
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_GuildOptions', {
       id: {
         type: DataTypes.INTEGER,
@@ -30,18 +14,18 @@ module.exports = {
         allowNull: false,
       },
       guildId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         field: 'guildId',
         allowNull: false,
-        unique: true,
-        // references: {
-        //   model: 'BOT_Guilds', // This is a reference to another model
-        //   key: 'guildId', // This is the column name of the referenced model
-        //   onDelete: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Guilds', // This is a reference to another model
+          key: 'id', // This is the column name of the referenced model
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       announcementChannelId: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(80),
         field: 'announcementChannelId',
         allowNull: true,
       },
@@ -59,18 +43,24 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('BOT_GuildOptions', ['guildId']);
+    // Index
+    await queryInterface.addIndex('BOT_GuildOptions', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_guildOptions_id',
+    });
+
+    await queryInterface.addIndex('BOT_GuildOptions', {
+      fields: ['guildId'],
+      name: 'IDX_guildOptions_guildId',
+    });
+
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_GuildOptions', ['guildId']);
+    await queryInterface.removeIndex('BOT_GuildOptions', 'PK_guildOptions_id');
+    await queryInterface.removeIndex('BOT_GuildOptions', 'IDX_guildOptions_guildId');
     await queryInterface.dropTable('BOT_GuildOptions');
   },
 };

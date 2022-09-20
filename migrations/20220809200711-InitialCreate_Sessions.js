@@ -5,22 +5,6 @@
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_Sessions', {
       id: {
         type: DataTypes.INTEGER,
@@ -28,6 +12,16 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+      },
+      tournamentId: {
+        type: DataTypes.INTEGER,
+        field: 'tournamentId',
+        references: {
+          model: 'BOT_Tournaments',
+          key: 'id',
+          // onDelete: 'Set NULL',
+          // onUpdate: 'CASCADE',
+        },
       },
       sessionNumber: {
         type: DataTypes.INTEGER,
@@ -50,30 +44,25 @@ module.exports = {
         allowNull: false,
         defaultValue: 1,
       },
-      tournamentId: {
-        type: DataTypes.INTEGER,
-        field: 'tournamentId',
-        // references: {
-        //   model: 'BOT_Tournaments',
-        //   key: 'id',
-        //   onDelete: 'Set NULL',
-        //   onUpdate: 'CASCADE',
-        // },
-      },
     });
 
-    await queryInterface.addIndex('BOT_Sessions', ['tournamentId']);
+    await queryInterface.addIndex('BOT_Sessions', {
+      fields: ['tournamentId'],
+      name: 'IDX_sessions_tournamentId',
+    });
+
+    await queryInterface.addIndex('BOT_Sessions', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_sessions_id',
+    });
+
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_Sessions', ['tournamentId']);
+    await queryInterface.removeIndex('BOT_Sessions', 'IDX_sessions_tournamentId');
+    await queryInterface.removeIndex('BOT_Sessions', 'PK_sessions_id');
     await queryInterface.dropTable('BOT_Sessions');
   },
 };

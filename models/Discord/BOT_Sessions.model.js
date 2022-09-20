@@ -10,21 +10,63 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.BOT_Sessions.belongsTo(models.BOT_Tournaments, {
-                foreignKey: 'tournamentId',
-                as: 'tournament',
+            BOT_Sessions.belongsTo(models.BOT_Tournaments, {
+                foreignKey: 'tournamentId', // FK on source table
+                targetKey: 'id', // Key name on target table
+                // as: 'tournament',
+                onDelete: 'Set NULL',
+                onUpdate: 'CASCADE',
             });
-            models.BOT_Sessions.belongsToMany(models.BOT_Users, {
+            BOT_Sessions.belongsToMany(models.BOT_Users, {
                 through: {
                     model: models.BOT_UserSessions,
                     unique: false,
                 },
                 foreignKey: 'sessionId',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
             });
+
+            BOT_Sessions.hasMany(models.BOT_Channels, {
+                foreignKey: 'sessionId', // Set FK name on TARGET
+                sourceKey: 'id', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
+
         }
 
         static models() {
             return this.sequelize.models;
+        }
+
+        /**
+         * Create a new session in DB for a tournament
+         * @param {*} tournamentId
+         * @param {*} sessionNumber
+         * @param {*} startDateTime
+         * @param {*} durations
+         * @param {*} status
+         * @param {*} transaction
+         * @returns
+         */
+        static async createSessionOnDB(tournamentId, sessionNumber, startDateTime, durations, status, transaction) {
+            if (transaction) {
+                return await this.create({
+                    tournamentId: tournamentId,
+                    sessionNumber: sessionNumber,
+                    startDateTime: startDateTime,
+                    duration: durations,
+                    status: status,
+                }, { transaction: transaction });
+            } else {
+                return await this.create({
+                    tournamentId: tournamentId,
+                    sessionNumber: sessionNumber,
+                    startDateTime: startDateTime,
+                    duration: durations,
+                    status: status,
+                });
+            }
         }
 
         /**
@@ -97,6 +139,10 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             allowNull: false,
         },
+        tournamentId: {
+            type: DataTypes.INTEGER,
+            field: 'tournamentId',
+        },
         sessionNumber: {
             type: DataTypes.INTEGER,
             field: 'sessionNumber',
@@ -119,30 +165,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 1,
         },
-        tournamentId: {
-            type: DataTypes.INTEGER,
-            field: 'tournamentId',
-        },
-
-        // nbUser: {
-        //     type: DataTypes.VIRTUAL,
-        //     get() {
-        //         let nbUser = 0;
-        //         if (this.Users) {
-        //             nbUser = this.Users.length;
-        //         }
-        //         return nbUser ? nbUser : 0;
-        //     },
-        // },
-        // nbTeam: {
-        //     type: DataTypes.VIRTUAL,
-        //     get() {
-        //         // TODO: dans .env ou autre pour le nombre de participant
-        //         const nbTeam = Math.ceil(this.nbUser / 12);
-        //         return nbTeam;
-        //     },
-        // },
-        //
     }, {
         sequelize,
         modelName: 'BOT_Sessions',

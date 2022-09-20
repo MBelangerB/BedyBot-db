@@ -5,22 +5,6 @@
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     // Common discord value and Shared user info
     await queryInterface.createTable('BOT_Users', {
       id: {
@@ -30,14 +14,14 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      userId: {
-        type: DataTypes.STRING,
-        field: 'userId',
+      discordUserId: {
+        type: DataTypes.STRING(80),
+        field: 'discordUserId',
         allowNull: false,
-        unique: true,
+        // unique: true,
       },
       defaultUsername: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(32),
         field: 'defaultUsername',
         allowNull: false,
       },
@@ -48,34 +32,43 @@ module.exports = {
       },
       // Custom user info. Shared with all guilds
       switchFriendCode: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(20),
         field: 'switchFriendCode',
         allowNull: true,
       },
       switchUsername: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(32),
         field: 'switchUsername',
         allowNull: true,
       },
       twitchUsername: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(32),
         field: 'twitchUsername',
         allowNull: true,
       },
+    },
+      {
+        comment: 'BOT_Users has discord user information + shared information',
+      });
+
+    await queryInterface.addIndex('BOT_Users', {
+      fields: ['discordUserId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_users_discordUserId',
     });
 
-    await queryInterface.addIndex('BOT_Users', ['userId']);
+    await queryInterface.addIndex('BOT_Users', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_users_id',
+    });
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-     await queryInterface.removeIndex('BOT_Users', ['userId']);
+    await queryInterface.removeIndex('BOT_Users', 'PK_users_id');
+    await queryInterface.removeIndex('BOT_Users', 'UQ_users_discordUserId');
     await queryInterface.dropTable('BOT_Users');
   },
 };

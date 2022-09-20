@@ -10,17 +10,26 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.BOT_Users.belongsToMany(models.BOT_Sessions, {
+            BOT_Users.belongsToMany(models.BOT_Sessions, {
                 through: {
                     model: models.BOT_UserSessions,
                     unique: false,
                 },
-                foreignKey: 'userId',
-            });
-            models.BOT_Users.hasOne(models.BOT_GuildUsers, {
-                foreignKey: 'userId', // Set FK name
-                sourceKey: 'userId', // Source Key In BOT_Users
+                foreignKey: 'userId', // FK on Target (UserSession ?)
                 onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            });
+
+            BOT_Users.hasMany(models.BOT_GuildUsers, {
+                foreignKey: 'userId', // Set FK name on TARGET
+                sourceKey: 'id', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
+
+            BOT_Users.hasMany(models.BOT_Tournaments, {
+                foreignKey: 'ownerId', // Set FK name on TARGET
+                sourceKey: 'id', // Source Key In SOURCE
+                onDelete: 'SET NULL',
             });
         }
 
@@ -28,8 +37,16 @@ module.exports = (sequelize, DataTypes) => {
             return this.sequelize.models;
         }
 
+        static async createUserOnDB(discordUserId, discordUsername, discordDiscriminator) {
+            return await this.create({
+                discordUserId: discordUserId,
+                defaultUsername: discordUsername,
+                discriminator: discordDiscriminator,
+            });
+        }
+
         /**
-         * Get the BOT_Users for a guild and userId
+         * Get the BOT_Users for a guildId (db) and userId
          * @param {string} guildId
          * @param {string} userId
          * @returns {BOT_Users}
@@ -38,23 +55,24 @@ module.exports = (sequelize, DataTypes) => {
             if (withInclude) {
                 // return await this.findOne({ where: { userId: userId, 'BOT_GuildUser.guildId': guildId }, include: [this.models().BOT_GuildUser] });
                 return await this.findOne({
-                    where: { userId: userId },
+                    where: { discordUserId: userId },
                     include: {
                         model: this.models().BOT_GuildUsers,
                         where: {
                             guildId: guildId,
                         },
+                        required: false
                     },
                 });
             } else {
-                return await this.findOne({ where: { userId: userId } });
+                return await this.findOne({ where: { discordUserId: userId } });
             }
 
         }
 
 
-        getUsername() {
-            return (this.BOT_GuildUser && this.BOT_GuildUser.hasUsername() ? this.BOT_GuildUser.username : this.defaultUsername);
+        getUsername(dbGuildMember) {
+            return (dbGuildMember && dbGuildMember.length > 0 && dbGuildMember[0].hasUsername() ? dbGuildMember[0].nickname : this.defaultUsername);
         }
         getTwitchUsername() {
             return this.twitchUsername ? this.twitchUsername : 'N/A';
@@ -121,9 +139,9 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true,
             allowNull: false,
         },
-        userId: {
+        discordUserId: {
             type: DataTypes.STRING,
-            field: 'userId',
+            field: 'discordUserId',
             allowNull: false,
         },
         defaultUsername: {

@@ -7,21 +7,6 @@ const Sequelize = require('sequelize');
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
     await queryInterface.createTable('BOT_Guilds', {
       id: {
         type: DataTypes.INTEGER,
@@ -30,25 +15,24 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      guildId: {
-        type: DataTypes.STRING,
-        field: 'guildId',
-        allowNull: false,
-        unique: true,
-      },
-      guildName: {
-        type: DataTypes.STRING,
-        field: 'guildName',
+      discordGuildId: {
+        type: DataTypes.STRING(80),
+        field: 'discordGuildId',
         allowNull: false,
       },
-      guildIconUrl: {
+      discordGuildName: {
+        type: DataTypes.STRING(120),
+        field: 'discordGuildName',
+        allowNull: false,
+      },
+      discordGuildIconUrl: {
         type: DataTypes.STRING,
-        field: 'guildIconUrl',
+        field: 'discordGuildIconUrl',
         allowNull: true,
       },
-      guildOwnerId: {
-        type: DataTypes.STRING,
-        field: 'guildOwnerId',
+      discordGuildOwnerId: {
+        type: DataTypes.STRING(80),
+        field: 'discordGuildOwnerId',
         allowNull: false,
       },
       isActive: {
@@ -73,18 +57,25 @@ module.exports = {
         comment: 'List of discord guilds where the bot has been installed.',
       });
 
-    await queryInterface.addIndex('BOT_Guilds', ['guildId']);
+    // Index
+    await queryInterface.addIndex('BOT_Guilds', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_guilds_id',
+    });
+
+    await queryInterface.addIndex('BOT_Guilds', {
+      fields: ['discordGuildId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_guilds_discordGuildId',
+    });
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_Guilds', ['guildId']);
+    await queryInterface.removeIndex('BOT_Guilds', 'UQ_guilds_discordGuildId');
+    await queryInterface.removeIndex('BOT_Guilds', 'PK_guilds_id');
     await queryInterface.dropTable('BOT_Guilds');
   },
 };

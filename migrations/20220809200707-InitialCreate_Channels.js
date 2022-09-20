@@ -5,22 +5,6 @@
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_Channels', {
       id: {
         type: DataTypes.INTEGER,
@@ -29,51 +13,41 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      guildId: {
-        type: DataTypes.STRING,
-        field: 'guildId',
-        allowNull: false,
-        // references: {
-        //   model: 'BOT_Guilds',
-        //   key: 'guildId',
-        //   onDelete: 'CASCADE',
-        // },
-      },
       sessionId: {
         type: DataTypes.INTEGER,
         field: 'sessionId',
         allowNull: true,
-        // references: {
-        //   model: 'BOT_Sessions',
-        //   key: 'id',
-        //   onUpdate: 'CASCADE',
-        //   onDelete: 'set NULL',
-        // },
+        references: {
+          model: 'BOT_Sessions',
+          key: 'id',
+          // onUpdate: 'CASCADE',
+          // onDelete: 'set NULL',
+        },
       },
       parentId: {
         type: DataTypes.INTEGER,
         field: 'parentId',
         allowNull: true,
-        // references: {
-        //   model: 'BOT_Channels',
-        //   key: 'id',
-        //   onDelete: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+          // onDelete: 'CASCADE',
+        },
       },
-      channelId: {
-        type: DataTypes.STRING,
-        field: 'channelId',
+      discordChannelId: {
+        type: DataTypes.STRING(80),
+        field: 'discordChannelId',
         allowNull: false,
         unique: true,
       },
-      channelName: {
-        type: DataTypes.STRING,
-        field: 'channelName',
+      discordChannelName: {
+        type: DataTypes.STRING(120),
+        field: 'discordChannelName',
         allowNull: false,
       },
-      channelType: {
-        type: DataTypes.STRING,
-        field: 'channelType',
+      discordChannelType: {
+        type: DataTypes.INTEGER,
+        field: 'discordChannelType',
         allowNull: false,
       },
     },
@@ -81,20 +55,30 @@ module.exports = {
         comment: 'Discord channels information who are create for a tournament.',
       });
 
-    await queryInterface.addIndex('BOT_Channels', ['guildId']);
-    await queryInterface.addIndex('BOT_Channels', ['sessionId']);
+    await queryInterface.addIndex('BOT_Channels', {
+      fields: ['sessionId'],
+      name: 'IDX_channels_sessionId',
+    });
+
+    await queryInterface.addIndex('BOT_Channels', {
+      fields: ['discordChannelId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_channels_discordChannelId',
+    });
+
+    await queryInterface.addIndex('BOT_Channels', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_channels_id',
+    });
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_Channels', ['guildId']);
-    await queryInterface.removeIndex('BOT_Channels', ['sessionId']);
+    await queryInterface.removeIndex('BOT_Channels', 'IDX_channels_sessionId');
+    await queryInterface.removeIndex('BOT_Channels', 'UQ_channels_discordChannelId');
+    await queryInterface.removeIndex('BOT_Channels', 'PK_channels_id');
     await queryInterface.dropTable('BOT_Channels');
   },
 };

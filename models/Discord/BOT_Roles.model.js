@@ -12,9 +12,60 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            models.BOT_Roles.hasOne(models.BOT_Guilds, {
-                foreignKey: 'guildId',
+            BOT_Roles.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
             });
+        }
+
+
+        /**
+         * Add a new discord role on DB
+         * @param {string} guildId
+         * @param {string} discordRoleId
+         * @param {string} discordRoleName
+         * @param {integer} discordColor
+         * @param {integer} type
+         * @returns
+         */
+        static async createRoleOnDB(guildId, discordRoleId, discordRoleName, discordColor, type) {
+            return await this.create({
+                guildId: guildId,
+                discordRoleId: discordRoleId,
+                discordRoleName: discordRoleName,
+                discordRoleColor: discordColor,
+                type: type,
+            });
+        }
+
+        /**
+         * Update DB Role
+         * @param {string} discordRoleId
+         * @param {string} discordRoleName
+         * @param {integer} discordColor
+         */
+        async updateRole(discordRoleId, discordRoleName, discordColor) {
+            if (discordRoleId !== this.discordRoleId) {
+                this.set({
+                    discordRoleId: discordRoleId,
+                });
+            }
+            if (discordRoleName !== this.discordRoleName) {
+                this.set({
+                    discordRoleName: discordRoleName,
+                });
+            }
+            if (discordColor !== this.discordRoleColor) {
+                this.set({
+                    discordRoleColor: discordColor,
+                });
+            }
+
+            if (this.changed() && this.changed.length > 0) {
+                await this.save();
+            }
         }
 
         /**
@@ -27,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         /**
-         * Get BOT_Roles by discord guildId
+         * Get BOT_Roles by guildId
          * @param {string} guildId
          * @param {BOT_Roles.RoleTypes} roleType
          * @returns {BOT_Roles}
@@ -42,8 +93,8 @@ module.exports = (sequelize, DataTypes) => {
          * @param {string} roleName
          * @returns {BOT_Roles}
          */
-        static async getRoleByRoleName(guildId, roleName) {
-            return await this.findOne({ where: { guildId: guildId, roleName: roleName } });
+        static async getRoleByRoleName(guildId, discordRoleName) {
+            return await this.findOne({ where: { guildId: guildId, discordRoleName: discordRoleName } });
         }
     }
 
@@ -51,6 +102,7 @@ module.exports = (sequelize, DataTypes) => {
         MANAGER: 1,
         PLAYER: 2,
     };
+
 
     BOT_Roles.init({
         id: {
@@ -61,23 +113,23 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         guildId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             field: 'guildId',
             allowNull: false,
         },
-        roleId: {
+        discordRoleId: {
             type: DataTypes.STRING,
-            field: 'roleId',
+            field: 'discordRoleId',
             allowNull: false,
         },
-        roleName: {
+        discordRoleName: {
             type: DataTypes.STRING,
-            field: 'roleName',
+            field: 'discordRoleName',
             allowNull: false,
         },
-        roleColor: {
+        discordRoleColor: {
             type: DataTypes.STRING,
-            field: 'roleColor',
+            field: 'discordRoleColor',
             allowNull: false,
         },
         // Manager - PLayer

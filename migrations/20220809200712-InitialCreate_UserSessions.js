@@ -7,22 +7,6 @@ const Sequelize = require('sequelize');
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_UserSessions', {
       id: {
         type: DataTypes.INTEGER,
@@ -35,41 +19,41 @@ module.exports = {
         type: DataTypes.INTEGER,
         field: 'sessionId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Sessions',
-        //   key: 'id',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Sessions',
+          key: 'id',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
+        },
       },
       userId: {
         type: DataTypes.INTEGER,
         field: 'userId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Users',
-        //   key: 'id',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Users',
+          key: 'id',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
+        },
       },
       voiceChannelId: {
         type: DataTypes.INTEGER,
         field: 'voiceChannelId',
         allowNull: true,
-        // references: {
-        //   model: 'BOT_Channels',
-        //   key: 'id',
-        // },
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+        },
       },
       textChannelId: {
         type: DataTypes.INTEGER,
         field: 'textChannelId',
         allowNull: true,
-        // references: {
-        //   model: 'BOT_Channels',
-        //   key: 'id',
-        // },
+        references: {
+          model: 'BOT_Channels',
+          key: 'id',
+        },
       },
       ts: {
         type: DataTypes.DATE,
@@ -79,18 +63,23 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('BOT_UserSessions', ['userId', 'sessionId']);
+    await queryInterface.addIndex('BOT_UserSessions', {
+      fields: ['userId', 'sessionId'],
+      name: 'IDX_userSession_userIdSessionId',
+    });
+
+    await queryInterface.addIndex('BOT_UserSessions', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_userSession_id',
+    });
+
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_UserSessions', ['UserId', 'sessionId']);
+    await queryInterface.removeIndex('BOT_Sessions', 'IDX_userSession_userIdSessionId');
+    await queryInterface.removeIndex('BOT_Sessions', 'PK_userSession_id');
     await queryInterface.dropTable('BOT_UserSessions');
   },
 };
