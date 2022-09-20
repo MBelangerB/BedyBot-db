@@ -7,22 +7,6 @@ const Sequelize = require('sequelize');
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_GuildUsers', {
       id: {
         type: DataTypes.INTEGER,
@@ -32,29 +16,29 @@ module.exports = {
         allowNull: false,
       },
       userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         field: 'userId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Users',
-        //   key: 'userId',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Users',
+          key: 'id',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
+        },
       },
       guildId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         field: 'guildId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Guilds',
-        //   key: 'guildId',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Guilds',
+          key: 'id',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
+        },
       },
       nickname: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(120),
         field: 'nickname',
         allowNull: true,
       },
@@ -66,20 +50,30 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('BOT_GuildUsers', ['guildId']);
-    await queryInterface.addIndex('BOT_GuildUsers', ['userId']);
+    await queryInterface.addIndex('BOT_GuildUsers', {
+      fields: ['userId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_guildUsers_userId',
+    });
+
+    await queryInterface.addIndex('BOT_GuildUsers', {
+      fields: ['guildId'],
+      name: 'IDX_guildUsers_guildId',
+    });
+
+    await queryInterface.addIndex('BOT_GuildUsers', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_guildUsers_id',
+    });
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_GuildUsers', ['guildId']);
-    await queryInterface.removeIndex('BOT_GuildUsers', ['userId']);
+    await queryInterface.removeIndex('BOT_GuildUsers', 'UQ_guildUsers_userId');
+    await queryInterface.removeIndex('BOT_GuildUsers', 'IDX_guildUsers_guildId');
+    await queryInterface.removeIndex('BOT_GuildUsers', 'PK_guildUsers_id');
     await queryInterface.dropTable('BOT_GuildUsers');
   },
 };

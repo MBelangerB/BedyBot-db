@@ -5,22 +5,6 @@
 */
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     *
-     * Add Column:
-     * await queryInterface.addColumn('users', // table name
-        'twitter', // new field name
-        {
-          type: Sequelize.STRING,
-          allowNull: true,
-        },
-      ),
-     */
-
     await queryInterface.createTable('BOT_Roles', {
       id: {
         type: DataTypes.INTEGER,
@@ -30,30 +14,30 @@ module.exports = {
         allowNull: false,
       },
       guildId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         field: 'guildId',
         allowNull: false,
-        // references: {
-        //   model: 'BOT_Guilds',
-        //   key: 'guildId',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'BOT_Guilds',
+          key: 'id',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
+        },
       },
-      roleId: {
-        type: DataTypes.STRING,
-        field: 'roleId',
+      discordRoleId: {
+        type: DataTypes.STRING(80),
+        field: 'discordRoleId',
         allowNull: false,
-        unique: true,
+        // unique: true,
       },
-      roleName: {
-        type: DataTypes.STRING,
-        field: 'roleName',
+      discordRoleName: {
+        type: DataTypes.STRING(120),
+        field: 'discordRoleName',
         allowNull: false,
       },
-      roleColor: {
+      discordRoleColor: {
         type: DataTypes.STRING,
-        field: 'roleColor',
+        field: 'discordRoleColor',
         allowNull: false,
       },
       // Manager - PLayer
@@ -64,18 +48,30 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('BOT_Roles', ['guildId']);
+    await queryInterface.addIndex('BOT_Roles', {
+      fields: ['guildId'],
+      name: 'IDX_roles_guildId',
+    });
+
+    await queryInterface.addIndex('BOT_Roles', {
+      fields: ['discordRoleId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_roles_discordRoleId',
+    });
+
+    await queryInterface.addIndex('BOT_Roles', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_roles_id',
+    });
   },
 
   async down(queryInterface) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     * await queryInterface.removeColumn('users', 'linkedin'),
-     */
-    await queryInterface.removeIndex('BOT_Roles', ['guildId']);
+    await queryInterface.removeIndex('BOT_Roles', 'IDX_roles_guildId');
+    await queryInterface.removeIndex('BOT_Roles', 'UQ_roles_discordRoleId');
+    await queryInterface.removeIndex('BOT_Roles', 'PK_roles_id');
     await queryInterface.dropTable('BOT_Roles');
   },
 };

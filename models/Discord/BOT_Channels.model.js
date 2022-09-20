@@ -10,20 +10,59 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.BOT_Channels.belongsTo(models.BOT_Channels, {
-        foreignKey: 'parentId',
+      BOT_Channels.belongsTo(models.BOT_Channels, {
+        foreignKey: 'parentId', // FK on source table
+        targetKey: 'id', // Key name on target table
         as: 'parent',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
-      models.BOT_Channels.hasMany(models.BOT_Channels, {
+      BOT_Channels.hasMany(models.BOT_Channels, {
         foreignKey: 'parentId',
         as: 'childs',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
 
-      models.BOT_Channels.belongsTo(models.BOT_Sessions, {
-        foreignKey: 'sessionId',
-        as: 'session',
+      BOT_Channels.belongsTo(models.BOT_Sessions, {
+        foreignKey: 'sessionId', // FK on source table
+        targetKey: 'id', // Key name on target table
+        // as: 'session',
+        onUpdate: 'CASCADE',
+        onDelete: 'set NULL',
       });
     }
+
+    /**
+     * Add a new discord channel on DB
+     * @param {string} discordChannelId
+     * @param {string} discordChannelName
+     * @param {integer} discordChannelType
+     * @param {integer} parentId
+     * @param {integer} sessionId
+     * @returns
+     */
+    static async createChannelOnDB(discordChannelId, discordChannelName, discordChannelType, parentId, sessionId) {
+      return await this.create({
+        discordChannelId: discordChannelId,
+        discordChannelName: discordChannelName,
+        discordChannelType: discordChannelType,
+        parentId: parentId,
+        sessionId: sessionId,
+      });
+    }
+
+    /**
+      * Update the discord channel name
+      * @param {string} discordChannelName
+      */
+    async updateChannelName(discordChannelName) {
+      this.set({
+        discordChannelName: discordChannelName,
+      });
+      await this.save();
+    }
+
 
     /**
      * Get BOT_Guilds by discord guildId
@@ -31,11 +70,11 @@ module.exports = (sequelize, DataTypes) => {
      * @param {boolean} withInclude
      * @returns {BOT_Channels}
      */
-    static async getChannelByGuildChannelId(guildId, channelId) {
-      return await this.findOne({ where: { guildId: guildId, channelId: channelId } });
+    static async getChannelByGuildChannelId(discordChannelId) {
+      return await this.findOne({ where: { discordChannelId: discordChannelId } });
     }
-    static async getChannelById(guildId, channelId) {
-      return await this.findOne({ where: { guildId: guildId, id: channelId } });
+    static async getChannelById(channelId) {
+      return await this.findOne({ where: { id: channelId } });
     }
 
     /**
@@ -46,11 +85,11 @@ module.exports = (sequelize, DataTypes) => {
      * @param {*} transaction
      * @returns {BOT_Channels}
      */
-    static async getAllChannelsByGuildSession(guildId, sessionId, withLock = false, transaction = null) {
+    static async getAllChannelsByGuildSession(sessionId, withLock = false, transaction = null) {
       if (transaction) {
-        return await this.findAll({ where: { guildId: guildId, sessionId: sessionId }, lock: withLock, transaction: transaction });
+        return await this.findAll({ where: { sessionId: sessionId }, lock: withLock, transaction: transaction });
       } else {
-        return await this.findAll({ where: { guildId: guildId, sessionId: sessionId } });
+        return await this.findAll({ where: { sessionId: sessionId } });
       }
     }
 
@@ -64,11 +103,6 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       field: 'id',
     },
-    guildId: {
-      type: DataTypes.STRING,
-      field: 'guildId',
-      allowNull: false,
-    },
     sessionId: {
       type: DataTypes.INTEGER,
       field: 'sessionId',
@@ -79,20 +113,20 @@ module.exports = (sequelize, DataTypes) => {
       field: 'parentId',
       allowNull: true,
     },
-    channelId: {
+    discordChannelId: {
       type: DataTypes.STRING,
-      field: 'channelId',
+      field: 'discordChannelId',
       allowNull: false,
       unique: true,
     },
-    channelName: {
+    discordChannelName: {
       type: DataTypes.STRING,
-      field: 'channelName',
+      field: 'discordChannelName',
       allowNull: false,
     },
-    channelType: {
+    discordChannelType: {
       type: DataTypes.STRING,
-      field: 'channelType',
+      field: 'discordChannelType',
       allowNull: false,
     },
   }, {

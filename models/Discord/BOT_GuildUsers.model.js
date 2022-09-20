@@ -10,18 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.BOT_GuildUsers.hasOne(models.BOT_Guilds, {
-        foreignKey: 'guildId',
+      BOT_GuildUsers.belongsTo(models.BOT_Guilds, {
+        foreignKey: 'guildId', // FK in source
+        targetKey: 'id', // Key name in target
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
 
-      // models.BOT_GuildUsers.hasOne(models.BOT_Users, {
-      //   foreignKey: 'userId',
-      // });
-
-      models.BOT_GuildUsers.belongsTo(models.BOT_Users, {
-        foreignKey: 'userId', // Set FK name
-        targetKey: 'userId', // Key name on BOT_Users
+      BOT_GuildUsers.belongsTo(models.BOT_Users, {
+        foreignKey: 'userId', // Set FK name on SOURCE
+        targetKey: 'id', // Key name on TARGET
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
 
     }
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     hasUsername() {
-      return (this.username && this.username.length > 0);
+      return (this.nickname && this.nickname.length > 0);
     }
   }
 
@@ -66,12 +66,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     userId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       field: 'userId',
       allowNull: false,
     },
     guildId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       field: 'guildId',
       allowNull: false,
     },

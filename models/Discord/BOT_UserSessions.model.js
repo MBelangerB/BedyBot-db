@@ -11,6 +11,18 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
+            BOT_UserSessions.belongsTo(models.BOT_Channels, {
+                foreignKey: 'textChannelId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'Set NULL',
+                onUpdate: 'CASCADE',
+            });
+            BOT_UserSessions.belongsTo(models.BOT_Channels, {
+                foreignKey: 'voiceChannelId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'Set NULL',
+                onUpdate: 'CASCADE',
+            });
         }
 
         /**
@@ -78,19 +90,19 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             type: DataTypes.INTEGER,
             field: 'voiceChannelId',
-            references: {
-                model: sequelize.models.BOT_Channels,
-                key: 'id',
-            },
+            // references: {
+            //     model: sequelize.models.BOT_Channels,
+            //     key: 'id',
+            // },
         },
         textChannelId: {
             allowNull: true,
             type: DataTypes.INTEGER,
             field: 'textChannelId',
-            references: {
-                model: sequelize.models.BOT_Channels,
-                key: 'id',
-            },
+            // references: {
+            //     model: sequelize.models.BOT_Channels,
+            //     key: 'id',
+            // },
         },
         ts: {
             type: DataTypes.DATE,

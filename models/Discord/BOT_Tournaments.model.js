@@ -11,18 +11,75 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             models.BOT_Tournaments.belongsTo(models.BOT_Users, {
-                foreignKey: 'ownerId',
-                as: 'owner',
-                // lors FindOne/FindALl pour include Sequelize il faut utiliser l'alias et nom la table
+                foreignKey: 'ownerId', // FK on source table
+                targetKey: 'id', // Key name on target table
+                as: 'owner', // lors FindOne/FindALl pour include Sequelize il faut utiliser l'alias et nom la table
+                onDelete: 'set NULL',
             });
 
-            models.BOT_Tournaments.belongsTo(models.BOT_Guilds, {
-                foreignKey: 'guildId',
+            BOT_Tournaments.belongsTo(models.BOT_Guilds, {
+                foreignKey: 'guildId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'set NULL',
+                onUpdate: 'CASCADE',
             });
+
+            BOT_Tournaments.belongsTo(models.BOT_Users, {
+                foreignKey: 'ownerId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'set NULL',
+                onUpdate: 'CASCADE',
+            });
+
+            BOT_Tournaments.hasMany(models.BOT_Sessions, {
+                foreignKey: 'tournamentId', // Set FK name on TARGET
+                sourceKey: 'id', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
+
         }
 
         static models() {
             return this.sequelize.models;
+        }
+
+        /**
+         * Create a tournament in DB
+         * @param {integer} guildId
+         * @param {string} discordChannelId
+         * @param {string} discordMessageId
+         * @param {integer} ownerId
+         * @param {datetime} startTime
+         * @param {integer} nbSession
+         * @param {integer} status
+         * @param {*} transaction
+         * @returns
+         */
+        static async createTournamentOnDB(guildId, discordChannelId, discordMessageId, ownerId, startTime, nbSession, status, transaction) {
+            if (transaction) {
+                return await BOT_Tournaments.create({
+                    guildId: guildId,
+                    announcementChannelId: discordChannelId,
+                    announcementMessageId: discordMessageId,
+                    ownerId: ownerId,
+                    startDateTime: startTime,
+                    sessionCount: nbSession,
+                    status: status,
+                    ts: Date.now(),
+                }, { transaction: transaction });
+
+            } else {
+                return await BOT_Tournaments.create({
+                    guildId: guildId,
+                    announcementChannelId: discordChannelId,
+                    announcementMessageId: discordMessageId,
+                    ownerId: ownerId,
+                    startDateTime: startTime,
+                    sessionCount: nbSession,
+                    status: status,
+                    ts: Date.now(),
+                });
+            }
         }
 
         /**
@@ -93,7 +150,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         guildId: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             field: 'guildId',
             allowNull: false,
         },
@@ -126,9 +183,10 @@ module.exports = (sequelize, DataTypes) => {
             field: 'status',
             allowNull: false,
         },
-        ts: {
+        createAt: {
             allowNull: false,
             type: DataTypes.DATE,
+            field: 'createAt',
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
     }, {
