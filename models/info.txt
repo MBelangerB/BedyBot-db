@@ -38,6 +38,8 @@ A.hasMany(B, {
 sequelize-auto -o ".\test\model" -d "E:\database\dev_bedybot2.db" -cm -noAlias -e sqlite 
 sequelize-auto -o "D:\_develop\BOT\DiscordMK\test\model" -d "E:\database\dev_bedybot2.db" -cm -e sqlite 
 
+sequelize-auto -o ".\test\model" -d "E:\database\dev_bedybot_test.db" -cm -e sqlite -l es6
+
 NOT WORK:
 sequelize-auto -o "D:\_develop\BOT\DiscordMK\test\model2" -d "E:\database\dev_bedybot2.db" -cm -noAlias -l ts -e sqlite 
 -----------------------------

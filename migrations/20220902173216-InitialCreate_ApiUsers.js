@@ -4,12 +4,6 @@ const Sequelize = require('sequelize');
 
 module.exports = {
   async up(queryInterface, DataTypes) {
-    /**
-     * Add altering commands here.
-     *
-     * Example:
-     * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
     await queryInterface.createTable('API_Users', {
       id: {
         type: DataTypes.INTEGER,
@@ -19,10 +13,9 @@ module.exports = {
         allowNull: false,
       },
       externalId: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(80),
         field: 'externalId',
         allowNull: false,
-        unique: true,
       },
       // 1 => Discord - 2 => Twitch
       source: {
@@ -36,12 +29,12 @@ module.exports = {
         allowNull: true,
       },
       username: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(32),
         field: 'username',
         allowNull: false,
       },
       discriminator: {
-        type: DataTypes.STRING(8),
+        type: DataTypes.STRING(10),
         field: 'discriminator',
         allowNull: true,
       },
@@ -58,18 +51,25 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('API_Users', ['externalId']);
+    await queryInterface.addIndex('API_Users', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_api_users_id',
+    });
+
+    await queryInterface.addIndex('API_Users', {
+      fields: ['externalId'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'UQ_api_users_externalId',
+    });
   },
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, dataType) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-    await queryInterface.removeIndex('API_Users', ['externalId']);
+    await queryInterface.removeIndex('BOT_Guilds', 'PK_api_users_id');
+    await queryInterface.removeIndex('BOT_Guilds', 'UQ_api_users_externalId');
     await queryInterface.dropTable('API_Users');
   },
 };
