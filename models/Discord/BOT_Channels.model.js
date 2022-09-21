@@ -106,7 +106,7 @@ module.exports = (sequelize, DataTypes) => {
     sessionId: {
       type: DataTypes.INTEGER,
       field: 'sessionId',
-      allowNull: true,
+      allowNull: true, // Peut-être null, car le parent n'a pas de session
     },
     parentId: {
       type: DataTypes.INTEGER,

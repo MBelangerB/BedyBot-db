@@ -48,21 +48,21 @@ module.exports = {
 
     await queryInterface.addIndex('BOT_Sessions', {
       fields: ['tournamentId'],
-      name: 'IDX_sessions_tournamentId',
+      name: 'IDX_bot_sessions_tournamentId',
     });
 
     await queryInterface.addIndex('BOT_Sessions', {
       fields: ['id'],
       unique: true,
       type: 'UNIQUE',
-      name: 'PK_sessions_id',
+      name: 'PK_bot_sessions_id',
     });
 
   },
 
   async down(queryInterface) {
-    await queryInterface.removeIndex('BOT_Sessions', 'IDX_sessions_tournamentId');
-    await queryInterface.removeIndex('BOT_Sessions', 'PK_sessions_id');
+    await queryInterface.removeIndex('BOT_Sessions', 'IDX_bot_sessions_tournamentId');
+    await queryInterface.removeIndex('BOT_Sessions', 'PK_bot_sessions_id');
     await queryInterface.dropTable('BOT_Sessions');
   },
 };

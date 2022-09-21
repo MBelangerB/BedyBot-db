@@ -217,12 +217,12 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'BOT_Guilds',
         // indexes: [
         //     {
-        //         name: "PK_guilds_id",
+        //         name: "PK_bot_guilds_id",
         //         unique: true,
         //         fields: [ { name: "id" }, ]
         //     },
         //     {
-        //         name: "UQ_guilds_discordGuildId",
+        //         name: "UQ_bot_guilds_discordGuildId",
         //         unique: true,
         //         fields: [ { name: "discordGuildId" }, ]
         //     },
