@@ -10,7 +10,7 @@ const { Model } = require('sequelize');
 // const UserSecret = 'Uas!sdsa4fa';
 
 module.exports = (sequelize, DataTypes) => {
-    class APIUsers extends Model {
+    class API_Users extends Model {
 
         static models() {
             return this.sequelize.models;
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.API_Users.belongsToMany(models.API_Guilds, {
+            API_Users.belongsToMany(models.API_Guilds, {
                 through: {
                     model: models.API_GuildUserPermissions,
                     unique: false,
@@ -31,28 +31,50 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId',
             });
 
-            models.API_Users.belongsTo(models.API_Tokens, {
-                foreignKey: 'externalId', // Set FK name in current table
-                targetKey: 'apiUserId', // Key name on API_Tokens
+            API_Users.hasMany(models.API_Tokens, {
+                foreignKey: 'guildId', // FK name on TARGET
+                sourceKey: 'id', // Key name on SOURCE
                 onDelete: 'CASCADE',
+            });
+        }
+
+
+        /**
+         * Add a new user in DB
+         * @param {string} externalId 
+         * @param {string} username 
+         * @param {string} avatar 
+         * @param {string} source 
+         * @param {string} discriminator 
+         * @param {string} email 
+         * @returns 
+         */
+        static async addUser(externalId, username, avatar, source, discriminator, email) {
+            return await this.create({
+                externalId: externalId,
+                username: username,
+                avatar: avatar,
+                source: source,
+                discriminator: discriminator,
+                email: email
             });
         }
 
         /**
          * Return a api user by id
          * @param {integer} id
-         * @returns {APIUsers}
+         * @returns {API_Users}
          */
-        static async getApiUserById(id) {
+        static async findUserById(id) {
             return await this.findOne({ where: { id: id } });
         }
-
+        
         /**
          * Return a api user by external id
          * @param {string} externalId external user id
-         * @returns {APIUsers}
+         * @returns {API_Users}
          */
-        static async getApiUserByExternalId(externalId) {
+        static async findUserByExternalId(externalId) {
             return await this.findOne({ where: { externalId: externalId } });
         }
 
@@ -114,43 +136,37 @@ module.exports = (sequelize, DataTypes) => {
         // }
     }
 
-    APIUsers.init({
+    API_Users.init({
         id: {
-            type: DataTypes.INTEGER,
-            field: 'id',
-            primaryKey: true,
             autoIncrement: true,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            primaryKey: true,
+            unique: true,
         },
         externalId: {
-            type: DataTypes.STRING,
-            field: 'externalId',
+            type: DataTypes.STRING(80),
             allowNull: false,
             unique: true,
         },
         source: {
             type: DataTypes.INTEGER,
-            field: 'source',
             allowNull: false,
         },
         avatar: {
-            type: DataTypes.STRING,
-            field: 'avatar',
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         username: {
-            type: DataTypes.STRING,
-            field: 'username',
+            type: DataTypes.STRING(32),
             allowNull: false,
         },
         discriminator: {
-            type: DataTypes.STRING(8),
-            field: 'discriminator',
+            type: DataTypes.STRING(10),
             allowNull: true,
         },
         email: {
-            type: DataTypes.STRING,
-            field: 'email',
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         joinedAt: {
@@ -162,6 +178,22 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'API_Users',
         tableName: 'API_Users',
+        indexes: [
+            {
+                name: 'PK_api_users_id',
+                unique: true,
+                fields: [
+                    { name: 'id' },
+                ],
+            },
+            {
+                name: 'UQ_api_users_externalId',
+                unique: true,
+                fields: [
+                    { name: 'externalId' },
+                ],
+            },
+        ],
         // hooks: {
         //     beforeValidate: (user, options) => {
         //         console.log('before validate')
@@ -177,5 +209,5 @@ module.exports = (sequelize, DataTypes) => {
         // }
     });
 
-    return APIUsers;
+    return API_Users;
 };

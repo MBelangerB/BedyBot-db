@@ -12,16 +12,16 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            models.API_GuildUserPermissions.belongsTo(models.API_Guilds, {
-                foreignKey: 'guildId', // FK in current table
-                targetKey: 'guildId', // Key name on API_Guilds
-                // as: 'guild',
+            API_GuildUserPermissions.belongsTo(models.API_Guilds, {
+                foreignKey: 'guildId', // Key name on source
+                targetKey: 'id', // Key name on TARGET
+                // as: 'guildId',
             });
-            // TODO:
-            // models.API_GuildUserPermissions.belongsTo(models.API_Users, {
-            //     foreignKey: 'externalId',
-            //     as: 'user',
-            // });
+
+            API_GuildUserPermissions.belongsTo(models.API_Users, {
+                foreignKey: 'userId', // Key name on source
+                targetKey: 'id', // Key name on TARGET
+            });
         }
 
         static models() {
@@ -57,43 +57,40 @@ module.exports = (sequelize, DataTypes) => {
 
     API_GuildUserPermissions.init({
         id: {
-            type: DataTypes.INTEGER,
-            field: 'id',
-            primaryKey: true,
             autoIncrement: true,
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.STRING,
-            field: 'userId',
-            allowNull: false,
-            references: {
-                model: sequelize.models.API_Users,
-                key: 'externalId',
-            },
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            primaryKey: true,
+            unique: true,
         },
         guildId: {
-            type: DataTypes.STRING,
-            field: 'guildId',
+            type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: sequelize.models.API_Guilds,
-            //     key: 'guildId',
-            // },
+            references: {
+                model: 'API_Guilds',
+                key: 'id',
+            },
+            unique: true,
+        },
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'API_Users',
+                key: 'id',
+            },
+            unique: true,
         },
         permissions: {
-            type: DataTypes.STRING,
-            field: 'permissions',
+            type: DataTypes.STRING(255),
             allowNull: false,
         },
         permissionsNew: {
-            type: DataTypes.STRING,
-            field: 'permissionsNew',
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         isOwner: {
             type: DataTypes.INTEGER,
-            field: 'isOwner',
             allowNull: false,
         },
         lastUpdate: {
@@ -106,6 +103,21 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'API_GuildUserPermissions',
         tableName: 'API_GuildUserPermissions',
+        indexes: [
+            {
+                name: 'PK_api_guildUserPermissions_id',
+                unique: true,
+                fields: [{ name: 'id' }],
+            },
+            {
+                name: 'UQ_api_guildUserPermissions_guildIdUserId',
+                unique: true,
+                fields: [
+                    { name: 'guildId' },
+                    { name: 'userId' },
+                ],
+            },
+        ],
     });
 
     return API_GuildUserPermissions;
