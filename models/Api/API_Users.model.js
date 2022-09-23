@@ -28,11 +28,11 @@ module.exports = (sequelize, DataTypes) => {
                     model: models.API_GuildUserPermissions,
                     unique: false,
                 },
-                foreignKey: 'guildId',
+                foreignKey: 'userId',
             });
 
             API_Users.hasMany(models.API_Tokens, {
-                foreignKey: 'guildId', // FK name on TARGET
+                foreignKey: 'userId', // FK name on TARGET
                 sourceKey: 'id', // Key name on SOURCE
                 onDelete: 'CASCADE',
             });
@@ -125,15 +125,6 @@ module.exports = (sequelize, DataTypes) => {
                 await this.save();
             }
         }
-
-        // validatePassword(password) {
-        //     var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
-        //     if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // }
     }
 
     API_Users.init({
@@ -194,19 +185,6 @@ module.exports = (sequelize, DataTypes) => {
                 ],
             },
         ],
-        // hooks: {
-        //     beforeValidate: (user, options) => {
-        //         console.log('before validate')
-        //     },
-        //     beforeCreate: (user, options) => {
-        //         console.log('before Create')
-        //         user.salt = CryptoJS.lib.WordArray.random(128 / 8).toString();
-        //         user.password = CryptoJS.TripleDES.encrypt(user.password, user.salt);
-        //     },
-        //     // https://javascript.hotexamples.com/fr/examples/crypto-js/-/PBKDF2/javascript-pbkdf2-function-examples.html
-        //     // https://cryptojs.gitbook.io/docs/
-        //     // https://www.npmjs.com/package/crypto-js
-        // }
     });
 
     return API_Users;

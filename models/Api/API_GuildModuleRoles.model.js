@@ -12,8 +12,13 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            API_GuildModuleRoles.belongsTo(models.API_Modules, {
-              foreignKey: 'moduleId', // Key name on source
+            API_GuildModuleRoles.belongsTo(models.API_GuildModules, {
+              foreignKey: 'guildModuleId', // Key name on source
+              targetKey: 'id', // Key name on TARGET
+            });
+
+            API_GuildModuleRoles.belongsTo(models.API_Roles, {
+              foreignKey: 'roleId', // Key name on source
               targetKey: 'id', // Key name on TARGET
             });
         }
@@ -21,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
 
     API_GuildModuleRoles.init({
         guildModuleId: {
-            autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -31,7 +35,6 @@ module.exports = (sequelize, DataTypes) => {
             unique: true,
           },
           roleId: {
-            autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

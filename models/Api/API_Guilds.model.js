@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
           model: models.API_GuildUserPermissions,
           unique: false,
         },
-        foreignKey: 'userId',
+        foreignKey: 'guildId',
       });
 
       API_Guilds.hasMany(models.API_Roles, {
@@ -61,6 +61,24 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
+     * 
+     * @param {*} guildId 
+     * @param {*} guildName 
+     * @param {*} guildIcon 
+     * @param {*} guildOwnerId 
+     * @param {*} region 
+     * @param {*} preferred_locale 
+     * @returns 
+     */
+    static async addGuild(guildId, guildName, guildIcon) {
+      return await this.create({
+        discordGuildId: guildId,
+        name: guildName,
+        icon: guildIcon,
+      });
+    }
+
+    /**
      * Get a guild by id
      * @param {*} id 
      * @returns {API_Guilds} 
@@ -75,7 +93,15 @@ module.exports = (sequelize, DataTypes) => {
      * @returns {API_Guilds} 
      */
     static async findGuildByGuildId(discordGuildId) {
-      return await this.findAll({ where: { discordGuildId: discordGuildId } });
+      return await this.findOne({ where: { discordGuildId: discordGuildId } });
+    }
+
+    async updateGuildInfo(guildName, guildIcon) {
+      this.set({
+        name: guildName,
+        icon: guildIcon,
+      });
+      await this.save();
     }
   }
 

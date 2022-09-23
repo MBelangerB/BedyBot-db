@@ -28,6 +28,15 @@ module.exports = (sequelize, DataTypes) => {
             return this.sequelize.models;
         }
 
+        static async addGuildUserPermission(userId, guildId, isOwner, permissions, permissions_new) {
+           return await this.create({
+                userId: userId,
+                guildId: guildId,
+                permissions: permissions,
+                permissionsNew: permissions_new,
+                isOwner: isOwner
+            });     
+        }
 
         /**
          * Return user permission for a guild
@@ -53,6 +62,16 @@ module.exports = (sequelize, DataTypes) => {
                 return await this.findAll({ where: { userId: userId } });
             }
         }
+
+        async updateGuildUserPermission(isOwner, permissions, permissions_new) {
+            this.set({
+                permissions: permissions,
+                permissionsNew: permissions_new,
+                isOwner: isOwner,
+                ts: Date.now()
+            });
+            await this.save();
+        } 
     }
 
     API_GuildUserPermissions.init({

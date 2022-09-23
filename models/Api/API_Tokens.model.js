@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       API_Tokens.belongsTo(models.API_Guilds, {
         foreignKey: 'guildId', // Key name on source
         targetKey: 'id', // Key name on TARGET
-        as: 'guildId',
       });
 
       API_Tokens.belongsTo(models.API_Users, {
@@ -36,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
      * @param {datetime} expireAt 
      * @returns {API_Tokens}
      */
-    static async addAccessToken(userId, accessToken, refreshToken, source, scope, tokenType, expireAt) {
+    static async addAccessToken(userId, accessToken, refreshToken, tokenType, scope, expireAt, source) {
       return await this.create({
         userId: userId,
         accessToken: accessToken,
@@ -60,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
      * @param {datetime} expireAt 
      * @returns {API_Tokens}
      */
-    static async addGuildAccessToken(userId, guildId, accessToken, refreshToken, source, scope, tokenType, expireAt) {
+    static async addGuildAccessToken(userId, guildId, refreshToken, tokenType, scope, expireAt, source) {
       return await this.create({
         guildId: guildId,
         userId: userId,
@@ -111,6 +110,25 @@ module.exports = (sequelize, DataTypes) => {
       return await this.findOne({ where: { accessToken: token, source: source } });
     }
 
+    /**
+     * Update the access token
+     * @param {*} accessToken 
+     * @param {*} refreshToken 
+     * @param {*} tokenType 
+     * @param {*} scope 
+     * @param {*} expireAt 
+     */
+    async updateAccessToken(accessToken, refreshToken, tokenType, scope, expireAt) {
+      this.set({
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        scope: scope,
+        expireAt: expireAt,
+        tokenType: tokenType,
+      });
+      await apiToken.save();
+    }
+
   }
 
   API_Tokens.init({
@@ -124,6 +142,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'userId',
       references: {
         model: 'API_Users',
         key: 'id',

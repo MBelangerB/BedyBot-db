@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       API_Commands.belongsTo(models.API_Modules, {
         foreignKey: 'moduleId', // Key name on source
         targetKey: 'id', // Key name on TARGET
-        as: 'guildId',
       });
     }
 

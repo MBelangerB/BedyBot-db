@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       API_Roles.belongsTo(models.API_Guilds, {
         foreignKey: 'guildId', // Key name on source
         targetKey: 'id', // Key name on TARGET
-        as: 'guildId',
       });
 
       API_Roles.hasMany(models.API_GuildModuleRoles, {
