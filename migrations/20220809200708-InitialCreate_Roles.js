@@ -50,28 +50,28 @@ module.exports = {
 
     await queryInterface.addIndex('BOT_Roles', {
       fields: ['guildId'],
-      name: 'IDX_roles_guildId',
+      name: 'IDX_bot_roles_guildId',
     });
 
     await queryInterface.addIndex('BOT_Roles', {
       fields: ['discordRoleId'],
       unique: true,
       type: 'UNIQUE',
-      name: 'UQ_roles_discordRoleId',
+      name: 'UQ_bot_roles_discordRoleId',
     });
 
     await queryInterface.addIndex('BOT_Roles', {
       fields: ['id'],
       unique: true,
       type: 'UNIQUE',
-      name: 'PK_roles_id',
+      name: 'PK_bot_roles_id',
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.removeIndex('BOT_Roles', 'IDX_roles_guildId');
-    await queryInterface.removeIndex('BOT_Roles', 'UQ_roles_discordRoleId');
-    await queryInterface.removeIndex('BOT_Roles', 'PK_roles_id');
+    await queryInterface.removeIndex('BOT_Roles', 'IDX_bot_roles_guildId');
+    await queryInterface.removeIndex('BOT_Roles', 'UQ_bot_roles_discordRoleId');
+    await queryInterface.removeIndex('BOT_Roles', 'PK_bot_roles_id');
     await queryInterface.dropTable('BOT_Roles');
   },
 };

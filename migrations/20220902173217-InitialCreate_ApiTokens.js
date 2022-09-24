@@ -18,27 +18,27 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      apiUserId: {
-        type: DataTypes.STRING,
-        field: 'apiUserId',
+      userId: {
+        type: DataTypes.INTEGER,
+        field: 'userId',
         allowNull: false,
-        // references: {
-        //   model: 'API_Users',
-        //   key: 'externalId',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'API_Users',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
       guildId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         field: 'guildId',
         allowNull: true,
-        // references: {
-        //   model: 'API_Guilds',
-        //   key: 'guildId',
-        //   onDelete: 'CASCADE',
-        //   onUpdate: 'CASCADE',
-        // },
+        references: {
+          model: 'API_Guilds',
+          key: 'id',
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
       },
       // 1 => Discord - 2 => Twitch
       source: {
@@ -80,20 +80,29 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('API_Tokens', ['apiUserId']);
-    await queryInterface.addIndex('API_Tokens', ['guildId']);
+    await queryInterface.addIndex('API_Tokens', {
+      fields: ['id'],
+      unique: true,
+      type: 'UNIQUE',
+      name: 'PK_api_tokens_id',
+    });
+
+    await queryInterface.addIndex('API_Tokens', {
+      fields: ['userId'],
+      name: 'IDX_api_tokens_userId',
+    });
+
+    await queryInterface.addIndex('API_Tokens', {
+      fields: ['userId', 'guildId'],
+      name: 'IDX_api_tokens_userIdGuildId',
+    });
   },
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, dataType) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-    await queryInterface.removeIndex('API_Tokens', ['guildId']);
-    await queryInterface.removeIndex('API_Tokens', ['apiUserId']);
+    await queryInterface.removeIndex('API_Tokens', 'PK_api_tokens_id');
+    await queryInterface.removeIndex('API_Tokens', 'IDX_api_tokens_userId');
+    await queryInterface.removeIndex('API_Tokens', 'IDX_api_tokens_userIdGuildId');
     await queryInterface.dropTable('API_Tokens');
   },
 };

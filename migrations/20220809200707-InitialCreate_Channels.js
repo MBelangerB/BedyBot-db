@@ -57,28 +57,28 @@ module.exports = {
 
     await queryInterface.addIndex('BOT_Channels', {
       fields: ['sessionId'],
-      name: 'IDX_channels_sessionId',
+      name: 'IDX_bot_channels_sessionId',
     });
 
     await queryInterface.addIndex('BOT_Channels', {
       fields: ['discordChannelId'],
       unique: true,
       type: 'UNIQUE',
-      name: 'UQ_channels_discordChannelId',
+      name: 'UQ_bot_channels_discordChannelId',
     });
 
     await queryInterface.addIndex('BOT_Channels', {
       fields: ['id'],
       unique: true,
       type: 'UNIQUE',
-      name: 'PK_channels_id',
+      name: 'PK_bot_channels_id',
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.removeIndex('BOT_Channels', 'IDX_channels_sessionId');
-    await queryInterface.removeIndex('BOT_Channels', 'UQ_channels_discordChannelId');
-    await queryInterface.removeIndex('BOT_Channels', 'PK_channels_id');
+    await queryInterface.removeIndex('BOT_Channels', 'IDX_bot_channels_sessionId');
+    await queryInterface.removeIndex('BOT_Channels', 'UQ_bot_channels_discordChannelId');
+    await queryInterface.removeIndex('BOT_Channels', 'PK_bot_channels_id');
     await queryInterface.dropTable('BOT_Channels');
   },
 };

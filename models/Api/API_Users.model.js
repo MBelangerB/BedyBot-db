@@ -10,7 +10,7 @@ const { Model } = require('sequelize');
 // const UserSecret = 'Uas!sdsa4fa';
 
 module.exports = (sequelize, DataTypes) => {
-    class APIUsers extends Model {
+    class API_Users extends Model {
 
         static models() {
             return this.sequelize.models;
@@ -23,36 +23,58 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.API_Users.belongsToMany(models.API_Guilds, {
+            API_Users.belongsToMany(models.API_Guilds, {
                 through: {
                     model: models.API_GuildUserPermissions,
                     unique: false,
                 },
-                foreignKey: 'guildId',
+                foreignKey: 'userId',
             });
 
-            models.API_Users.belongsTo(models.API_Tokens, {
-                foreignKey: 'externalId', // Set FK name in current table
-                targetKey: 'apiUserId', // Key name on API_Tokens
+            API_Users.hasMany(models.API_Tokens, {
+                foreignKey: 'userId', // FK name on TARGET
+                sourceKey: 'id', // Key name on SOURCE
                 onDelete: 'CASCADE',
+            });
+        }
+
+
+        /**
+         * Add a new user in DB
+         * @param {string} externalId 
+         * @param {string} username 
+         * @param {string} avatar 
+         * @param {string} source 
+         * @param {string} discriminator 
+         * @param {string} email 
+         * @returns 
+         */
+        static async addUser(externalId, username, avatar, source, discriminator, email) {
+            return await this.create({
+                externalId: externalId,
+                username: username,
+                avatar: avatar,
+                source: source,
+                discriminator: discriminator,
+                email: email
             });
         }
 
         /**
          * Return a api user by id
          * @param {integer} id
-         * @returns {APIUsers}
+         * @returns {API_Users}
          */
-        static async getApiUserById(id) {
+        static async findUserById(id) {
             return await this.findOne({ where: { id: id } });
         }
-
+        
         /**
          * Return a api user by external id
          * @param {string} externalId external user id
-         * @returns {APIUsers}
+         * @returns {API_Users}
          */
-        static async getApiUserByExternalId(externalId) {
+        static async findUserByExternalId(externalId) {
             return await this.findOne({ where: { externalId: externalId } });
         }
 
@@ -103,54 +125,39 @@ module.exports = (sequelize, DataTypes) => {
                 await this.save();
             }
         }
-
-        // validatePassword(password) {
-        //     var decodedPasswd = CryptoJS.TripleDES.decrypt(this.password, this.salt);
-        //     if (password === CryptoJS.enc.Utf8.stringify(decodedPasswd)) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // }
     }
 
-    APIUsers.init({
+    API_Users.init({
         id: {
-            type: DataTypes.INTEGER,
-            field: 'id',
-            primaryKey: true,
             autoIncrement: true,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            primaryKey: true,
+            unique: true,
         },
         externalId: {
-            type: DataTypes.STRING,
-            field: 'externalId',
+            type: DataTypes.STRING(80),
             allowNull: false,
             unique: true,
         },
         source: {
             type: DataTypes.INTEGER,
-            field: 'source',
             allowNull: false,
         },
         avatar: {
-            type: DataTypes.STRING,
-            field: 'avatar',
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         username: {
-            type: DataTypes.STRING,
-            field: 'username',
+            type: DataTypes.STRING(32),
             allowNull: false,
         },
         discriminator: {
-            type: DataTypes.STRING(8),
-            field: 'discriminator',
+            type: DataTypes.STRING(10),
             allowNull: true,
         },
         email: {
-            type: DataTypes.STRING,
-            field: 'email',
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         joinedAt: {
@@ -162,20 +169,23 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'API_Users',
         tableName: 'API_Users',
-        // hooks: {
-        //     beforeValidate: (user, options) => {
-        //         console.log('before validate')
-        //     },
-        //     beforeCreate: (user, options) => {
-        //         console.log('before Create')
-        //         user.salt = CryptoJS.lib.WordArray.random(128 / 8).toString();
-        //         user.password = CryptoJS.TripleDES.encrypt(user.password, user.salt);
-        //     },
-        //     // https://javascript.hotexamples.com/fr/examples/crypto-js/-/PBKDF2/javascript-pbkdf2-function-examples.html
-        //     // https://cryptojs.gitbook.io/docs/
-        //     // https://www.npmjs.com/package/crypto-js
-        // }
+        indexes: [
+            {
+                name: 'PK_api_users_id',
+                unique: true,
+                fields: [
+                    { name: 'id' },
+                ],
+            },
+            {
+                name: 'UQ_api_users_externalId',
+                unique: true,
+                fields: [
+                    { name: 'externalId' },
+                ],
+            },
+        ],
     });
 
-    return APIUsers;
+    return API_Users;
 };

@@ -55,20 +55,20 @@ module.exports = {
       fields: ['discordUserId'],
       unique: true,
       type: 'UNIQUE',
-      name: 'UQ_users_discordUserId',
+      name: 'UQ_bot_users_discordUserId',
     });
 
     await queryInterface.addIndex('BOT_Users', {
       fields: ['id'],
       unique: true,
       type: 'UNIQUE',
-      name: 'PK_users_id',
+      name: 'PK_bot_users_id',
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.removeIndex('BOT_Users', 'PK_users_id');
-    await queryInterface.removeIndex('BOT_Users', 'UQ_users_discordUserId');
+    await queryInterface.removeIndex('BOT_Users', 'PK_bot_users_id');
+    await queryInterface.removeIndex('BOT_Users', 'UQ_bot_users_discordUserId');
     await queryInterface.dropTable('BOT_Users');
   },
 };

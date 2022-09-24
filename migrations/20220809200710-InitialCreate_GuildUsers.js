@@ -54,26 +54,26 @@ module.exports = {
       fields: ['userId'],
       unique: true,
       type: 'UNIQUE',
-      name: 'UQ_guildUsers_userId',
+      name: 'UQ_bot_guildUsers_userId',
     });
 
     await queryInterface.addIndex('BOT_GuildUsers', {
       fields: ['guildId'],
-      name: 'IDX_guildUsers_guildId',
+      name: 'IDX_bot_guildUsers_guildId',
     });
 
     await queryInterface.addIndex('BOT_GuildUsers', {
       fields: ['id'],
       unique: true,
       type: 'UNIQUE',
-      name: 'PK_guildUsers_id',
+      name: 'PK_bot_guildUsers_id',
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.removeIndex('BOT_GuildUsers', 'UQ_guildUsers_userId');
-    await queryInterface.removeIndex('BOT_GuildUsers', 'IDX_guildUsers_guildId');
-    await queryInterface.removeIndex('BOT_GuildUsers', 'PK_guildUsers_id');
+    await queryInterface.removeIndex('BOT_GuildUsers', 'UQ_bot_guildUsers_userId');
+    await queryInterface.removeIndex('BOT_GuildUsers', 'IDX_bot_guildUsers_guildId');
+    await queryInterface.removeIndex('BOT_GuildUsers', 'PK_bot_guildUsers_id');
     await queryInterface.dropTable('BOT_GuildUsers');
   },
 };
