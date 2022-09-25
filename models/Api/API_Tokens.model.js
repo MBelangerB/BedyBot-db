@@ -126,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
         expireAt: expireAt,
         tokenType: tokenType,
       });
-      await apiToken.save();
+      await this.save();
     }
 
   }

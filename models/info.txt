@@ -3,7 +3,7 @@
     One-to-One relationship
     FK is define in B
 
-  A.belongTo(B)
+  A.belongsTo(B)
     One-to-One relationship
     FK is define in A
 

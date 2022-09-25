@@ -36,6 +36,13 @@ module.exports = (sequelize, DataTypes) => {
                 sourceKey: 'id', // Key name on SOURCE
                 onDelete: 'CASCADE',
             });
+
+            API_Users.hasOne(models.API_DiscordUsers, {
+                foreignKey: 'userId', // Set FK name on SOURCE
+                targetKey: 'id', // Key name on TARGET
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            });
         }
 
 
@@ -43,21 +50,41 @@ module.exports = (sequelize, DataTypes) => {
          * Add a new user in DB
          * @param {string} externalId 
          * @param {string} username 
-         * @param {string} avatar 
          * @param {string} source 
-         * @param {string} discriminator 
          * @param {string} email 
          * @returns 
          */
-        static async addUser(externalId, username, avatar, source, discriminator, email) {
+        static async addUser(externalId, username, source, email) {
             return await this.create({
                 externalId: externalId,
                 username: username,
-                avatar: avatar,
                 source: source,
-                discriminator: discriminator,
-                email: email
-            });
+                email: email,
+            })
+        }
+
+        /**
+         * Add a new Discord user
+         * @param {*} userData 
+         * @param {*} source 
+         * @returns 
+         */
+        static async addDiscordUser(userData, source) {
+            return await this.create({
+                externalId: userData.id,
+                username: userData.username,
+                source: source,
+                email: userData.email,
+                API_DiscordUser: {
+                    discriminator: userData.discriminator,
+                    avatar: (userData?.avatar || null),
+                    banner: (userData?.banner || null),
+                    bannerColor: (userData?.banner_color || null),
+                    accentColor: (userData?.accent_color || null),
+                }
+            }, {
+                include: [API_Users.sequelize.models.API_DiscordUsers]
+            })
         }
 
         /**
@@ -65,17 +92,25 @@ module.exports = (sequelize, DataTypes) => {
          * @param {integer} id
          * @returns {API_Users}
          */
-        static async findUserById(id) {
-            return await this.findOne({ where: { id: id } });
+        static async findUserById(id, withInclude = true) {
+            if (withInclude) {
+                return await this.findOne({ where: { id: id }, include: [this.models().API_DiscordUsers] });
+            } else {
+                return await this.findOne({ where: { id: id } });
+            }
         }
-        
+
         /**
          * Return a api user by external id
          * @param {string} externalId external user id
          * @returns {API_Users}
          */
-        static async findUserByExternalId(externalId) {
-            return await this.findOne({ where: { externalId: externalId } });
+        static async findUserByExternalId(externalId, withInclude = true) {
+            if (withInclude) {
+                return await this.findOne({ where: { externalId: externalId }, include: [this.models().API_DiscordUsers] });
+            } else {
+                return await this.findOne({ where: { externalId: externalId } });
+            }
         }
 
         /**
@@ -88,7 +123,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static async getApiUserByUserInfo(username, email, source, withInclude = true) {
             if (withInclude) {
-                return await this.findOne({ where: { username: username, email: email, source: source }, include: [this.models().API_Tokens] });
+                return await this.findOne({ where: { username: username, email: email, source: source }, include: [this.models().API_Tokens, this.models().API_DiscordUsers] });
             } else {
                 return await this.findOne({ where: { username: username, email: email, source: source } });
             }
@@ -100,7 +135,7 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {APIUsers}
          */
         static async getUserByPayload(payload) {
-            return await this.findOne({ where: { id: payload.userid, username: payload.username, email: payload.email } });
+            return await this.findOne({ where: { id: payload.userid, username: payload.username, email: payload.email }, include: [this.models().API_DiscordUsers] });
         }
 
         /**
@@ -109,16 +144,43 @@ module.exports = (sequelize, DataTypes) => {
          * @param {string} newUsername
          * @param {string} newAvatar
          */
-        async updateUserInfo(newUsername, newAvatar) {
+        async updateUserInfo(newUsername, persistChange = true) {
             if (newUsername !== this.username) {
                 this.set({
                     username: newUsername,
                 });
             }
-            if (newAvatar !== this.avatar) {
-                this.set({
-                    avatar: newAvatar,
-                });
+
+            if (persistChange && this.changed() && this.changed.length > 0) {
+                await this.save();
+            }
+        }
+
+
+        async updateDiscordUserInfo(discordUserData) {
+            if (discordUserData.avatar !== this.avatar) {
+                this.avatar = discordUserData.avatar;
+                // this.API_DiscordUser.set({
+                //     avatar: discordUserData.avatar,
+                // });
+            }
+            if (discordUserData.banner !== this.banner) {
+                this.banner = discordUserData.banner;
+                // this.API_DiscordUser.set({
+                //     banner:  discordUserData.banner,
+                // });
+            }
+            if (discordUserData.banner_color !== this.bannerColor) {
+                this.bannerColor = discordUserData.banner_color;
+                // this.API_DiscordUser.set({
+                //     bannerColor:  discordUserData.banner_color,
+                // });
+            }
+            if (discordUserData.accent_color !== this.accentColor) {
+                this.accentColor = discordUserData.accent_color;
+                // this.API_DiscordUser.set({
+                //     accentColor:  discordUserData.accent_color,
+                // });
             }
 
             if (this.changed() && this.changed.length > 0) {
@@ -144,17 +206,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        avatar: {
-            type: DataTypes.STRING(255),
-            allowNull: true,
-        },
         username: {
             type: DataTypes.STRING(32),
             allowNull: false,
-        },
-        discriminator: {
-            type: DataTypes.STRING(10),
-            allowNull: true,
         },
         email: {
             type: DataTypes.STRING(255),
@@ -165,6 +219,57 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
+        // Virtual
+        avatar: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.API_DiscordUser !== null ? this.API_DiscordUser?.avatar : null);
+            },
+            set(newAvatar) {
+                this.API_DiscordUser?.set({
+                    avatar: newAvatar,
+                });
+            }
+        },
+        banner: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.API_DiscordUser !== null ? this.API_DiscordUser?.banner : null);
+            },
+            set(newBanner) {
+                this.API_DiscordUser?.set({
+                    banner: newBanner,
+                });
+            }
+        },
+        bannerColor: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.API_DiscordUser !== null ? this.API_DiscordUser?.bannerColor : null);
+            },
+            set(newColor) {
+                this.API_DiscordUser?.set({
+                    bannerColor: newColor,
+                });
+            }
+        },
+        accentColor: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.API_DiscordUser !== null ? this.API_DiscordUser?.accentColor : null);
+            },
+            set(newColor) {
+                this.API_DiscordUser?.set({
+                    accentColor: newColor,
+                });
+            }
+        },
+        discriminator: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return (this.API_DiscordUser !== null ? this.API_DiscordUser.discriminator : null);
+            },
+        }
     }, {
         sequelize,
         modelName: 'API_Users',
