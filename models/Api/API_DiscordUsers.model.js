@@ -86,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         bannerColor: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             field: 'bannerColor',
             allowNull: true,
         },

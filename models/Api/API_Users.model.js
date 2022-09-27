@@ -122,6 +122,7 @@ module.exports = (sequelize, DataTypes) => {
          * @returns {APIUsers}
          */
         static async getApiUserByUserInfo(username, email, source, withInclude = true) {
+            // TODO: Gestion Lower/Upper
             if (withInclude) {
                 return await this.findOne({ where: { username: username, email: email, source: source }, include: [this.models().API_Tokens, this.models().API_DiscordUsers] });
             } else {
