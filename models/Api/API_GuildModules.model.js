@@ -25,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Add a new guild module on DB
-     * @param {integer} moduleId 
-     * @param {integer} guildId 
-     * @param {integer} authorizationType 
-     * @param {boolean} isActive 
+     * @param {integer} moduleId
+     * @param {integer} guildId
+     * @param {integer} authorizationType
+     * @param {boolean} isActive
      * @returns {API_GuildModules}
      */
     static async addGuildModule(moduleId, guildId, authorizationType, isActive) {
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Get a guyild module by id
-     * @param {integer} id 
+     * @param {integer} id
      * @returns {API_GuildModules}
      */
     static async findGuildModuleById(id) {
@@ -51,9 +51,9 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Get a guild module by module id / guild id
-     * @param {integer} moduleId 
-     * @param {integer} guildId 
-     * @returns {API_GuildModules} 
+     * @param {integer} moduleId
+     * @param {integer} guildId
+     * @returns {API_GuildModules}
      */
     static async findGuildModuleByGuildId(moduleId, guildId) {
       return await this.findOne({ where: { moduleId: moduleId, guildId: guildId } });

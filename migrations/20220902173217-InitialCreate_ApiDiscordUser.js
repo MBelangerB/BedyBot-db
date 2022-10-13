@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint-disable-next-line no-unused-vars */
 const Sequelize = require('sequelize');
 
 module.exports = {
@@ -42,13 +43,13 @@ module.exports = {
       bannerColor: {
         type: DataTypes.STRING,
         field: 'bannerColor',
-        allowNull: true,   
+        allowNull: true,
       },
       accentColor: {
         type: DataTypes.INTEGER,
         field: 'accentColor',
         allowNull: true,
-      },    
+      },
     });
 
     await queryInterface.addIndex('API_DiscordUsers', {

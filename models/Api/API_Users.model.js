@@ -48,11 +48,11 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Add a new user in DB
-         * @param {string} externalId 
-         * @param {string} username 
-         * @param {string} source 
-         * @param {string} email 
-         * @returns 
+         * @param {string} externalId
+         * @param {string} username
+         * @param {string} source
+         * @param {string} email
+         * @returns
          */
         static async addUser(externalId, username, source, email) {
             return await this.create({
@@ -60,14 +60,14 @@ module.exports = (sequelize, DataTypes) => {
                 username: username,
                 source: source,
                 email: email,
-            })
+            });
         }
 
         /**
          * Add a new Discord user
-         * @param {*} userData 
-         * @param {*} source 
-         * @returns 
+         * @param {*} userData
+         * @param {*} source
+         * @returns
          */
         static async addDiscordUser(userData, source) {
             return await this.create({
@@ -81,10 +81,10 @@ module.exports = (sequelize, DataTypes) => {
                     banner: (userData?.banner || null),
                     bannerColor: (userData?.banner_color || null),
                     accentColor: (userData?.accent_color || null),
-                }
+                },
             }, {
-                include: [API_Users.sequelize.models.API_DiscordUsers]
-            })
+                include: [API_Users.sequelize.models.API_DiscordUsers],
+            });
         }
 
         /**
@@ -230,7 +230,7 @@ module.exports = (sequelize, DataTypes) => {
                 this.API_DiscordUser?.set({
                     avatar: newAvatar,
                 });
-            }
+            },
         },
         banner: {
             type: DataTypes.VIRTUAL,
@@ -241,7 +241,7 @@ module.exports = (sequelize, DataTypes) => {
                 this.API_DiscordUser?.set({
                     banner: newBanner,
                 });
-            }
+            },
         },
         bannerColor: {
             type: DataTypes.VIRTUAL,
@@ -252,7 +252,7 @@ module.exports = (sequelize, DataTypes) => {
                 this.API_DiscordUser?.set({
                     bannerColor: newColor,
                 });
-            }
+            },
         },
         accentColor: {
             type: DataTypes.VIRTUAL,
@@ -263,14 +263,14 @@ module.exports = (sequelize, DataTypes) => {
                 this.API_DiscordUser?.set({
                     accentColor: newColor,
                 });
-            }
+            },
         },
         discriminator: {
             type: DataTypes.VIRTUAL,
             get() {
                 return (this.API_DiscordUser !== null ? this.API_DiscordUser.discriminator : null);
             },
-        }
+        },
     }, {
         sequelize,
         modelName: 'API_Users',

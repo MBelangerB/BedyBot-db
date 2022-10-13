@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Add a new command in DB
-     * @param {UUID} moduleId 
-     * @param {string} commandName 
-     * @param {integer} commandType 
+     * @param {UUID} moduleId
+     * @param {string} commandName
+     * @param {integer} commandType
      * @returns {API_Commands}
      */
     static async addCommand(moduleId, commandName, commandType) {
@@ -30,14 +30,12 @@ module.exports = (sequelize, DataTypes) => {
         moduleId: moduleId,
         name: commandName,
         commandType: commandType,
-        parentId: parentId,
-        sessionId: sessionId,
       });
     }
 
     /**
      * Find a command by id
-     * @param {integer} id 
+     * @param {integer} id
      * @returns {API_Commands}
      */
     static async findCommandById(id) {
@@ -45,8 +43,8 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * Find all command for a module 
-     * @param {UUID} moduleId 
+     * Find all command for a module
+     * @param {UUID} moduleId
      * @returns {API_Commands}
      */
     static async findAllCommandByModuleId(moduleId) {
