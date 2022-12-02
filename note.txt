@@ -28,3 +28,9 @@ you should have your modified copy loaded in as a dependency in node_modules.
 
 
 npm pack --pack-destination=".\dist"
+
+--------
+
+DB Schema
+
+ (HEAD detached at d937543)
