@@ -34,8 +34,8 @@ module.exports = (sequelize, DataTypes) => {
                 guildId: guildId,
                 permissions: permissions,
                 permissionsNew: permissions_new,
-                isOwner: isOwner
-            });     
+                isOwner: isOwner,
+            });
         }
 
         /**
@@ -68,10 +68,10 @@ module.exports = (sequelize, DataTypes) => {
                 permissions: permissions,
                 permissionsNew: permissions_new,
                 isOwner: isOwner,
-                ts: Date.now()
+                ts: Date.now(),
             });
             await this.save();
-        } 
+        }
     }
 
     API_GuildUserPermissions.init({

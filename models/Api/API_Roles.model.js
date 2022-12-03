@@ -26,12 +26,12 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Add a new role in DB
-     * @param {integer} guildId 
-     * @param {string} discordRoleId 
-     * @param {string} roleName 
-     * @param {string} permissions 
-     * @param {string} position 
-     * @param {string} color 
+     * @param {integer} guildId
+     * @param {string} discordRoleId
+     * @param {string} roleName
+     * @param {string} permissions
+     * @param {string} position
+     * @param {string} color
      * @returns {API_Roles}
      */
     static async addRole(guildId, discordRoleId, roleName, permissions, position, color) {
@@ -41,13 +41,13 @@ module.exports = (sequelize, DataTypes) => {
         name: roleName,
         permissions: permissions,
         position: position,
-        color: color
+        color: color,
       });
     }
 
     /**
      * Get a role by id
-     * @param {integer} id 
+     * @param {integer} id
      * @returns {API_Roles}
      */
     static async findRoleById(id) {
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Get a role by discord role id
-     * @param {string} discordRoleId 
+     * @param {string} discordRoleId
      * @returns {API_Roles}
      */
     static async findRoleByDiscordRoleId(discordRoleId) {
@@ -65,8 +65,8 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Get all roles by guildId
-     * @param {integer} guildId 
-     * @returns {API_Roles} 
+     * @param {integer} guildId
+     * @returns {API_Roles}
      */
     static async findAllRoleByGuildId(guildId) {
       return await this.findAll({ where: { guildId: guildId } });
@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Update the sync date
-     * @param {datetime} newDate 
+     * @param {datetime} newDate
      */
     async updateSyncDate(newDate) {
       if (this.lastUpdate !== newDate) {

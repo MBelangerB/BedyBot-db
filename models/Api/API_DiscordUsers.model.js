@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Get a Discord user by UserId
-         * @param {*} userId 
-         *  @returns {API_DiscordUsers}
+         * @param {*} userId
+         * @returns {API_DiscordUsers}
          */
         static async findDiscordUserByUserId(userId) {
             return await this.findOne({ where: { userId: userId } });
@@ -79,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             field: 'avatar',
             allowNull: true,
-        }, 
+        },
         banner: {
             type: DataTypes.STRING,
             field: 'banner',
