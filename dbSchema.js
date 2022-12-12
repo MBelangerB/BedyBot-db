@@ -61,6 +61,7 @@ const initializeModel = function() {
 readModelScript();
 readModelScript('./models/Api');
 readModelScript('./models/Discord');
+readModelScript('./models/Riot');
 
 initializeModel();
 
