@@ -3,15 +3,16 @@
   "version": "2022.09.1",
   "description": "Database model and migration or BedyBot tools",
   "main": "dbSchema.js",
-  "scripts": { "eslint": "eslint .",
-  "eslintFix": "eslint . --fix",
-  "cleanState": "npm ci",
-  "migrate:up": "npx sequelize-cli db:migrate",
-  "migrate:seed": "npx sequelize-cli db:seed:all",
-  "migrate:undo": "npx sequelize-cli db:migrate:undo",
-  "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
-  "migrate:create": "npx sequelize-cli migration:generate --name=",
-  "package:pack": "npm pack --pack-destination ./dist"
+  "scripts": {
+    "eslint": "eslint .",
+    "eslintFix": "eslint . --fix",
+    "cleanState": "npm ci",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:seed": "npx sequelize-cli db:seed:all",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
+    "migrate:create": "npx sequelize-cli migration:generate --name=",
+    "package:pack": "npm pack --pack-destination ./dist"
   },
   "repository": {
     "type": "git",
@@ -24,10 +25,16 @@
   },
   "homepage": "https://github.com/MBelangerB/BedyBot-db#readme",
   "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/validator": "^13.7.10",
     "dotenv": "^16.0.2",
     "eslint": "^8.13.0",
-    "sequelize": "^6.21.4",
+    "sequelize": "^6.28.0",
     "sqlite3": "^5.0.11",
     "uuid": "^8.3.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "sequelize-typescript": "^2.1.5"
   }
 }

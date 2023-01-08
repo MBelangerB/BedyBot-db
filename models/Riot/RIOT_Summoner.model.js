@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 
-module.exports = (sequelize, DataTypes) => {
+const RiotSummoner = (sequelize, DataTypes) => {
     class RIOT_Summoner extends Model {
         /**
          * Helper method for defining associations.
@@ -162,5 +162,9 @@ module.exports = (sequelize, DataTypes) => {
         ]
     });
 
-    return RIOT_Summoner;
+
+    return RIOT_Summoner
 };
+
+module.exports = RiotSummoner;
+export default { RiotSummoner };
