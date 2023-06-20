@@ -1,36 +1,59 @@
-   
-   Pour créer une nouvelle migration
-   
-        "npx sequelize-cli migration:generate --name="
-   
 
-   Une fois la migration et le modèle de créer. 2 instructions sont possibible
-        "migrate:up": "npx sequelize-cli db:migrate",
-        "migrate:undo": "npx sequelize-cli db:migrate:undo",
+npx typeorm-ts-node-commonjs migration:generate -n CreateDatabase
 
+-- Create Empty Migration
+npx typeorm-ts-node-commonjs migration:create ./src/Migrations/CreateRiotSummoner
 
---------
-https://stackoverflow.com/questions/55560791/build-and-use-npm-package-locally
+-- Database First
+npx typeorm-ts-node-commonjs migration:generate -d ./src/dataSource.ts -o /src/Migrations/InitRiotSummoner
 
+-- Run migrate
+npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
 
-If you have made these changes on your machine. (I'm assuming you have)
-
-     1. Run a build of the DB package
-     2. Run `npm pack` from the package's root folder.  This creates a .tgz zip file of your package with your custom modifications.
-     3. Copy that file into the root (you could put it wherever but root makes things easy) of your project.
-     4. In your `package.json` add the package `"bedybot-db": "file:bedybot-db-1.0.0.tgz"`, or replace the version number to the following 
-               `"file:my-packed-file.tgz"`
-
-     5. Run an npm install using your new package.json
-
-you should have your modified copy loaded in as a dependency in node_modules.
+        -> ORM Config (non fonctionnel)
+        npx typeorm-ts-node-commonjs migration:run -d ./src/config/ormconfig.json
 
 
 
-npm pack --pack-destination=".\dist"
+-- ///////////////////////////////////////////////////////////////////
+-- Version basique
+npx typeorm migration:create ./src/Migrations/InitRiotSummoner
 
---------
+-- Database First
+npx typeorm migration:generate -d ./src/dataSource.ts -o /src/Migrations/InitRiotSummoner
 
-DB Schema
+///////////////
 
- (HEAD detached at d937543)
+-- Créer une nouvelle entité « API_Modules »
+-- https://github.com/typeorm/typeorm/blob/master/docs/entities.md
+npx typeorm-ts-node-commonjs entity:create src/entity/API/API_Modules
+
+-- Créer un nouveau subscriber 
+-- https://github.com/typeorm/typeorm/blob/master/docs/listeners-and-subscribers.md
+-- Un subscriber est une action a effectué
+npx typeorm-ts-node-commonjs subscriber:create src/subscriber/Test 
+
+-- Créer une nouvelle migration « CreateApiModulesTable »
+npx typeorm-ts-node-commonjs migration:create src/migration/CreateApiModulesTable
+
+
+-- ////////////////////////////////////////////
+-- Generer a partir d'un schema existant
+-- https://github.com/typeorm/typeorm/blob/master/docs/using-cli.md#installing-cli
+-- ////////////////////////////////////////////
+npx typeorm-ts-node-commonjs migration:generate src/migration -d ./src/dataSource.ts
+
+
+-- Not working
+typeorm-model-generator -h localhost -d bedybot_test -u bedybot -x adamra -e mysql -o ./src/entity --noConfig true --ce pascal
+
+
+-- Executer les migrations
+npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
+
+-- ERR
+    "test": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -d ./src/dataSource.ts",
+-- try
+npx typeorm migration:generate -d ./src/dataSource.ts ./src/migrations/1687214666286-InitialCreate_DiscordUsers
+
+npx typeorm migration:generate InitialCreate_DiscordUsers -d ./src/dataSource.ts

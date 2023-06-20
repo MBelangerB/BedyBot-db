@@ -107,3 +107,5 @@ dist
 config/*.json
 
 /test
+/Backup
+/docker/data/*

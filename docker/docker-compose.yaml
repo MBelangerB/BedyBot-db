@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  bedyapi-networks:
+    external: false # If True compose fail
+
+services:
+  bedyapi-db:
+    container_name: BedyApi-DB
+    image: mariadb:lts
+    restart: always
+
+    networks:
+      - bedyapi-networks
+
+    volumes:
+      - ./data:/var/lib/mysql
+      
+    environment:
+      - TZ=America/Montreal
+      - NODE_ENV=production
+      - MARIADB_USER=bedybot
+      - MARIADB_PASSWORD=adamra
+      - MARIADB_ROOT_PASSWORD=root
+
+    ports:
+      - 13808:3808
+      - 13306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - bedyapi-networks
+    ports:
+      - 18080:8080
