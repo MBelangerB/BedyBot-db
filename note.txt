@@ -62,6 +62,7 @@ npx typeorm migration:generate InitialCreate_DiscordUsers -d ./src/dataSource.ts
 
 //------------------------------------------------------------------------
 // Note Clean
+npx typeorm  migration:generate XYZ -d src/dataSource.ts
 //------------------------------------------------------------------------
 
 -- Créer une nouvelle migrations

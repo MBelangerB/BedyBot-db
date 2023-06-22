@@ -9,7 +9,7 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
         await queryRunner.createTable(
             new Table({
                 name: "BOT_Guilds",
-                schema: "bot",
+                // schema: "bot",
                 columns: [
                     {
                         name: "discordGuildId",
@@ -70,18 +70,13 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
             }),
             true
         );
-        await queryRunner.createIndex("BOT_Guilds", new TableIndex({
-            name: "PK_Guilds_discordGuildId",
-            columnNames: ["discordGuildId"],
-            isUnique: true
-        }))
 
         // ***************************************
-        // * BOT_GuildOptions
+        // * BOT_GuildOption
         // ****************************************
         await queryRunner.createTable(
             new Table({
-                name: "BOT_GuildOptions",
+                name: "BOT_GuildOption",
                 schema: "bot",
                 columns: [
                     {
@@ -96,7 +91,7 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
                         name: "discordAnnoucementChannelId",
                         type: "bigint",
                         unsigned: true,
-                        isNullable: false
+                        isNullable: true
                     },
                     {
                         name: "maxPlayerByLobby",
@@ -114,10 +109,6 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
             }),
             true
         );
-        await queryRunner.createIndex("BOT_GuildOptions", new TableIndex({
-            name: "PK_GuildOptions_discordGuildId",
-            columnNames: ["discordGuildId"]
-        }))
 
         // ***************************************
         // * BOT_Roles
@@ -173,37 +164,38 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
                     {
                         name: "lastUpdate",
                         type: "datetime",
-                        isNullable: true
+                        default: 'NOW()',
+                        isNullable: false
                     }
 					]
             }),
             true
         );
-        await queryRunner.createIndex("BOT_Roles", new TableIndex({
-            name: "PK_Roles_discordGuildId_discordRoleId",
-            columnNames: ["discordGuildId", "discordRoleId"],
-            isUnique: true
-        }))
+        // await queryRunner.createIndex("BOT_Roles", new TableIndex({
+        //     name: "PK_Roles_discordGuildId_discordRoleId",
+        //     columnNames: ["discordGuildId", "discordRoleId"],
+        //     isUnique: true
+        // }))
 
         // ***************************************
         // * Foreing Key
-        // * 1 BOT_Guilds have 1 BOT_GuildOptions (1..1)
+        // * 1 BOT_Guilds have 1 BOT_GuildOption (1..1)
         // * 1 BOT_Guilds have 0..* BOT_Roles (1..*)
         // ****************************************
         const fk_GuildToGuildOption = new TableForeignKey({
-            name: "FK_GuildOptions_to_Guilds_discordGuildId",
+            // name: "FK_GuildOptions_to_Guilds_discordGuildId",
             // Child Table Key
             columnNames: ["discordGuildId"],
             // (referenced) Parent Table Key
             referencedColumnNames: ["discordGuildId"],
             referencedTableName: "BOT_Guilds",
             // Options
-            onDelete: "CASCADE",
+            onDelete: "CASCADE"
         });
-        await queryRunner.createForeignKey("BOT_GuildOptions", fk_GuildToGuildOption);
+        await queryRunner.createForeignKey("BOT_GuildOption", fk_GuildToGuildOption);
 
         const fk_GuildToRoles = new TableForeignKey({
-            name: "FK_Guilds_to_Roles_discordGuildId",
+            // name: "FK_Guilds_to_Roles_discordGuildId",
             // Child Table Key
             columnNames: ["discordGuildId"],
             // (referenced) Parent Table Key
@@ -218,7 +210,7 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("BOT_Roles", true, true, true);
-        await queryRunner.dropTable("BOT_GuildOptions", true, true, true);
+        await queryRunner.dropTable("BOT_GuildOption", true, true, true);
         await queryRunner.dropTable("BOT_Guilds", true, true, true);     
     }
 

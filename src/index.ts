@@ -9,8 +9,8 @@
 //     .catch((err) => {
 //         console.error("Error during Data Source initialization:", err)
 //     })
-
-import { AppDataSource, firstLoadingDataSource } from "./dataSource"
+// firstLoadingDataSource
+import { AppDataSource  } from "./dataSource"
 import { Bot_Guilds, Bot_GuildOption } from "./entity/global"
 import { FindManyOptions, Repository } from 'typeorm';
 import { copyFileSync } from "fs";
@@ -23,9 +23,9 @@ import { copyFileSync } from "fs";
 const runSync: boolean = false;
 
 if (runSync) {
-    firstLoadingDataSource.initialize().then(async () => {
-        console.log("Here you can setup and run express / fastify / any other framework.")
-    }).catch(error => console.log(error))
+    // firstLoadingDataSource.initialize().then(async () => {
+    //     console.log("Here you can setup and run express / fastify / any other framework.")
+    // }).catch(error => console.log(error))
 
 } else {
 

@@ -14,7 +14,7 @@ const initialConfig : DataSourceOptions = {
     migrations: [`${__dirname}/migrations/**/*.ts`],
     // migrationsTableName: "custom_migration_table",
     logging: true,
-    synchronize: true,  // Sync the entity with database
+    synchronize: false,  // (required : True) Sync the entity with database
     subscribers: [],
     timezone: "Z",
     migrationsRun: false // True for auto install migration
@@ -36,11 +36,11 @@ const processConfig : DataSourceOptions = {
     migrationsRun: false // True for auto install migration
 };
 
-console.log("CWD2 : " + process.cwd()); // /path/to/project
-console.log("DIR2 : " + __dirname)
+// console.log("CWD2 : " + process.cwd()); // /path/to/project
+// console.log("DIR2 : " + __dirname)
 
 // export default new DataSource(processConfig);
-export const firstLoadingDataSource = new DataSource(initialConfig);
+// export const firstLoadingDataSource = new DataSource(initialConfig);
 export const AppDataSource = new DataSource(processConfig);
 
 

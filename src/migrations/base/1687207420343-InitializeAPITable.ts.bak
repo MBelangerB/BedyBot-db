@@ -1,0 +1,384 @@
+import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from "typeorm"
+
+export class InitializeAPITable1687207420343 implements MigrationInterface {
+
+    transaction: true;
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+        // ***************************************
+        // * API_Users
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_Users",
+                schema: "api",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isUnique: true,
+                        generationStrategy: "increment",
+                        isNullable: false
+                    },
+                    {
+                        name: "legacyId",
+                        type: "varchar",
+                        length: "80",
+                        isUnique: true,
+                        isNullable: false
+                    },
+                    {
+                        name: "source",
+                        type: "smallint",
+                        width: 1,
+                        isNullable: false
+                    },
+                    {
+                        name: "username",
+                        type: "varchar",
+                        length: "32",
+                        isNullable: false
+                    },
+                    {
+                        name: "email",
+                        type: "varchar",
+                        length: "255",
+                        isNullable: true
+                    },
+                    {
+                        name: "joinedAt",
+                        type: "datetime",
+                        default: 'NOW()',
+                        isNullable: false
+                    }
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_Users", new TableIndex({
+            name: "PK_ApiUsers_Id",
+            columnNames: ["id"]
+        }));
+        await queryRunner.createIndex("API_Users", new TableIndex({
+            name: "UQ_ApiUsers_LegacyId",
+            columnNames: ["legacyId"]
+        }));
+
+        // ***************************************
+        // * API_DiscordUsers
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_DiscordUsers",
+                schema: "api",
+                columns: [
+                    {
+                        name: "legacyId",
+                        type: "varchar",
+                        length: "80",
+                        isUnique: true,
+                        isPrimary: true,
+                        isNullable: false
+                    },
+                    {
+                        name: "avatar",
+                        type: "varchar",
+                        length: "255",
+                        isNullable: true
+                    },
+                    {
+                        name: "banner",
+                        type: "varchar",
+                        length: "255",
+                        isNullable: true
+                    },
+                    {
+                        name: "bannerColor",
+                        type: "varchar",
+                        length: "255",
+                        isNullable: true
+                    },
+                    {
+                        name: "accentColor",
+                        type: "int",
+                        isNullable: true
+                    }
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_DiscordUsers", new TableIndex({
+            name: "PK_ApiDiscordUser_Id",
+            columnNames: ["legacyId"]
+        }))
+        const foreignKeyDU = new TableForeignKey({
+            name: "FK_ApiDiscordUser_LegacyId_to_ApiUser",
+            // Child Table Key
+            columnNames: ["legacyId"],
+            // (referenced) Parent Table Key
+            referencedColumnNames: ["legacyId"],
+            referencedTableName: "API_Users",
+            // Options
+            onDelete: "CASCADE"
+
+        });
+        await queryRunner.createForeignKey("API_DiscordUsers", foreignKeyDU);
+
+
+        // ***************************************
+        // * API_Modules
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_Modules",
+                schema: "api",
+                columns: [
+                    {
+                        name: "id",
+                        type: "uuid",
+                        isPrimary: true,
+                        isUnique: true,
+                        isNullable: false,
+                        default: 'UUID()',
+                    },
+                    {
+                        name: "name",
+                        type: "varchar",
+                        // length: "255",
+                        width: 255,
+                        isNullable: false
+                    },
+                    {
+                        name: "isEnabled",
+                        type: "boolean",
+                        default: false,
+                        isNullable: false,
+                        comment: 'Permet de définir si le module est disponible de manière globale',
+                    },
+                    {
+                        name: "isPremium",
+                        type: "boolean",
+                        default: false,
+                        isNullable: false,
+                        comment: 'Permet de définir si le module est une option premium'
+                    }
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_Modules", new TableIndex({
+            name: "PK_ApiModules_id",
+            columnNames: ["id"]
+        }));
+
+
+        // ***************************************
+        // * API_Commands
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_Commands",
+                schema: "api",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isUnique: true,
+                        generationStrategy: "increment",
+                        isNullable: false
+                    },
+                    {
+                        name: "moduleId",
+                        type: "uuid",
+                        isNullable: false
+                    },
+                    {
+                        name: "name",
+                        type: "varchar",
+                        length: '255',
+                        isNullable: false
+                    },
+                    // applicationCommand (Global) - applicationGuildCommand
+                    {
+                        name: "commandType",
+                        type: "tinyint",
+                        isNullable: false,
+                    },
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_Commands", new TableIndex({
+            name: "PK_ApiCommands_Id",
+            columnNames: ["id"]
+        }));
+        await queryRunner.createIndex("API_Commands", new TableIndex({
+            name: "IDX_ApiCommands_ModuleId",
+            columnNames: ["moduleId"]
+        }));
+
+        const foreignKeyCmdToModule = new TableForeignKey({
+            name: "FK_ApiCommands_ModuleId_to_ApiModules",
+            // Child Table Key
+            columnNames: ["moduleId"],
+            // (referenced) Parent Table Key
+            referencedColumnNames: ["id"],
+            referencedTableName: "API_Modules",
+            // Options
+            onDelete: "CASCADE"
+
+        });
+        await queryRunner.createForeignKey("API_Commands", foreignKeyCmdToModule);
+
+
+        // ***************************************
+        // * API_Roles
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_Roles",
+                schema: "api",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isUnique: true,
+                        generationStrategy: "increment",
+                        isNullable: false
+                    },
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_Users", new TableIndex({
+            name: "PK_ApiUsers_Id",
+            columnNames: ["id"]
+        }))
+
+
+
+
+
+
+
+
+        // ***************************************
+        // * API_GuildModules
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_GuildModules",
+                schema: "api",
+                columns: [
+                    {
+                        name: "id",
+                        type: "int",
+                        isPrimary: true,
+                        isUnique: true,
+                        generationStrategy: "increment",
+                        isNullable: false
+                    },
+                    {
+                        name: "moduleId",
+                        type: "uuid",
+                        isNullable: false
+                    },
+                    {
+                        name: "discordGuildId",
+                        type: "varchar",
+                        length: "80",
+                        isNullable: false
+                    },
+                    // 1 => allowForAllExcept - 2 => disallowForAllExcept
+                    {
+                        name: "authorizationType",
+                        type: "tinyint",
+                        isNullable: false,
+                    },
+                    {
+                        name: "isEnabled",
+                        type: "boolean",
+                        default: false,
+                        isNullable: false,
+                        comment: 'Permet de définir si le module est disponible de manière globale',
+                    },
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_GuildModules", new TableIndex({
+            name: "PK_ApiGuildModules_Id",
+            columnNames: ["id"]
+        }))
+        await queryRunner.createIndex("API_GuildModules", new TableIndex({
+            name: "IDX_ApiGuildModules_ModuleId",
+            columnNames: ["moduleId"]
+        }));
+        await queryRunner.createIndex("API_GuildModules", new TableIndex({
+            name: "IDX_ApiGuildModules_DiscordGuildId",
+            columnNames: ["discordGuildId"]
+        }));
+
+        const foreignKeyGuildCmdToModule = new TableForeignKey({
+            name: "FK_ApiGuildModule_ModuleId_to_ApiModules",
+            // Child Table Key
+            columnNames: ["moduleId"],
+            // (referenced) Parent Table Key
+            referencedColumnNames: ["id"],
+            referencedTableName: "API_Modules",
+            // Options
+            onDelete: "CASCADE"
+
+        });
+        await queryRunner.createForeignKey("API_GuildModules", foreignKeyGuildCmdToModule);
+
+        // ***************************************
+        // * API_GuildModuleRoles
+        // ****************************************
+        await queryRunner.createTable(
+            new Table({
+                name: "API_GuildModuleRoles",
+                schema: "api",
+                columns: [
+                    {
+                        name: "guildModuleId",
+                        type: "int",
+                        isPrimary: true,
+                        isUnique: true,
+                        isNullable: false
+                    },
+                    {
+                        name: "discordGuildId",
+                        type: "varchar",
+                        length: "80",
+                        isNullable: false
+                    },
+                    {
+                        name: "discordRoleId",
+                        type: "varchar",
+                        length: "80",
+                        isNullable: false
+                    },
+                    {
+                        name: "name",
+                        type: "varchar",
+                        length: "120",
+                        isNullable: false
+                    }
+                ]
+            }),
+            true
+        );
+        await queryRunner.createIndex("API_Users", new TableIndex({
+            name: "PK_ApiUsers_Id",
+            columnNames: ["id"]
+        }))
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+    }
+
+}

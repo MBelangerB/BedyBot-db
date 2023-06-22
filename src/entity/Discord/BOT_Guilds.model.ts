@@ -1,15 +1,12 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, JoinTable, OneToOne, PrimaryColumn, RelationOptions } from "typeorm";
-import { Bot_GuildOption } from "./BotGuildoptions.model";
+import { Bot_GuildOption } from "./Bot_GuildOption.model";
 
-// @Index("UQ_e90ba75c071d4a6f0b7d57d3cbb", ["discordGuildId"], { unique: true })
-// @Index("PK_Guilds_discordGuildId", ["discordGuildId"], {unique: true})
 @Entity({ name: "BOT_Guilds" })
 export class Bot_Guilds {
-  // @Column("bigint", { primary: true, name: "discordGuildId", unsigned: true, unique: true })
-  @PrimaryColumn("bigint", { primary: true, name: "discordGuildId", unsigned: true, unique: true })
+  @PrimaryColumn("bigint", { primary: true, name: "discordGuildId", unsigned: true, unique: true, nullable: false })
   discordGuildId: string;
 
-  @Column("varchar", { name: "discordGuildName", length: 100 })
+  @Column("varchar", { name: "discordGuildName", length: 100, nullable:false })
   discordGuildName: string;
 
   @Column("varchar", {
@@ -19,8 +16,14 @@ export class Bot_Guilds {
   })
   discordGuildIconUrl: string | null;
 
-  @Column("bigint", { name: "discordGuildOwnerId", unsigned: true })
+  @Column("bigint", { name: "discordGuildOwnerId", unsigned: true, nullable: false })
   discordGuildOwnerId: string;
+
+  @Column("varchar", { name: "discordPreferredLocale", length: 10, nullable: true })
+  discordPreferredLocale: string;
+
+  @Column("varchar", { name: "discordRegion", length: 10, nullable: true })
+  discordRegion: string;
 
   @Column("tinyint", { name: "isActive", width: 1, default: () => "'1'" })
   isActive: boolean;
@@ -33,7 +36,5 @@ export class Bot_Guilds {
   leftAt: Date | null;
 
   @OneToOne(() => Bot_GuildOption, (option) => option.guild)
-  // @OneToOne(() => Bot_GuildOption)
-  // @JoinColumn()
   guildOption: Bot_GuildOption;
 }
