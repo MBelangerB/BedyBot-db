@@ -45,8 +45,9 @@ npx typeorm-ts-node-commonjs migration:generate src/migration -d ./src/dataSourc
 
 
 -- Not working
-typeorm-model-generator -h localhost -d bedybot_test -u bedybot -x adamra -e mysql -o ./src/entity --noConfig true --ce pascal
+typeorm-model-generator -h localhost -p 13306 -d bedybot_dev -u bedybot -x adamra -e mysql -o ./src/entity --noConfig true --ce pascal
 
+typeorm-model-generator -h localhost -p 13306 -d bedybot_dev -u root -x root -e mariadb -o ./src/entity --noConfig true --ce pascal
 
 -- Executer les migrations
 npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
@@ -57,3 +58,17 @@ npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
 npx typeorm migration:generate -d ./src/dataSource.ts ./src/migrations/1687214666286-InitialCreate_DiscordUsers
 
 npx typeorm migration:generate InitialCreate_DiscordUsers -d ./src/dataSource.ts
+
+
+//------------------------------------------------------------------------
+// Note Clean
+//------------------------------------------------------------------------
+
+-- Créer une nouvelle migrations
+npx typeorm-ts-node-commonjs migration:create ./src/Migrations/XYZ
+
+-- Installer les migrations en attentes
+npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
+
+-- PSeudo generator des entités
+npx typeorm-model-generator -h localhost -p 13306 -d bedybot_dev -u root -x root -e mariadb -o ./src/entity

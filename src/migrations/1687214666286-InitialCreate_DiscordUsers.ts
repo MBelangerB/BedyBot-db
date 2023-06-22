@@ -155,7 +155,7 @@ export class InitialCreateDiscordUsers1687214666286 implements MigrationInterfac
                         length: "120",
                         isNullable: true
                     },
-					]
+                ]
             }),
             true
         );
@@ -183,7 +183,7 @@ export class InitialCreateDiscordUsers1687214666286 implements MigrationInterfac
         await queryRunner.createForeignKey("BOT_UserDetails", fk_UserDetailsToUser);
 
 
-        const fk_GuildUserToUser= new TableForeignKey({
+        const fk_GuildUserToUser = new TableForeignKey({
             name: "FK_GuildUser_to_Users_discordUserId",
             // Child Table Key
             columnNames: ["discordUserId"],
@@ -206,13 +206,13 @@ export class InitialCreateDiscordUsers1687214666286 implements MigrationInterfac
             onDelete: "CASCADE",
         });
         await queryRunner.createForeignKey("BOT_GuildUsers", fk_GuildUserToGuild);
-        
+
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("BOT_GuildUsers", true, true, true);
         await queryRunner.dropTable("BOT_UserDetails", true, true, true);
-        await queryRunner.dropTable("BOT_Users", true, true, true);   
+        await queryRunner.dropTable("BOT_Users", true, true, true);
     }
 
 }

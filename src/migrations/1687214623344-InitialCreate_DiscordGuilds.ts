@@ -72,7 +72,8 @@ export class InitialCreateDiscordGuild1687214623344 implements MigrationInterfac
         );
         await queryRunner.createIndex("BOT_Guilds", new TableIndex({
             name: "PK_Guilds_discordGuildId",
-            columnNames: ["discordGuildId"]
+            columnNames: ["discordGuildId"],
+            isUnique: true
         }))
 
         // ***************************************
