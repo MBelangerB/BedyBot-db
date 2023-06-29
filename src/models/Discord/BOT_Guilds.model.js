@@ -1,5 +1,86 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
+
+// module.exports = (sequelize, DataTypes) => {
+
+//     const BOT_Guilds = sequelize.define('BOT_Guilds',
+//         {
+//             guildId: {
+//                 type: DataTypes.BIGINT.UNSIGNED,
+//                 field: 'guildId',
+//                 primaryKey: true,
+//                 unique: true,
+//                 allowNull: false,
+//             },
+//             guildName: {
+//                 type: DataTypes.STRING(100),
+//                 field: 'guildName',
+//                 allowNull: false,
+//             },
+//             guildIconUrl: {
+//                 type: DataTypes.STRING,
+//                 field: 'guildIconUrl',
+//                 allowNull: true,
+//             },
+//             guildBannerUrl: {
+//                 type: DataTypes.STRING,
+//                 field: 'guildBannerUrl',
+//                 allowNull: true,
+//             },
+//             guildOwnerId: {
+//                 type: DataTypes.BIGINT.UNSIGNED, // DataTypes.STRING(80),
+//                 field: 'guildOwnerId',
+//                 allowNull: false,
+//             },
+//             guildRegion: {
+//                 type: DataTypes.STRING(10),
+//                 field: 'guildRegion',
+//                 allowNull: true,
+//             },
+//             guildPreferredLocale: {
+//                 type: DataTypes.STRING(10),
+//                 field: 'guildPreferredLocale',
+//                 allowNull: true,
+//             },
+//             isActive: {
+//                 type: DataTypes.BOOLEAN,
+//                 field: 'isActive',
+//                 allowNull: false,
+//                 defaultValue: true,
+//             },
+//             joinedAt: {
+//                 type: DataTypes.DATE,
+//                 field: 'joinedAt',
+//                 allowNull: false,
+//                 defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+//             },
+//             leftAt: {
+//                 type: DataTypes.DATE,
+//                 field: 'leftAt',
+//                 allowNull: true,
+//             },
+//         }, {}
+//     //     {
+//     //     sequelize,
+//     //     modelName: 'BOT_Guilds',
+//     //     tableName: 'BOT_Guilds'
+//     // }
+//     );
+
+//     BOT_Guilds.associate = function (models) {
+//         BOT_Guilds.hasOne(models.BOT_GuildOptions, {
+//             foreignKey: 'guildId', // Set FK name on TARGET
+//             sourceKey: 'guildId', // Source Key In SOURCE
+//             onDelete: 'CASCADE',
+//         });
+//     }
+
+//     BOT_Guilds.getModels = function() {
+//         return this.sequelize.models;
+//     }
+
+//     return BOT_Guilds;
+// };
 
 module.exports = (sequelize, DataTypes) => {
     class BOT_Guilds extends Model {
@@ -12,188 +93,76 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             BOT_Guilds.hasOne(models.BOT_GuildOptions, {
                 foreignKey: 'guildId', // Set FK name on TARGET
-                sourceKey: 'id', // Source Key In SOURCE
+                sourceKey: 'guildId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
             });
 
-            BOT_Guilds.hasMany(models.BOT_GuildUsers, {
-                foreignKey: 'guildId', // Set FK name on TARGET
-                sourceKey: 'id', // Source Key In SOURCE
-                onDelete: 'CASCADE',
-            });
+            // BOT_Guilds.hasMany(models.BOT_GuildUsers, {
+            //     foreignKey: 'guildId', // Set FK name on TARGET
+            //     sourceKey: 'id', // Source Key In SOURCE
+            //     onDelete: 'CASCADE',
+            // });
 
             BOT_Guilds.hasMany(models.BOT_Roles, {
                 foreignKey: 'guildId', // Set FK name on TARGET
-                sourceKey: 'id', // Source Key In SOURCE
+                sourceKey: 'guildId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
             });
 
-            BOT_Guilds.hasMany(models.BOT_Tournaments, {
-                foreignKey: 'guildId', // Set FK name on TARGET
-                sourceKey: 'id', // Source Key In SOURCE
-                onDelete: 'CASCADE',
-            });
+            // BOT_Guilds.hasMany(models.BOT_Tournaments, {
+            //     foreignKey: 'guildId', // Set FK name on TARGET
+            //     sourceKey: 'id', // Source Key In SOURCE
+            //     onDelete: 'CASCADE',
+            // });
 
-        }
+        } // End associate
 
-        static models() {
-            return this.sequelize.models;
-        }
+        // static getModels() {
+        //     return this.sequelize.models;
+        // }
+    }
 
-
-        /**
-         * Add a new discord guild on DB
-         * @param {*} discordGuildId
-         * @param {*} discordGuildName
-         * @param {*} discordOwnerId
-         * @returns
-         */
-        static async createGuildOnDB(discordGuildId, discordGuildName, discordOwnerId) {
-            return await this.create({
-                discordGuildId: discordGuildId,
-                discordGuildName: discordGuildName,
-                discordGuildOwnerId: discordOwnerId,
-                isActive: true,
-            });
-        }
-
-        /**
-         * Get BOT_Guilds by id
-         * @param {integer} id
-         * @param {boolean} withInclude
-         * @returns {BOT_Guilds}
-         */
-        static async getGuildById(id, withInclude = true) {
-            if (withInclude) {
-                return await this.findOne({ where: { id: id }, include: [this.models().BOT_GuildOptions] });
-            } else {
-                return await this.findOne({ where: { id: id } });
-            }
-        }
-
-        /**
-         * Get BOT_Guilds by discord guildId
-         * @param {string} guildId
-         * @param {boolean} withInclude
-         * @returns {BOT_Guilds}
-         */
-        static async getGuildByGuildId(guildId, withInclude = true) {
-            if (withInclude) {
-                return await this.findOne({ where: { discordGuildId: guildId }, include: [this.models().BOT_GuildOptions] });
-            } else {
-                return await this.findOne({ where: { discordGuildId: guildId } });
-            }
-        }
-
-        /**
-         * Return all active guilds
-         * @param {boolean} withInclude
-         * @returns {BOT_Guilds}
-         */
-        static async getAllActiveGuilds(withInclude = true) {
-            if (withInclude) {
-                return await this.findAll({ where: { isActive: true }, include: [this.models().BOT_GuildOptions] });
-            } else {
-                return await this.findAll({ where: { isActive: true } });
-            }
-        }
-
-        /**
-         * Return the guild option by a guildId
-         * @param {integer} guildId
-         * @returns {BOT_GuildOptions}
-         */
-        static async getGuildOptionByGuildId(guildId) {
-            const guild = await this.getGuildByGuildId(guildId, true);
-            return guild?.BOT_GuildOption;
-        }
-
-        /**
-         * Update the guild statut and date param
-         * @param {boolean} isActive new guild Statut
-         * @returns {BOT_Guilds}
-         */
-        async updateGuildStatut(isActive) {
-            if (this.isActive !== isActive) {
-                if (isActive) {
-                    // Guild is comeback
-                    this.set({
-                        isActive: isActive,
-                        joinedAt: Date.now(),
-                        leftAt: null,
-                    });
-                    return await this.save();
-
-                } else if (!isActive) {
-                    // Guild is left
-                    this.set({
-                        isActive: isActive,
-                        leftAt: Date.now(),
-                    });
-                    return await this.save();
-                }
-                console.verbose(`Guild status and date for **${this.id}** has been updated.`);
-            }
-        }
-
-        /**
-         * Update the guild name
-         * @param {string} newName
-         */
-        async updateGuildName(newName) {
-            if (this.discordGuildName !== newName) {
-                this.set({
-                    discordGuildName: newName,
-                });
-                await this.save();
-                console.verbose(`Guild name for **${this.id}** has been updated.`);
-            }
-        }
-
-        /**
-         * Update the guild owner id
-         * @param {string} ownerId
-         */
-        async updateGuildOwner(ownerId) {
-            if (this.discordGuildOwnerId !== ownerId) {
-                this.set({
-                    discordGuildOwnerId: ownerId,
-                });
-                await this.save();
-                console.verbose(`Guild owner for **${this.id}** has been updated.`);
-            }
-        }
+    BOT_Guilds.getModels = function () {
+        return this.sequelize.models;
     }
 
     BOT_Guilds.init({
-        id: {
-            type: DataTypes.INTEGER,
-            field: 'id',
+        guildId: {
+            type: DataTypes.BIGINT.UNSIGNED,
+            field: 'guildId',
             primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
             unique: true,
-        },
-        discordGuildId: {
-            type: DataTypes.STRING(80),
-            field: 'discordGuildId',
-            allowNull: false,
-            unique: true,
-        },
-        discordGuildName: {
-            type: DataTypes.STRING(120),
-            field: 'discordGuildName',
             allowNull: false,
         },
-        discordGuildIconUrl: {
+        guildName: {
+            type: DataTypes.STRING(100),
+            field: 'guildName',
+            allowNull: false,
+        },
+        guildIconUrl: {
             type: DataTypes.STRING,
-            field: 'discordGuildIconUrl',
+            field: 'guildIconUrl',
             allowNull: true,
         },
-        discordGuildOwnerId: {
-            type: DataTypes.STRING(80),
-            field: 'discordGuildOwnerId',
+        guildBannerUrl: {
+            type: DataTypes.STRING,
+            field: 'guildBannerUrl',
+            allowNull: true,
+        },
+        guildOwnerId: {
+            type: DataTypes.BIGINT.UNSIGNED, // DataTypes.STRING(80),
+            field: 'guildOwnerId',
             allowNull: false,
+        },
+        guildRegion: {
+            type: DataTypes.STRING(10),
+            field: 'guildRegion',
+            allowNull: true,
+        },
+        guildPreferredLocale: {
+            type: DataTypes.STRING(10),
+            field: 'guildPreferredLocale',
+            allowNull: true,
         },
         isActive: {
             type: DataTypes.BOOLEAN,
@@ -202,8 +171,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: true,
         },
         joinedAt: {
-            allowNull: false,
             type: DataTypes.DATE,
+            field: 'joinedAt',
+            allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         },
         leftAt: {
@@ -215,18 +185,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'BOT_Guilds',
         tableName: 'BOT_Guilds',
-        // indexes: [
-        //     {
-        //         name: "PK_bot_guilds_id",
-        //         unique: true,
-        //         fields: [ { name: "id" }, ]
-        //     },
-        //     {
-        //         name: "UQ_bot_guilds_discordGuildId",
-        //         unique: true,
-        //         fields: [ { name: "discordGuildId" }, ]
-        //     },
-        // ]
     });
 
     return BOT_Guilds;

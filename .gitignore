@@ -108,4 +108,5 @@ config/*.json
 
 /test
 /Backup
-/OldMigration
+/src/OldMigration
+src/config/config.js

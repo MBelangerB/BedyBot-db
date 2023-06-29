@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class BOT_Roles extends Model {
@@ -14,87 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             BOT_Roles.belongsTo(models.BOT_Guilds, {
                 foreignKey: 'guildId', // Set FK name on SOURCE
-                targetKey: 'id', // Key name on TARGET
+                targetKey: 'guildId', // Key name on TARGET
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             });
-        }
-
-
-        /**
-         * Add a new discord role on DB
-         * @param {string} guildId
-         * @param {string} discordRoleId
-         * @param {string} discordRoleName
-         * @param {integer} discordColor
-         * @param {integer} type
-         * @returns
-         */
-        static async createRoleOnDB(guildId, discordRoleId, discordRoleName, discordColor, type) {
-            return await this.create({
-                guildId: guildId,
-                discordRoleId: discordRoleId,
-                discordRoleName: discordRoleName,
-                discordRoleColor: discordColor,
-                type: type,
-            });
-        }
-
-        /**
-         * Update DB Role
-         * @param {string} discordRoleId
-         * @param {string} discordRoleName
-         * @param {integer} discordColor
-         */
-        async updateRole(discordRoleId, discordRoleName, discordColor) {
-            if (discordRoleId !== this.discordRoleId) {
-                this.set({
-                    discordRoleId: discordRoleId,
-                });
-            }
-            if (discordRoleName !== this.discordRoleName) {
-                this.set({
-                    discordRoleName: discordRoleName,
-                });
-            }
-            if (discordColor !== this.discordRoleColor) {
-                this.set({
-                    discordRoleColor: discordColor,
-                });
-            }
-
-            if (this.changed() && this.changed.length > 0) {
-                await this.save();
-            }
-        }
-
-        /**
-         * Get BOT_Roles by id
-         * @param {integer} id
-         * @returns {BOT_Roles}
-         */
-        static async getRoleById(id, roleType = BOT_Roles.RoleTypes.MANAGER) {
-            return await this.findOne({ where: { id: id, type: roleType } });
-        }
-
-        /**
-         * Get BOT_Roles by guildId
-         * @param {string} guildId
-         * @param {BOT_Roles.RoleTypes} roleType
-         * @returns {BOT_Roles}
-         */
-        static async getRoleByGuildId(guildId, roleType = BOT_Roles.RoleTypes.MANAGER) {
-            return await this.findOne({ where: { guildId: guildId, type: roleType } });
-        }
-
-        /**
-         * Get BOT_Roles by roleName
-         * @param {string} guildId
-         * @param {string} roleName
-         * @returns {BOT_Roles}
-         */
-        static async getRoleByRoleName(guildId, discordRoleName) {
-            return await this.findOne({ where: { guildId: guildId, discordRoleName: discordRoleName } });
         }
     }
 
@@ -105,38 +28,56 @@ module.exports = (sequelize, DataTypes) => {
 
 
     BOT_Roles.init({
-        id: {
-            type: DataTypes.INTEGER,
-            field: 'id',
-            primaryKey: true,
-            autoIncrement: true,
-            allowNull: false,
-        },
         guildId: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.BIGINT.UNSIGNED,
             field: 'guildId',
+            primaryKey: true,
+            unique: true,
+            allowNull: false,
+            references: {
+                model: 'BOT_Guilds', // This is a reference to another model
+                key: 'guildId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+        },
+        roleId: {
+            type: Sequelize.BIGINT.UNSIGNED,
+            field: 'roleId',
+            primaryKey: true,
+            unique: true,
             allowNull: false,
         },
-        discordRoleId: {
-            type: DataTypes.STRING,
-            field: 'discordRoleId',
+        roleName: {
+            type: DataTypes.STRING(120),
+            field: 'roleName',
             allowNull: false,
         },
-        discordRoleName: {
-            type: DataTypes.STRING,
-            field: 'discordRoleName',
+        rolePermission: {
+            type: DataTypes.STRING(255),
+            field: 'permissionLevel',
             allowNull: false,
         },
-        discordRoleColor: {
-            type: DataTypes.STRING,
-            field: 'discordRoleColor',
-            allowNull: false,
+        roleColor: {
+            type: DataTypes.INTEGER,
+            field: 'color',
+            allowNull: true,
         },
-        // Manager - PLayer
+        rolePosition: {
+            type: DataTypes.INTEGER,
+            field: 'position',
+            allowNull: true,
+        },
         type: {
             type: DataTypes.INTEGER,
             field: 'type',
+            allowNull: true,
+        },
+        lastUpdate: {
+            type: DataTypes.DATE,
+            field: 'lastUpdated',
             allowNull: false,
+            defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
     }, {
         sequelize,
