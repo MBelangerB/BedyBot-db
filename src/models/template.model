@@ -31,3 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     });
     return Users;
 };
+
+
+
+exports.updateRole = async () => {
+    
+}
