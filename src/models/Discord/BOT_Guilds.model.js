@@ -1,87 +1,6 @@
 'use strict';
 const { Model, Sequelize } = require('sequelize');
 
-// module.exports = (sequelize, DataTypes) => {
-
-//     const BOT_Guilds = sequelize.define('BOT_Guilds',
-//         {
-//             guildId: {
-//                 type: DataTypes.BIGINT.UNSIGNED,
-//                 field: 'guildId',
-//                 primaryKey: true,
-//                 unique: true,
-//                 allowNull: false,
-//             },
-//             guildName: {
-//                 type: DataTypes.STRING(100),
-//                 field: 'guildName',
-//                 allowNull: false,
-//             },
-//             guildIconUrl: {
-//                 type: DataTypes.STRING,
-//                 field: 'guildIconUrl',
-//                 allowNull: true,
-//             },
-//             guildBannerUrl: {
-//                 type: DataTypes.STRING,
-//                 field: 'guildBannerUrl',
-//                 allowNull: true,
-//             },
-//             guildOwnerId: {
-//                 type: DataTypes.BIGINT.UNSIGNED, // DataTypes.STRING(80),
-//                 field: 'guildOwnerId',
-//                 allowNull: false,
-//             },
-//             guildRegion: {
-//                 type: DataTypes.STRING(10),
-//                 field: 'guildRegion',
-//                 allowNull: true,
-//             },
-//             guildPreferredLocale: {
-//                 type: DataTypes.STRING(10),
-//                 field: 'guildPreferredLocale',
-//                 allowNull: true,
-//             },
-//             isActive: {
-//                 type: DataTypes.BOOLEAN,
-//                 field: 'isActive',
-//                 allowNull: false,
-//                 defaultValue: true,
-//             },
-//             joinedAt: {
-//                 type: DataTypes.DATE,
-//                 field: 'joinedAt',
-//                 allowNull: false,
-//                 defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-//             },
-//             leftAt: {
-//                 type: DataTypes.DATE,
-//                 field: 'leftAt',
-//                 allowNull: true,
-//             },
-//         }, {}
-//     //     {
-//     //     sequelize,
-//     //     modelName: 'BOT_Guilds',
-//     //     tableName: 'BOT_Guilds'
-//     // }
-//     );
-
-//     BOT_Guilds.associate = function (models) {
-//         BOT_Guilds.hasOne(models.BOT_GuildOptions, {
-//             foreignKey: 'guildId', // Set FK name on TARGET
-//             sourceKey: 'guildId', // Source Key In SOURCE
-//             onDelete: 'CASCADE',
-//         });
-//     }
-
-//     BOT_Guilds.getModels = function() {
-//         return this.sequelize.models;
-//     }
-
-//     return BOT_Guilds;
-// };
-
 module.exports = (sequelize, DataTypes) => {
     class BOT_Guilds extends Model {
         /**
@@ -97,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'CASCADE',
             });
 
-            // BOT_Guilds.hasMany(models.BOT_GuildUsers, {
-            //     foreignKey: 'guildId', // Set FK name on TARGET
-            //     sourceKey: 'id', // Source Key In SOURCE
-            //     onDelete: 'CASCADE',
-            // });
+            BOT_Guilds.hasMany(models.BOT_GuildUser, {
+                foreignKey: 'guildId', // Set FK name on TARGET
+                sourceKey: 'guildId', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
 
             BOT_Guilds.hasMany(models.BOT_Roles, {
                 foreignKey: 'guildId', // Set FK name on TARGET
@@ -116,10 +35,6 @@ module.exports = (sequelize, DataTypes) => {
             // });
 
         } // End associate
-
-        // static getModels() {
-        //     return this.sequelize.models;
-        // }
     }
 
     BOT_Guilds.getModels = function () {
