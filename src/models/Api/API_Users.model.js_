@@ -12,9 +12,9 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class API_Users extends Model {
 
-        static models() {
-            return this.sequelize.models;
-        }
+        // static models() {
+        //     return this.sequelize.models;
+        // }
 
         /**
          * Helper method for defining associations.
@@ -190,7 +190,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    API_Users.init({
+       API_Users.init({
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,

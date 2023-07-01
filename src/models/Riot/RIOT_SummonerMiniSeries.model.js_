@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
 
         // /**
         //  * Add a change history for a summoner
-        //  * @param {*} riotSummonerId 
-        //  * @param {*} name 
-        //  * @param {*} level 
-        //  * @returns 
+        //  * @param {*} riotSummonerId
+        //  * @param {*} name
+        //  * @param {*} level
+        //  * @returns
         //  */
         //  /* eslint-disable-next-line no-dupe-class-members */
         //  static async addSummonerHistory(riotSummonerId, name, level) {
@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
           },
     }, {
-        sequelize, 
+        sequelize,
         modelName: 'RIOT_SummonerMiniSeries',
         tableName: 'RIOT_SummonerMiniSeries',
         indexes: [
