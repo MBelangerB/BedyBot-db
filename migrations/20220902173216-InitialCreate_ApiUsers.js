@@ -23,20 +23,10 @@ module.exports = {
         field: 'source',
         allowNull: false,
       },
-      avatar: {
-        type: DataTypes.STRING,
-        field: 'avatar',
-        allowNull: true,
-      },
       username: {
         type: DataTypes.STRING(32),
         field: 'username',
         allowNull: false,
-      },
-      discriminator: {
-        type: DataTypes.STRING(10),
-        field: 'discriminator',
-        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,

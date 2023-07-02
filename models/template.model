@@ -17,6 +17,17 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         sequelize, modelName: 'Users',
+        modelName: 'Users',
+        tableName: 'Users',
+        indexes: [
+            {
+                name: 'PK_api_modules_id',
+                unique: true,
+                fields: [
+                    { name: 'id' },
+                ],
+            },
+        ],
     });
     return Users;
 };

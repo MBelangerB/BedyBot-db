@@ -27,9 +27,9 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Add a new module in db
-         * @param {string} moduleName 
-         * @param {boolean} isEnabled 
-         * @param {boolean} isPremium 
+         * @param {string} moduleName
+         * @param {boolean} isEnabled
+         * @param {boolean} isPremium
          * @returns {API_Modules}
          */
         static async addModule(moduleName, isEnabled, isPremium) {
@@ -42,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
 
         /**
          * Get a module by Id
-         * @param {*} id 
-         * @returns {API_Modules} 
+         * @param {*} id
+         * @returns {API_Modules}
          */
         static async findModuleById(id) {
             return await this.findOne({ where: { id: id } });

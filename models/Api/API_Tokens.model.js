@@ -26,13 +26,13 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Add a new access token in DB
-     * @param {string} userId 
-     * @param {string} accessToken 
-     * @param {string} refreshToken 
-     * @param {integer} source 
-     * @param {string} scope 
-     * @param {string} tokenType 
-     * @param {datetime} expireAt 
+     * @param {string} userId
+     * @param {string} accessToken
+     * @param {string} refreshToken
+     * @param {integer} source
+     * @param {string} scope
+     * @param {string} tokenType
+     * @param {datetime} expireAt
      * @returns {API_Tokens}
      */
     static async addAccessToken(userId, accessToken, refreshToken, tokenType, scope, expireAt, source) {
@@ -49,17 +49,17 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Add a new access token for a specific guild in DB
-     * @param {string} userId 
-     * @param {string} guildId 
-     * @param {string} accessToken 
-     * @param {string} refreshToken 
-     * @param {integer} source 
-     * @param {string} scope 
-     * @param {string} tokenType 
-     * @param {datetime} expireAt 
+     * @param {string} userId
+     * @param {string} guildId
+     * @param {string} accessToken
+     * @param {string} refreshToken
+     * @param {integer} source
+     * @param {string} scope
+     * @param {string} tokenType
+     * @param {datetime} expireAt
      * @returns {API_Tokens}
      */
-    static async addGuildAccessToken(userId, guildId, refreshToken, tokenType, scope, expireAt, source) {
+    static async addGuildAccessToken(userId, guildId, accessToken, refreshToken, tokenType, scope, expireAt, source) {
       return await this.create({
         guildId: guildId,
         userId: userId,
@@ -74,8 +74,8 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Find a token by id
-     * @param {integer} id 
-     * @returns {API_Tokens} 
+     * @param {integer} id
+     * @returns {API_Tokens}
      */
     static async findTokenById(id) {
       return await this.findOne({ where: { id: id } });
@@ -83,8 +83,8 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Find a token by userId
-     * @param {integer} userId 
-     * @returns {API_Tokens} 
+     * @param {integer} userId
+     * @returns {API_Tokens}
      */
     static async findTokenByUserId(userId) {
       return await this.findOne({ where: { userId: userId } });
@@ -92,9 +92,9 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Find a token by a guild id and user Id
-     * @param {integer} guildId 
-     * @param {integer} userId 
-     * @returns {API_Tokens} 
+     * @param {integer} guildId
+     * @param {integer} userId
+     * @returns {API_Tokens}
      */
     static async findTokenByGuildIdUserId(guildId, userId) {
       return await this.findOne({ where: { guildId: guildId, userId: userId } });
@@ -112,11 +112,11 @@ module.exports = (sequelize, DataTypes) => {
 
     /**
      * Update the access token
-     * @param {*} accessToken 
-     * @param {*} refreshToken 
-     * @param {*} tokenType 
-     * @param {*} scope 
-     * @param {*} expireAt 
+     * @param {*} accessToken
+     * @param {*} refreshToken
+     * @param {*} tokenType
+     * @param {*} scope
+     * @param {*} expireAt
      */
     async updateAccessToken(accessToken, refreshToken, tokenType, scope, expireAt) {
       this.set({
@@ -126,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
         expireAt: expireAt,
         tokenType: tokenType,
       });
-      await apiToken.save();
+      await this.save();
     }
 
   }
