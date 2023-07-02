@@ -32,6 +32,18 @@ exports.getAllActiveGuilds = async (includeModels = []) => {
     }
 }
 
+/**
+ * Return all guilds
+ * @param {Models[]} includeModels Array of Sequelize models
+ * @returns {BOT_Guilds[]}
+ */
+ exports.getAllGuilds = async (includeModels = []) => {
+    if (includeModels && includeModels.length > 0) {
+        return await BOT_Guilds.findAll({ include: includeModels });
+    } else {
+        return await BOT_Guilds.findAll();
+    }
+}
 
 /**
  * Add a new discord guild on DB 
