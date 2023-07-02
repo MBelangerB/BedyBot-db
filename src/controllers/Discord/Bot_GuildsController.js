@@ -1,71 +1,8 @@
 const { sequelize } = require('../../dbSchema');
-const { BOT_Guilds, BOT_GuildOptions } = sequelize.models;
-
-// /**
-//  * Get BOT_Guilds by guildId
-//  * @param {BigInt} guildId A Discord guildId
-//  * @param {Boolean} withInclude Include GuildOption
-//  * @returns 
-//  */
-// exports.getGuildByGuildId = async (guildId, withInclude = true) => {
-//     if (withInclude) {
-//         return await BOT_Guilds.findOne({ where: { guildId: guildId }, include: [BOT_Guilds.getModels().BOT_GuildOptions] });
-//     } else {
-//         return await BOT_Guilds.findOne({ where: { guildId: guildId } });
-//     }
-// }
-//
-// /**
-//  * Return all active guilds
-//  * @param {boolean} withInclude
-//  * @returns {BOT_Guilds}
-//  */
-// exports.getAllActiveGuilds = async (withInclude = true) => {
-//     if (withInclude) {
-//         return await BOT_Guilds.findAll({ where: { isActive: true }, include: [BOT_Guilds.getModels().BOT_GuildOptions] });
-//     } else {
-//         return await BOT_Guilds.findAll({ where: { isActive: true } });
-//     }
-// }
-
-
-// /**
-//  * Update the guild name
-//  * @param {string} newName
-//  */
-// exports.updateGuildName = async (guildId, newGuildName) => {
-//     let aGuild = this.getGuildByGuildId(guildId);
-//     if (!aGuild) {
-//         throw new Exception(`GuildId ${guildId} doesn't exist.`)
-//     } else if (aGuild.guildName !== newGuildName) {
-//         aGuild.set({
-//             guildName: newName,
-//         });
-//         await aGuild.save();
-
-//         console.verbose(`Guild name for **${aGuild.id}** has been updated.`);
-//     }
-// }
-// /**
-//  * Update the guild owner id
-//  * @param {string} ownerId
-//  */
-// exports.updateGuildOwner = async (guildId, newOwnerId) => {
-//     let aGuild = this.getGuildByGuildId(guildId);
-//     if (!aGuild) {
-//         throw new Exception(`GuildId ${guildId} doesn't exist.`)
-//     } else if (aGuild.guildOwnerId !== newOwnerId) {
-//         aGuild.set({
-//             guildOwnerId: ownerId,
-//         });
-//         await aGuild.save();
-
-//         console.verbose(`Guild owner for **${aGuild.id}** has been updated.`);
-//     }
-// }
+const { BOT_Guilds, BOT_GuildOptions, BOT_GuildUser } = sequelize.models;
 
 // ******************************************
-// BOT_Guilds
+// BOT_Guilds 
 // ******************************************
 
 /**
@@ -262,20 +199,6 @@ exports.updateGuildOption = async (guildId, announcementChannelId = null, maxPla
     }
 }
 
-// /**
-//  * Return the guild option by a guildId
-//  * @param {BIGINT} guildId
-//  * @returns {BOT_GuildOptions}
-//  */
-// exports.getGuildOptionByGuildId = async (guildId) => {
-//     let aGuild = this.getGuildByGuildId(guildId, true);
-//     if (!aGuild) {
-//         throw new Exception(`GuildId ${guildId} doesn't exist.`)
-//     } else {
-//         return aGuild?.BOT_GuildOptions;
-//     }
-// }
-
 /**
  * Get BOT_GuildOptions by id
  * @param {BIGINT} id 
@@ -290,3 +213,104 @@ exports.getGuildOptionByGuildId = async (guildId, withInclude = true) => {
     }
 }
 
+// ******************************************
+// BOT_GuildUser
+// ******************************************
+
+/**
+ * Initialize a initGuildUser
+ * @param {BIGINT} guildId (mandatory)
+ * @param {BIGINT} userId  (mandatory)
+ * @param {*} nickname 
+ * @param {*} avatar 
+ * @returns 
+ */
+exports.initGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
+    return await BOT_GuildUser.create({
+        guildId: guildId,
+        userId: userId,
+        nickname: nickname,
+        avatar: avatar,
+    });
+}
+
+exports.getGuildUserByUserId = async (guildId, userId, includeGuild = false, includeUsers = false) => {
+    let includeList = [];
+    if (includeGuild) {
+        includeList.push(BOT_GuildUser.getModels().BOT_Guilds);
+    }
+    if (includeUsers) {
+        includeList.push(BOT_GuildUser.getModels().BOT_Users);
+        // include.push({
+        //     model: BOT_GuildUser.getModels().BOT_Users,
+        //     include: [
+        //         {
+        //           model: BOT_UserDetails
+        //         }
+        //       ]
+        // });
+    }
+
+    return await BOT_GuildUser.findAll({ where: { guildId: guildId, userId: userId }, include: includeList });
+}
+
+/**
+ * Update the guildUser info
+ * @param {*} guildId 
+ * @param {*} userId 
+ * @param {*} nickname 
+ * @param {*} avatar 
+ * @returns 
+ */
+exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
+    const aGuildUser = this.getGuildUserByUserId(guildId, userId);
+    if (!aGuildUser) {
+        throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+
+    } else {
+        if (nickname != null && aGuildUser.nickname != nickname) {
+            aGuildUser.set({
+                nickname: nickname
+            });
+        }
+
+        if (avatar != null && aGuildUser.avatar != avatar) {
+            aGuildUser.set({
+                avatar: maxPlayavatarerPerLobby
+            });
+        }
+
+        if (aGuildUser.changed() && aGuildUser.changed.length > 0) {
+            return await aGuildUser.save();
+        }
+    }
+}
+
+/**
+ * Change the guid user presence. 
+ * @returns {BOT_GuildUser}
+ */
+exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
+    const aGuildUser = this.getGuildUserByUserId(guildId, userId);
+    if (!aGuildUser) {
+        throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+
+    } else {
+        if (hasLeft == false) {
+            // GuildUser comeback
+            aGuildUser.set({
+                joinedAt: Date.now(),
+                leftAt: null,
+            });
+            return await aGuildUser.save();
+
+        } else if (hasLeft == true) {
+            // Guild is left
+            aGuildUser.set({
+                aGuildUser: Date.now(),
+            });
+            return await aGuildUser.save();
+        }
+        console.verbose(`GuildUser state change, hasLeft : ${hasLeft} for **(${guildId}, ${userId})**.`);
+    }
+}
