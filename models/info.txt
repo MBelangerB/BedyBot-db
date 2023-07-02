@@ -1,0 +1,54 @@
+/*
+  A.hasOne(B)
+    One-to-One relationship
+    FK is define in B
+
+  A.belongTo(B)
+    One-to-One relationship
+    FK is define in A
+
+  A.hasMany(B)
+    One-To-Many relationship
+    FK is define in B
+
+  A.belongsToMany(B, { through: 'C' })
+    Many-To-Many relationship
+    Junction table C
+*/
+
+
+
+A.hasOne(B, {
+  foreignKey: 'bId', // Target Key
+  sourceKey: 'id', // Source Key (A)
+});
+
+A.belongsTo(B, {
+  foreignKey: 'id', // FK on source table (A)
+  targetKey: 'aId', // Key name on target table
+  as: 'parent',
+});
+
+
+A.hasMany(B, {
+  foreignKey: 'parentId', // FK on source table
+  as: 'childs',
+});
+
+sequelize-auto -o ".\test\model" -d "E:\database\dev_bedybot2.db" -cm -noAlias -e sqlite 
+sequelize-auto -o "D:\_develop\BOT\DiscordMK\test\model" -d "E:\database\dev_bedybot2.db" -cm -e sqlite 
+
+sequelize-auto -o ".\test\model" -d "E:\database\dev_bedybot_test.db" -cm -e sqlite -l es6
+
+NOT WORK:
+sequelize-auto -o "D:\_develop\BOT\DiscordMK\test\model2" -d "E:\database\dev_bedybot2.db" -cm -noAlias -l ts -e sqlite 
+-----------------------------
+
+User.hasOne(Task, {
+  foreignKey: "task_owner", // change column name
+  sourceKey: "firstName", // change the referenced column
+  uniqueKey: "task_user_fk", // foreign key constraint name
+  onDelete: "RESTRICT", // ON DELETE config
+  onUpdate: "RESTRICT", // ON UPDATE config
+  constraints: false, // remove ON DELETE and ON UPDATE constraints
+});
