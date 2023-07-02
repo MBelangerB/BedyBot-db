@@ -4,6 +4,7 @@
   "description": "Database model and migration or BedyBot tools",
   "main": "dbSchema.js",
   "scripts": {
+    "start": "node src/test",
     "eslint": "eslint .",
     "eslintFix": "eslint . --fix",
     "cleanState": "npm ci",

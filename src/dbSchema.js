@@ -1,5 +1,6 @@
 'use strict';
 
+// Required Node state
 require('dotenv').config();
 
 const fs = require('fs');
@@ -7,7 +8,38 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/config/config')[env];
+// const config = require(__dirname + '/config/config')[env];
+
+// Initiale fonction
+let nbVerif = 0;
+const getConfigFilePath = function (path) {
+  if (!fs.existsSync(path))
+  {
+    if (nbVerif == 0) {
+      let filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH);
+      if (getConfigFilePath(filePath)) {
+        dbConfigFilePath = filePath;
+      }
+      nbVerif++;
+    } else {
+      throw new Error('Can\' find config file');
+    }
+  } else {
+    return true;
+  }
+}
+
+// Load config
+let dbConfigFilePath = path.join(__dirname, '/config/config.js');
+let config;
+if (getConfigFilePath(dbConfigFilePath))
+{
+  // let filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH)
+  // dbConfigFilePath = require(filePath);
+  config = require(dbConfigFilePath)[env];
+}
+
+// Sequelize Variable
 const db = {};
 const controller = [];
 
@@ -37,6 +69,7 @@ sequelize.options.define = {
   createdAt: false,
   updatedAt: false,
 };
+
 
 const testConnection = function () {
   // Test the connection
