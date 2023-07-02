@@ -1,9 +1,9 @@
 'use strict';
 
-const { Model, Sequelize} = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class API_Commands extends Model {
+  class API_CommandRoles extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,16 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     /* eslint-disable-next-line no-unused-vars */
     static associate(models) {
       // define association here
-      API_Commands.belongsTo(models.API_Modules, {
-        foreignKey: 'moduleId', // Key name on source
-        targetKey: 'moduleId', // Key name on TARGET
+      API_CommandRoles.belongsTo(models.API_Commands, {
+        foreignKey: 'commandId', // Key name on source
+        targetKey: 'commandId', // Key name on TARGET
       });
 
-      API_Commands.hasMany(models.API_CommandRoles, {
-        foreignKey: 'commandId', // FK name on TARGET
-        sourceKey: 'commandId', // Key name on SOURCE
-        onDelete: 'CASCADE',
-      });
     }
 
     // /**
@@ -29,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     //  * @param {UUID} moduleId
     //  * @param {string} commandName
     //  * @param {integer} commandType
-    //  * @returns {API_Commands}
+    //  * @returns {API_CommandRoles}
     //  */
     // static async addCommand(moduleId, commandName, commandType) {
     //   return await this.create({
@@ -42,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     // /**
     //  * Find a command by id
     //  * @param {integer} id
-    //  * @returns {API_Commands}
+    //  * @returns {API_CommandRoles}
     //  */
     // static async findCommandById(id) {
     //   return await this.findOne({ where: { id: id } });
@@ -51,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     // /**
     //  * Find all command for a module
     //  * @param {UUID} moduleId
-    //  * @returns {API_Commands}
+    //  * @returns {API_CommandRoles}
     //  */
     // static async findAllCommandByModuleId(moduleId) {
     //   return await this.findAll({ where: { moduleId: moduleId } });
@@ -59,53 +54,48 @@ module.exports = (sequelize, DataTypes) => {
 
   }
 
-  API_Commands.getModels = function () {
+  API_CommandRoles.getModels = function () {
     return this.sequelize.models;
   }
 
 
-  API_Commands.init({
+  API_CommandRoles.init({
     commandId: {
       type: DataTypes.UUID,
       field: 'commandId',
       primaryKey: true,
-      allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
-    },
-    moduleId: {
-      type: DataTypes.UUID,
-      field: 'moduleId',
+      unique: true,
       allowNull: false,
       // references: {
-      //   model: 'API_Modules',
-      //   key: 'id',
+      //   model: 'API_Commands', // This is a reference to another model
+      //   key: 'id', // This is the column name of the referenced model
+      // },
+      // onDelete: 'CASCADE',
+      // onUpdate: 'CASCADE',
+    },
+    roleId: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      field: 'roleId',
+      allowNull: true,
+      // references: {
+      //   model: 'BOT_Roles',
+      //   key: 'roleId',
       //   onDelete: 'CASCADE',
       //   onUpdate: 'CASCADE',
       // },
     },
-    name: {
-      type: DataTypes.STRING,
-      field: 'name',
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      field: 'description',
-      allowNull: false,
-    },
-    // applicationCommand (Global) - applicationGuildCommands
-    isApplicationCommand: {
+    forEveryone: {
       type: DataTypes.BOOLEAN,
-      field: 'isApplicationCommand',
+      field: 'forEveryone',
       allowNull: false,
       defaultValue: true,
-      comment: 'If True, it\'s a global command for the bot.'
-    },
+      comment: 'If True, the commands not require a Role.'
+    }
   },
     {
       sequelize,
-      modelName: 'API_Commands',
-      tableName: 'API_Commands',
+      modelName: 'API_CommandRoles',
+      tableName: 'API_CommandRoles',
       // indexes: [
       //   {
       //     name: 'PK_api_commands_id',
@@ -123,5 +113,5 @@ module.exports = (sequelize, DataTypes) => {
       // ],
     });
 
-  return API_Commands;
+  return API_CommandRoles;
 };

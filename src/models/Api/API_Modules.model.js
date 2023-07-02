@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class API_Modules extends Model {
@@ -14,83 +14,91 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             API_Modules.hasMany(models.API_Commands, {
                 foreignKey: 'moduleId', // FK name on TARGET
-                sourceKey: 'id', // Key name on SOURCE
+                sourceKey: 'moduleId', // Key name on SOURCE
                 onDelete: 'CASCADE',
             });
 
             API_Modules.hasMany(models.API_GuildModules, {
                 foreignKey: 'moduleId', // FK name on TARGET
-                sourceKey: 'id', // Key name on SOURCE
+                sourceKey: 'moduleId', // Key name on SOURCE
                 onDelete: 'CASCADE',
             });
         }
 
-        /**
-         * Add a new module in db
-         * @param {string} moduleName
-         * @param {boolean} isEnabled
-         * @param {boolean} isPremium
-         * @returns {API_Modules}
-         */
-        static async addModule(moduleName, isEnabled, isPremium) {
-            return await this.create({
-                name: moduleName,
-                isEnabled: isEnabled,
-                isPremium: isPremium,
-            });
-        }
+        // /**
+        //  * Add a new module in db
+        //  * @param {string} moduleName
+        //  * @param {boolean} isEnabled
+        //  * @param {boolean} isPremium
+        //  * @returns {API_Modules}
+        //  */
+        // static async addModule(moduleName, isEnabled, isPremium) {
+        //     return await this.create({
+        //         name: moduleName,
+        //         isEnabled: isEnabled,
+        //         isPremium: isPremium,
+        //     });
+        // }
 
-        /**
-         * Get a module by Id
-         * @param {*} id
-         * @returns {API_Modules}
-         */
-        static async findModuleById(id) {
-            return await this.findOne({ where: { id: id } });
-        }
+        // /**
+        //  * Get a module by Id
+        //  * @param {*} id
+        //  * @returns {API_Modules}
+        //  */
+        // static async findModuleById(id) {
+        //     return await this.findOne({ where: { id: id } });
+        // }
     }
 
+    API_Modules.getModels = function () {
+        return this.sequelize.models;
+      }
+
     API_Modules.init({
-        id: {
+        moduleId: {
             type: DataTypes.UUID,
-            allowNull: false,
+            field: 'moduleId',
             primaryKey: true,
-            unique: true,
-        },
-        name: {
-            type: DataTypes.STRING(255),
             allowNull: false,
-        },
-        isEnabled: {
+            defaultValue: Sequelize.UUIDV4,
+          },
+          name: {
+            type: DataTypes.STRING,
+            field: 'name',
+            allowNull: false,
+          },
+          isEnabled: { // TODO a ajouté
             type: DataTypes.INTEGER,
+            field: 'isEnabled',
             allowNull: false,
-            defaultValue: 1,
-        },
-        isPremium: {
+            defaultValue: true,
+          },
+          isPremium: {
             type: DataTypes.INTEGER,
+            field: 'isPremium',
             allowNull: false,
-            defaultValue: 0,
-        },
+            defaultValue: false,
+          },
     }, {
         sequelize,
         modelName: 'API_Modules',
         tableName: 'API_Modules',
-        indexes: [
-            {
-                name: 'sqlite_autoindex_API_Modules_1',
-                unique: true,
-                fields: [
-                    { name: 'id' },
-                ],
-            },
-            {
-                name: 'PK_api_modules_id',
-                unique: true,
-                fields: [
-                    { name: 'id' },
-                ],
-            },
-        ],
+        // indexes: [
+        //     {
+        //         name: 'sqlite_autoindex_API_Modules_1',
+        //         unique: true,
+        //         fields: [
+        //             { name: 'id' },
+        //         ],
+        //     },
+        //     {
+        //         name: 'PK_api_modules_id',
+        //         unique: true,
+        //         fields: [
+        //             { name: 'id' },
+        //         ],
+        //     },
+        // ],
     });
 
     return API_Modules;
