@@ -76,6 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       field: 'moduleId',
       allowNull: false,
+      primaryKey: true,
       // references: {
       //   model: 'API_Modules',
       //   key: 'id',

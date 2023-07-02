@@ -1,5 +1,4 @@
 'use strict';
-// const { v4: uuidv4 } = require('uuid');
 const { BedyAPIConst } = require('../BedyAPIConst');
 
 module.exports = {
@@ -8,11 +7,11 @@ module.exports = {
      await queryInterface.bulkInsert('API_Modules',
      [
        {
-         id: BedyAPIConst.ModuleGuid.TOURNAMENT,
+         moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
          name: "Tournament",
        },
        {
-        id: BedyAPIConst.ModuleGuid.ROLE,
+        moduleId: BedyAPIConst.ModuleGuid.ROLE,
         name: "Role",
       },
      ]);

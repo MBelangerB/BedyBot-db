@@ -1,6 +1,6 @@
 'use strict';
 const { BedyAPIConst } = require('../BedyAPIConst');
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -10,35 +10,35 @@ module.exports = {
       await queryInterface.bulkInsert('API_Commands',
         [
           {
-            id: uuidv4(),
+            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CREATE,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
             name: "create",
             description: "Permet de créer un nouveau tournoi.",
             isApplicationCommand: false
           },
           {
-            id: uuidv4(),
+            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CLOSE,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
             name: "close",
             description: "Permet de clore un tournoi existant.",
             isApplicationCommand: false
           },
           {
-            id: uuidv4(),
+            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.TOURNAMENT,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
             name: "tournament",
             description: "Permet de lancer un tournoi.",
             isApplicationCommand: false
           },
           {
-            id: uuidv4(),
+            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.SET,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
             name: "set",
             description: "Permet a l'utilisateur de setter ses informations",
             isApplicationCommand: false
           },
           {
-            id: uuidv4(),
+            commandId: BedyAPIConst.CommandGuid.ROLE.ROLE,
             moduleId: BedyAPIConst.ModuleGuid.ROLE,
             name: "role",
             description: "Permet a l'utilisateur de sélectionner une rôle.",

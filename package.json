@@ -7,6 +7,7 @@
     "eslint": "eslint .",
     "eslintFix": "eslint . --fix",
     "cleanState": "npm ci",
+    "migrate:dbCreate": "npx sequelize db:create",
     "migrate:up": "npx sequelize-cli db:migrate",
     "migrate:seed": "npx sequelize-cli db:seed:all",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
