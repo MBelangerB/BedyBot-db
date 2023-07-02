@@ -12,8 +12,8 @@ const env = process.env.NODE_ENV || 'development';
 
 // Initiale fonction
 let nbVerif = 0;
-const getConfigFilePath = function (filepath) {
-  if (!fs.existsSync(filepath))
+const getConfigFilePath = function (filePath) {
+  if (!fs.existsSync(filePath))
   {
     if (nbVerif == 0) {
       filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH);
