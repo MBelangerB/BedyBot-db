@@ -12,11 +12,11 @@ const env = process.env.NODE_ENV || 'development';
 
 // Initiale fonction
 let nbVerif = 0;
-const getConfigFilePath = function (path) {
-  if (!fs.existsSync(path))
+const getConfigFilePath = function (filepath) {
+  if (!fs.existsSync(filepath))
   {
     if (nbVerif == 0) {
-      let filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH);
+      filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH);
       if (getConfigFilePath(filePath)) {
         dbConfigFilePath = filePath;
       }
