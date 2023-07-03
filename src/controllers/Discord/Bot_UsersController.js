@@ -56,7 +56,7 @@ exports.createNewUser = async (userId, username, globalUsername = null, discrimi
  * @param {*} accentColor 
  */
 exports.updateUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
-    let aUser = this.getUserByUserId(roleId, false);
+    let aUser = await this.getUserByUserId(roleId, false);
     if (!aUser) {
         throw new Exception(`UserId ${userId} doesn't exist.`)
     } else {
@@ -132,7 +132,7 @@ exports.getUserDetailsByUserId = async (userId, withInclude = true) => {
 }
 
 exports.updateUserDetails = async (userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) => {
-    let aUserDetails = this.getUserDetailsByUserId(userId);
+    let aUserDetails = await this.getUserDetailsByUserId(userId);
     if (!aUserDetails) {
         throw new Exception(`User details for userId ${userId} doesn't exist.`)
     } else {

@@ -62,7 +62,7 @@ exports.createRoleOnDB = async (guildId, roleId, roleName, permission, color = n
  * @param {*} position 
  */
 exports.updateRole = async (roleId, roleName = null, permission = null, color = null, type = null, position = null) => {
-    let aRole = this.getRolesById(roleId, false);
+    let aRole = await this.getRolesById(roleId, false);
     if (!aRole) {
         throw new Exception(`RoleId ${roleId} doesn't exist.`)
     }

@@ -81,7 +81,7 @@ exports.createGuild = async (guildId, guildName, ownerId, region = null, preferr
  * @returns 
  */
 exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
-    let aGuild = this.getGuildByGuildId(guildId);
+    let aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
         throw new Exception(`GuildId ${guildId} doesn't exist.`);
 
@@ -133,7 +133,7 @@ exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferr
  * @returns {BOT_Guilds}
  */
 exports.updateGuildStatut = async (guildId, newStatut) => {
-    let aGuild = this.getGuildByGuildId(guildId);
+    let aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
         throw new Exception(`GuildId ${guildId} doesn't exist.`)
 
@@ -182,7 +182,7 @@ exports.initOptionForGuildId = async (guildId) => {
  * @returns 
  */
 exports.updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null) => {
-    const aGuildOption = this.getGuildOptionByGuildId(guildId);
+    const aGuildOption = await this.getGuildOptionByGuildId(guildId);
     if (!aGuildOption) {
         throw new Exception(`GuildOption for ${guildId} doesn't exist.`);
 
@@ -275,7 +275,7 @@ exports.getGuildUserByUserId = async (guildId, userId, includeGuild = false, inc
  * @returns 
  */
 exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
-    const aGuildUser = this.getGuildUserByUserId(guildId, userId);
+    const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
         throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
 
@@ -303,7 +303,7 @@ exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null
  * @returns {BOT_GuildUser}
  */
 exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
-    const aGuildUser = this.getGuildUserByUserId(guildId, userId);
+    const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
         throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
 
