@@ -12,7 +12,7 @@ const { BOT_Users, BOT_UserDetails } = sequelize.models;
  * @returns 
  */
 exports.getUserByUserId = async (userId, includeModels = []) => {
-    if (withInclude) {
+    if (includeModels && includeModels.length > 0) {
         return await BOT_Users.findOne({ where: { userId: userId }, include: includeModels });
     } else {
         return await BOT_Users.findOne({ where: { userId: userId } });
@@ -56,7 +56,7 @@ exports.createNewUser = async (userId, username, globalUsername = null, discrimi
  * @param {*} accentColor 
  */
 exports.updateUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
-    let aUser = await this.getUserByUserId(roleId, false);
+    let aUser = await this.getUserByUserId(roleId);
     if (!aUser) {
         throw new Exception(`UserId ${userId} doesn't exist.`)
     } else {
