@@ -11,33 +11,25 @@ const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/config/config')[env];
 
 // Initiale fonction
-let nbVerif = 0;
-const getConfigFilePath = function (filePath) {
-  if (!fs.existsSync(filePath))
-  {
-    if (nbVerif == 0) {
-      filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH);
-      if (getConfigFilePath(filePath)) {
-        dbConfigFilePath = filePath;
-      }
-      nbVerif++;
-    } else {
-      throw new Error('Can\' find config file');
+let dbConfigFilePath = '';
+let authorizedPath = [path.join(__dirname, '/config/config.js'), path.join(process.cwd(), process.env.CONFIG_FILE_PATH)]
+const getConfigFilePath = function () {
+  let successfully = false;
+  for (const idx in authorizedPath) {
+    const filePath = authorizedPath[idx];
+    if (fs.existsSync(filePath))
+    {
+      dbConfigFilePath = filePath;
+      successfully = true;
+      break;
     }
-  } else {
-    return true;
+  }
+  if (!successfully) {
+    throw new Error('Can\'t find config file');   
   }
 }
-
-// Load config
-let dbConfigFilePath = path.join(__dirname, '/config/config.js');
-let config;
-if (getConfigFilePath(dbConfigFilePath))
-{
-  // let filePath = path.join(process.cwd(), process.env.CONFIG_FILE_PATH)
-  // dbConfigFilePath = require(filePath);
-  config = require(dbConfigFilePath)[env];
-}
+getConfigFilePath();
+const config = require(dbConfigFilePath)[env];
 
 // Sequelize Variable
 const db = {};
@@ -163,9 +155,6 @@ const initializeModel = function () {
 testConnection();
 
 readModelScript();
-// readModelScript('./models/Api');
-// readModelScript('./models/Discord');
-// readModelScript('./models/Riot');
 
 initializeModel();
 
