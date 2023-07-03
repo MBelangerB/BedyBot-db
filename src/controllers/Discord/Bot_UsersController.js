@@ -55,7 +55,7 @@ exports.createNewUser = async (userId, username, globalUsername = null, discrimi
  * @param {*} banner 
  * @param {*} accentColor 
  */
-exports.updateRole = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
+exports.updateUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
     let aUser = this.getUserByUserId(roleId, false);
     if (!aUser) {
         throw new Exception(`UserId ${userId} doesn't exist.`)

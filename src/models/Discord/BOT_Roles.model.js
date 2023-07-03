@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             });
+
+            BOT_Roles.hasMany(models.API_CommandRoles, {
+                foreignKey: 'roleId', // Set FK name on TARGET
+                sourceKey: 'roleId', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
         }
     }
 

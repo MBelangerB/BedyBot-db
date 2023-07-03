@@ -17,41 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'commandId', // Key name on TARGET
       });
 
+      API_CommandRoles.belongsTo(models.BOT_Roles, {
+        foreignKey: 'roleId', // Key name on source
+        targetKey: 'roleId', // Key name on TARGET
+      });
+
+      API_CommandRoles.belongsTo(models.BOT_Guilds, {
+        foreignKey: 'guildId', // Key name on source
+        targetKey: 'guildId', // Key name on TARGET
+      });
     }
-
-    // /**
-    //  * Add a new command in DB
-    //  * @param {UUID} moduleId
-    //  * @param {string} commandName
-    //  * @param {integer} commandType
-    //  * @returns {API_CommandRoles}
-    //  */
-    // static async addCommand(moduleId, commandName, commandType) {
-    //   return await this.create({
-    //     moduleId: moduleId,
-    //     name: commandName,
-    //     commandType: commandType,
-    //   });
-    // }
-
-    // /**
-    //  * Find a command by id
-    //  * @param {integer} id
-    //  * @returns {API_CommandRoles}
-    //  */
-    // static async findCommandById(id) {
-    //   return await this.findOne({ where: { id: id } });
-    // }
-
-    // /**
-    //  * Find all command for a module
-    //  * @param {UUID} moduleId
-    //  * @returns {API_CommandRoles}
-    //  */
-    // static async findAllCommandByModuleId(moduleId) {
-    //   return await this.findAll({ where: { moduleId: moduleId } });
-    // }
-
   }
 
   API_CommandRoles.getModels = function () {
@@ -73,6 +48,18 @@ module.exports = (sequelize, DataTypes) => {
       // onDelete: 'CASCADE',
       // onUpdate: 'CASCADE',
     },
+    guildId: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      field: 'guildId',
+      allowNull: true,
+      // J'aime pas ça, la boucle ...
+      // references: {
+      //   model: 'BOT_Guilds', // This is a reference to another model
+      //   key: 'guildId', // This is the column name of the referenced model
+      // },
+      // onDelete: 'CASCADE',
+      // onUpdate: 'CASCADE',
+    },
     roleId: {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'roleId',
@@ -90,7 +77,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
       comment: 'If True, the commands not require a Role.'
-    }
+    },
+    isDeployed: {
+      type: DataTypes.BOOLEAN,
+      field: 'isDeployed',
+      allowNull: false,
+      defaultValue: false,
+    },
+    deployedDate: {
+      type: DataTypes.DATE,
+      field: 'deployedDate',
+      allowNull: true,
+    },
   },
     {
       sequelize,

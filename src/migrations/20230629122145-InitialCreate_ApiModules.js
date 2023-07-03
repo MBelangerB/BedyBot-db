@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -73,13 +74,18 @@ module.exports = {
           field: 'description',
           allowNull: false,
         },
+        commandType: {
+          type: DataTypes.INTEGER,
+          field: 'commandType',
+          defaultValue: BedyAPIConst.BedyModuleType.GLOBAL,
+          allowNull: false,    
+        },
         // applicationCommand (Global) - applicationGuildCommands
-        isApplicationCommand: {
-          type: DataTypes.BOOLEAN,
-          field: 'isApplicationCommand',
+        applicationCommandType: {
+          type: DataTypes.INTEGER,
+          field: 'applicationCommandType',
           allowNull: false,
-          defaultValue: true,
-          comment: 'If True, it\'s a global command for the bot.'
+          defaultValue: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
         },
       }, { transaction: t });
 
@@ -138,16 +144,29 @@ module.exports = {
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE',
         },   
+        guildId: {
+          type: Sequelize.BIGINT.UNSIGNED,
+          field: 'guildId',
+          allowNull: true,
+          // J'aime pas ça, la boucle ...
+          references: {
+            model: 'BOT_Guilds', // This is a reference to another model
+            key: 'guildId', // This is the column name of the referenced model
+          },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
+        },
         roleId: {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'roleId',
           allowNull: true,
-          // references: {
-          //   model: 'BOT_Roles',
-          //   key: 'roleId',
-          //   onDelete: 'CASCADE',
-          //   onUpdate: 'CASCADE',
-          // },
+          // J'aime pas ça, la boucle ...
+          references: {
+            model: 'BOT_Roles',
+            key: 'roleId',
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
         },
         forEveryone: {
           type: DataTypes.BOOLEAN,
@@ -155,7 +174,18 @@ module.exports = {
           allowNull: false,
           defaultValue: true,
           comment: 'If True, the commands not require a Role.'   
-        }
+        },
+        isDeployed: {
+          type: DataTypes.BOOLEAN,
+          field: 'isDeployed',
+          allowNull: false,
+          defaultValue: false,
+        },
+        deployedDate: {
+          type: DataTypes.DATE,
+          field: 'deployedDate',
+          allowNull: true,
+        },
       });
 
     });

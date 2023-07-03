@@ -34,6 +34,12 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'CASCADE',
             });
 
+            BOT_Guilds.hasMany(models.API_CommandRoles, {
+                foreignKey: 'guildId', // Set FK name on TARGET
+                sourceKey: 'guildId', // Source Key In SOURCE
+                onDelete: 'CASCADE',
+            });
+
             // BOT_Guilds.hasMany(models.BOT_Tournaments, {
             //     foreignKey: 'guildId', // Set FK name on TARGET
             //     sourceKey: 'id', // Source Key In SOURCE

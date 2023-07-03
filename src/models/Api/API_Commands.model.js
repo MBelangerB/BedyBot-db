@@ -1,6 +1,7 @@
 'use strict';
 
 const { Model, Sequelize} = require('sequelize');
+const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
   class API_Commands extends Model {
@@ -23,46 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       });
     }
-
-    // /**
-    //  * Add a new command in DB
-    //  * @param {UUID} moduleId
-    //  * @param {string} commandName
-    //  * @param {integer} commandType
-    //  * @returns {API_Commands}
-    //  */
-    // static async addCommand(moduleId, commandName, commandType) {
-    //   return await this.create({
-    //     moduleId: moduleId,
-    //     name: commandName,
-    //     commandType: commandType,
-    //   });
-    // }
-
-    // /**
-    //  * Find a command by id
-    //  * @param {integer} id
-    //  * @returns {API_Commands}
-    //  */
-    // static async findCommandById(id) {
-    //   return await this.findOne({ where: { id: id } });
-    // }
-
-    // /**
-    //  * Find all command for a module
-    //  * @param {UUID} moduleId
-    //  * @returns {API_Commands}
-    //  */
-    // static async findAllCommandByModuleId(moduleId) {
-    //   return await this.findAll({ where: { moduleId: moduleId } });
-    // }
-
   }
 
   API_Commands.getModels = function () {
     return this.sequelize.models;
   }
-
 
   API_Commands.init({
     commandId: {
@@ -94,34 +60,23 @@ module.exports = (sequelize, DataTypes) => {
       field: 'description',
       allowNull: false,
     },
-    // applicationCommand (Global) - applicationGuildCommands
-    isApplicationCommand: {
-      type: DataTypes.BOOLEAN,
-      field: 'isApplicationCommand',
+    commandType: {
+      type: DataTypes.INTEGER,
+      field: 'commandType',
+      defaultValue: BedyAPIConst.BedyModuleType.GLOBAL,
+      allowNull: false,    
+    },
+    applicationCommandType: {
+      type: DataTypes.INTEGER,
+      field: 'applicationCommandType',
       allowNull: false,
-      defaultValue: true,
-      comment: 'If True, it\'s a global command for the bot.'
+      defaultValue: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
     },
   },
     {
       sequelize,
       modelName: 'API_Commands',
       tableName: 'API_Commands',
-      // indexes: [
-      //   {
-      //     name: 'PK_api_commands_id',
-      //     unique: true,
-      //     fields: [
-      //       { name: 'id' },
-      //     ],
-      //   },
-      //   {
-      //     name: 'IDX_api_commands_id',
-      //     fields: [
-      //       { name: 'moduleId' },
-      //     ],
-      //   },
-      // ],
     });
 
   return API_Commands;

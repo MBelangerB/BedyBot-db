@@ -14,6 +14,7 @@
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
     "migrate:create": "npx sequelize-cli migration:generate --name=$1",
+    "prepare:db": "npm run migrate:dbCreate && npm run migrate:up && npm run migrate:seed",
     "package:pack": "npm pack --pack-destination ./dist"
   },
   "repository": {
