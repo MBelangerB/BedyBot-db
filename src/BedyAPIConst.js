@@ -69,11 +69,12 @@ BedyAPIConst.BedyModuleType = {
      */
     ROLE_MODULE: 2, // 'role',
     /**
-     * Commands for guild (not global, not for a specific module)
+     * Custom command for a specific guild. Ex. « /aketo »
      */
-    GUILD: 3, // 'guild',
+    CUSTOM_GUILD_COMMAND: 3, // 'guild',
     /**
      * All commands if no categorized
+     * @deprecated
      */
     ALL: 99, // 'all',
 }
