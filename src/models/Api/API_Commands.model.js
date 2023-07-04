@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'moduleId', // Key name on TARGET
       });
 
-      API_Commands.hasMany(models.API_CommandRoles, {
+      API_Commands.hasMany(models.API_GuildCommands, {
         foreignKey: 'commandId', // FK name on TARGET
         sourceKey: 'commandId', // Key name on SOURCE
         onDelete: 'CASCADE',
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       field: 'moduleId',
       allowNull: false,
-      primaryKey: true,
+      // primaryKey: true,
       // references: {
       //   model: 'API_Modules',
       //   key: 'id',

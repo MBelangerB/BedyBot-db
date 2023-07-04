@@ -3,7 +3,7 @@
 const { Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class API_CommandRoles extends Model {
+  class API_GuildCommands extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,46 +12,41 @@ module.exports = (sequelize, DataTypes) => {
     /* eslint-disable-next-line no-unused-vars */
     static associate(models) {
       // define association here
-      API_CommandRoles.belongsTo(models.API_Commands, {
+      API_GuildCommands.belongsTo(models.API_Commands, {
         foreignKey: 'commandId', // Key name on source
         targetKey: 'commandId', // Key name on TARGET
       });
 
-      API_CommandRoles.belongsTo(models.BOT_Roles, {
-        foreignKey: 'roleId', // Key name on source
-        targetKey: 'roleId', // Key name on TARGET
-      });
-
-      API_CommandRoles.belongsTo(models.BOT_Guilds, {
+      API_GuildCommands.hasMany(models.API_CommandPermissions, {
+        foreignKey: 'guildCommandId', // Set FK name on TARGET
+        sourceKey: 'guildCommandId', // Source Key In SOURCE
+        onDelete: 'CASCADE',
+    });
+    
+      API_GuildCommands.belongsTo(models.BOT_Guilds, {
         foreignKey: 'guildId', // Key name on source
         targetKey: 'guildId', // Key name on TARGET
       });
     }
   }
 
-  API_CommandRoles.getModels = function () {
+  API_GuildCommands.getModels = function () {
     return this.sequelize.models;
   }
 
 
-  API_CommandRoles.init({
-    commandId: {
+  API_GuildCommands.init({
+    guildCommandId: {
       type: DataTypes.UUID,
-      field: 'commandId',
+      field: 'guildCommandId',
       primaryKey: true,
-      unique: true,
       allowNull: false,
-      // references: {
-      //   model: 'API_Commands', // This is a reference to another model
-      //   key: 'id', // This is the column name of the referenced model
-      // },
-      // onDelete: 'CASCADE',
-      // onUpdate: 'CASCADE',
+      defaultValue: Sequelize.UUIDV4,
     },
     guildId: {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'guildId',
-      allowNull: true,
+      allowNull: false,
       // J'aime pas ça, la boucle ...
       // references: {
       //   model: 'BOT_Guilds', // This is a reference to another model
@@ -60,23 +55,38 @@ module.exports = (sequelize, DataTypes) => {
       // onDelete: 'CASCADE',
       // onUpdate: 'CASCADE',
     },
-    roleId: {
-      type: Sequelize.BIGINT.UNSIGNED,
-      field: 'roleId',
-      allowNull: true,
-      // references: {
-      //   model: 'BOT_Roles',
-      //   key: 'roleId',
-      //   onDelete: 'CASCADE',
-      //   onUpdate: 'CASCADE',
-      // },
-    },
-    forEveryone: {
-      type: DataTypes.BOOLEAN,
-      field: 'forEveryone',
+    commandId: {
+      type: DataTypes.UUID,
+      field: 'commandId',
+      // primaryKey: true,
+      // unique: true,
       allowNull: false,
-      defaultValue: true,
-      comment: 'If True, the commands not require a Role.'
+      // references: {
+      //   model: 'API_Commands', // This is a reference to another model
+      //   key: 'commandId', // This is the column name of the referenced model
+      // },
+      // onDelete: 'CASCADE',
+      // onUpdate: 'CASCADE',
+    },
+    allowFor: {
+      type: DataTypes.BOOLEAN,
+      field: 'allowFor',
+      allowNull: false,
+      defaultValue: false,
+      comment: ''
+    },
+    deniedFor: {
+      type: DataTypes.BOOLEAN,
+      field: 'deniedFor',
+      allowNull: false,
+      defaultValue: false,
+      comment: ''
+    },
+    isActive: {
+      type: DataTypes.INTEGER,
+      field: 'isActive',
+      allowNull: false,
+      comment: 'Permet de définir si la commande est actif pour une guilde. Gérer par les responsables de la guild.',
     },
     isDeployed: {
       type: DataTypes.BOOLEAN,
@@ -92,24 +102,9 @@ module.exports = (sequelize, DataTypes) => {
   },
     {
       sequelize,
-      modelName: 'API_CommandRoles',
-      tableName: 'API_CommandRoles',
-      // indexes: [
-      //   {
-      //     name: 'PK_api_commands_id',
-      //     unique: true,
-      //     fields: [
-      //       { name: 'id' },
-      //     ],
-      //   },
-      //   {
-      //     name: 'IDX_api_commands_id',
-      //     fields: [
-      //       { name: 'moduleId' },
-      //     ],
-      //   },
-      // ],
+      modelName: 'API_GuildCommands',
+      tableName: 'API_GuildCommands'
     });
 
-  return API_CommandRoles;
+  return API_GuildCommands;
 };

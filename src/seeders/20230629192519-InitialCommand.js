@@ -102,77 +102,12 @@ module.exports = {
             commandType:BedyAPIConst.BedyModuleType.ROLE_MODULE
           },
         ], { transaction: t })
-
-
-      // *******************************************
-      // ADD API_CommandRoles
-      //  - Global Module
-      // *******************************************
-
-
-      // *******************************************
-      // ADD API_CommandRoles
-      //  - Tournament Module
-      // *******************************************
-      // await queryInterface.bulkInsert('API_CommandRoles',
-      //   [
-      //     {
-      //       commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CREATE,
-      //       guildId: null,
-      //       roleId: null,
-      //       isDeployed: false,
-      //       deployedDate: null,
-      //       forEveryone: false
-      //     },
-      //     {
-      //       commandId: BedyAPIConst.CommandGuid.TOURNAMENT.TOURNAMENT,
-      //       guildId: null,
-      //       roleId: null,
-      //       isDeployed: false,
-      //       deployedDate: null,
-      //       forEveryone: false
-      //     },
-      //     {
-      //       commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CLOSE,
-      //       guildId: null,
-      //       roleId: null,
-      //       isDeployed: false,
-      //       deployedDate: null,
-      //       forEveryone: false
-      //     },
-      //     {
-      //       commandId: BedyAPIConst.CommandGuid.TOURNAMENT.SET_CONFIGURATION,
-      //       guildId: null,
-      //       roleId: null,
-      //       isDeployed: false,
-      //       deployedDate: null,
-      //       forEveryone: true
-      //     },
-      //   ], { transaction: t })
-
-      // *******************************************
-      // ADD API_CommandRoles
-      //  - Role Module
-      // *******************************************
-      // await queryInterface.bulkInsert('API_CommandRoles',
-      //   [
-      //     {
-      //       commandId: BedyAPIConst.CommandGuid.ROLE.ROLE,
-      //       guildId: null,
-      //       roleId: null,
-      //       isDeployed: false,
-      //       deployedDate: null,
-      //       forEveryone: false
-      //     }
-      //   ], { transaction: t })
-
       // End Transaction
     });
   },
 
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('API_CommandRoles', null, {});
-    await queryInterface.bulkDelete('API_Modules', null, {});
+    await queryInterface.bulkDelete('API_Commands', null, {});
   }
 };

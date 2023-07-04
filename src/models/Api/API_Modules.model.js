@@ -67,14 +67,14 @@ module.exports = (sequelize, DataTypes) => {
             field: 'name',
             allowNull: false,
           },
-          isEnabled: { // TODO a ajouté
-            type: DataTypes.INTEGER,
+          isEnabled: {
+            type: DataTypes.BOOLEAN,
             field: 'isEnabled',
             allowNull: false,
             defaultValue: true,
           },
           isPremium: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.BOOLEAN,
             field: 'isPremium',
             allowNull: false,
             defaultValue: false,
