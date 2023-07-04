@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
     BOT_Roles.getModels = function () {
         return this.sequelize.models;
-    }
+    };
 
     BOT_Roles.RoleTypes = {
         MANAGER: 1,

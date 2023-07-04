@@ -8,15 +8,15 @@ module.exports = {
       [
         {
           moduleId: BedyAPIConst.ModuleGuid.GLOBAL,
-          name: "Global",
+          name: 'Global',
         },
         {
           moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-          name: "Tournament",
+          name: 'Tournament',
         },
         {
           moduleId: BedyAPIConst.ModuleGuid.ROLE,
-          name: "Role",
+          name: 'Role',
         },
       ]);
   },

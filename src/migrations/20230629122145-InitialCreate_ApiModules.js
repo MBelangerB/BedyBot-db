@@ -168,14 +168,14 @@ module.exports = {
           field: 'allowFor',
           allowNull: false,
           defaultValue: false,
-          comment: ''
+          comment: '',
         },
         deniedFor: {
           type: DataTypes.BOOLEAN,
           field: 'deniedFor',
           allowNull: false,
           defaultValue: false,
-          comment: ''
+          comment: '',
         },
         isActive: {
           type: DataTypes.INTEGER,
@@ -197,7 +197,7 @@ module.exports = {
       }, { transaction: t });
 
       // ******************************************
-      // API_CommandPermissions		
+      // API_CommandPermissions
       // ******************************************
       await queryInterface.createTable('API_CommandPermissions', {
         guildCommandId: {
@@ -234,11 +234,12 @@ module.exports = {
     }); // End transaction
   },
 
+  /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('API_CommandPermissions');
     await queryInterface.dropTable('API_GuildCommands');
     await queryInterface.dropTable('API_GuildModules');
     await queryInterface.dropTable('API_Commands');
     await queryInterface.dropTable('API_Modules');
-  }
+  },
 };

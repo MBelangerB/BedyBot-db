@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here   
+            // define association here
             BOT_UserDetails.belongsTo(models.BOT_Users, {
               foreignKey: 'userId', // Set FK name on SOURCE
               targetKey: 'userId', // Key name on TARGET
               onDelete: 'CASCADE',
               onUpdate: 'CASCADE',
             });
-      
+
         }
 
         // static async createUserOnDB(discordUserId, discordUsername, discordDiscriminator) {
@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
 
     BOT_UserDetails.getModels = function () {
         return this.sequelize.models;
-    }
+    };
 
     BOT_UserDetails.init({
       userId: {

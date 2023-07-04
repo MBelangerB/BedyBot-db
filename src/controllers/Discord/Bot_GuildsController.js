@@ -2,7 +2,7 @@ const { sequelize } = require('../../dbSchema');
 const { BOT_Guilds, BOT_GuildOptions, BOT_GuildUser } = sequelize.models;
 
 // ******************************************
-// BOT_Guilds 
+// BOT_Guilds
 // ******************************************
 
 /**
@@ -17,7 +17,7 @@ exports.getGuildByGuildId = async (guildId, includeModels = []) => {
     } else {
         return await BOT_Guilds.findOne({ where: { guildId: guildId } });
     }
-}
+};
 
 /**
  * Return all active guilds
@@ -30,7 +30,7 @@ exports.getAllActiveGuilds = async (includeModels = []) => {
     } else {
         return await BOT_Guilds.findAll({ where: { isActive: true } });
     }
-}
+};
 
 /**
  * Return all guilds
@@ -43,18 +43,18 @@ exports.getAllActiveGuilds = async (includeModels = []) => {
     } else {
         return await BOT_Guilds.findAll();
     }
-}
+};
 
 /**
- * Add a new discord guild on DB 
+ * Add a new discord guild on DB
  * @param {BIGINT} guildId (mandatory)
- * @param {String} guildName (mandatory) 
+ * @param {String} guildName (mandatory)
  * @param {*} ownerId (mandatory)
- * @param {*} region 
- * @param {*} preferredLocal 
- * @param {*} iconUrl 
- * @param {*} bannerUrl 
- * @returns 
+ * @param {*} region
+ * @param {*} preferredLocal
+ * @param {*} iconUrl
+ * @param {*} bannerUrl
+ * @returns
  */
 exports.createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
     return await BOT_Guilds.create({
@@ -67,56 +67,56 @@ exports.createGuild = async (guildId, guildName, ownerId, region = null, preferr
         guildPreferredLocale: preferredLocal,
         isActive: true,
     });
-}
+};
 
 /**
- * Update a new discord guild on DB 
- * @param {*} guildId 
- * @param {*} guildName 
- * @param {*} ownerId 
- * @param {*} region 
- * @param {*} preferredLocal 
- * @param {*} iconUrl 
- * @param {*} bannerUrl 
- * @returns 
+ * Update a new discord guild on DB
+ * @param {*} guildId
+ * @param {*} guildName
+ * @param {*} ownerId
+ * @param {*} region
+ * @param {*} preferredLocal
+ * @param {*} iconUrl
+ * @param {*} bannerUrl
+ * @returns
  */
 exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
-    let aGuild = await this.getGuildByGuildId(guildId);
+    const aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
-        throw new Exception(`GuildId ${guildId} doesn't exist.`);
+        throw new Error(`GuildId ${guildId} doesn't exist.`);
 
     } else {
         if (guildName != null && aGuild.guildName != guildName) {
             aGuild.set({
-                guildName: region
+                guildName: region,
             });
         }
         if (ownerId != null && aGuild.guildOwnerId != ownerId) {
             aGuild.set({
-                guildOwnerId: region
+                guildOwnerId: region,
             });
         }
 
         if (region != null && aGuild.guildRegion != region) {
             aGuild.set({
-                guildRegion: region
+                guildRegion: region,
             });
         }
 
         if (preferredLocal != null && aGuild.guildPreferredLocale != preferredLocal) {
             aGuild.set({
-                guildPreferredLocale: preferredLocal
+                guildPreferredLocale: preferredLocal,
             });
         }
 
         if (iconUrl != null && aGuild.guildIconUrl != iconUrl) {
             aGuild.set({
-                guildIconUrl: iconUrl
+                guildIconUrl: iconUrl,
             });
         }
         if (bannerUrl != null && aGuild.guildBannerUrl != bannerUrl) {
             aGuild.set({
-                guildBannerUrl: bannerUrl
+                guildBannerUrl: bannerUrl,
             });
         }
 
@@ -125,7 +125,7 @@ exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferr
             return await aGuild.save();
         }
     }
-}
+};
 
 /**
  * Update the guild statut and date param.
@@ -133,9 +133,9 @@ exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferr
  * @returns {BOT_Guilds}
  */
 exports.updateGuildStatut = async (guildId, newStatut) => {
-    let aGuild = await this.getGuildByGuildId(guildId);
+    const aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
-        throw new Exception(`GuildId ${guildId} doesn't exist.`)
+        throw new Error(`GuildId ${guildId} doesn't exist.`);
 
     } else if (aGuild.isActive !== newStatut && newStatut == true) {
         // Guild is comeback
@@ -155,7 +155,7 @@ exports.updateGuildStatut = async (guildId, newStatut) => {
         return await aGuild.save();
     }
     console.verbose(`Guild status and date for **${aGuild.id}** has been updated.`);
-}
+};
 
 // ******************************************
 // BOT_GuildOptions
@@ -163,44 +163,44 @@ exports.updateGuildStatut = async (guildId, newStatut) => {
 
 /**
  * Initialize a GuildOption
- * @param {BIGINT} guildId 
- * @returns 
+ * @param {BIGINT} guildId
+ * @returns
  */
 exports.initOptionForGuildId = async (guildId) => {
     return await BOT_GuildOptions.create({
         guildId: guildId,
         maxPlayerPerLobby: 12,
     });
-}
+};
 
 /**
  * Update GuildOption
- * @param {*} guildId 
- * @param {*} announcementChannelId 
- * @param {*} maxPlayerPerLobby 
- * @param {*} addEveryone 
- * @returns 
+ * @param {*} guildId
+ * @param {*} announcementChannelId
+ * @param {*} maxPlayerPerLobby
+ * @param {*} addEveryone
+ * @returns
  */
 exports.updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null) => {
     const aGuildOption = await this.getGuildOptionByGuildId(guildId);
     if (!aGuildOption) {
-        throw new Exception(`GuildOption for ${guildId} doesn't exist.`);
+        throw new Error(`GuildOption for ${guildId} doesn't exist.`);
 
     } else {
         if (announcementChannelId != null && aGuildOption.announcementChannelId != announcementChannelId) {
             aGuildOption.set({
-                announcementChannelId: announcementChannelId
+                announcementChannelId: announcementChannelId,
             });
         }
 
         if (maxPlayerPerLobby != null && aGuildOption.maxPlayerPerLobby != maxPlayerPerLobby) {
             aGuildOption.set({
-                maxPlayerPerLobby: maxPlayerPerLobby
+                maxPlayerPerLobby: maxPlayerPerLobby,
             });
         }
         if (addEveryone != null && aGuildOption.addEveryone != addEveryone) {
             aGuildOption.set({
-                addEveryone: addEveryone
+                addEveryone: addEveryone,
             });
         }
 
@@ -209,13 +209,13 @@ exports.updateGuildOption = async (guildId, announcementChannelId = null, maxPla
             return await aGuildOption.save();
         }
     }
-}
+};
 
 /**
  * Get BOT_GuildOptions by id
- * @param {BIGINT} id 
- * @param {Boolean} withInclude 
- * @returns 
+ * @param {BIGINT} id
+ * @param {Boolean} withInclude
+ * @returns
  */
 exports.getGuildOptionByGuildId = async (guildId, withInclude = true) => {
     if (withInclude) {
@@ -223,7 +223,7 @@ exports.getGuildOptionByGuildId = async (guildId, withInclude = true) => {
     } else {
         return await BOT_GuildOptions.findOne({ where: { guildId: guildId } });
     }
-}
+};
 
 // ******************************************
 // BOT_GuildUser
@@ -233,9 +233,9 @@ exports.getGuildOptionByGuildId = async (guildId, withInclude = true) => {
  * Initialize a initGuildUser
  * @param {BIGINT} guildId (mandatory)
  * @param {BIGINT} userId  (mandatory)
- * @param {*} nickname 
- * @param {*} avatar 
- * @returns 
+ * @param {*} nickname
+ * @param {*} avatar
+ * @returns
  */
 exports.initGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
     return await BOT_GuildUser.create({
@@ -244,10 +244,10 @@ exports.initGuildUser = async (guildId, userId, nickname = null, avatar = null) 
         nickname: nickname,
         avatar: avatar,
     });
-}
+};
 
 exports.getGuildUserByUserId = async (guildId, userId, includeGuild = false, includeUsers = false) => {
-    let includeList = [];
+    const includeList = [];
     if (includeGuild) {
         includeList.push(BOT_GuildUser.getModels().BOT_Guilds);
     }
@@ -264,31 +264,31 @@ exports.getGuildUserByUserId = async (guildId, userId, includeGuild = false, inc
     }
 
     return await BOT_GuildUser.findAll({ where: { guildId: guildId, userId: userId }, include: includeList });
-}
+};
 
 /**
  * Update the guildUser info
- * @param {*} guildId 
- * @param {*} userId 
- * @param {*} nickname 
- * @param {*} avatar 
- * @returns 
+ * @param {*} guildId
+ * @param {*} userId
+ * @param {*} nickname
+ * @param {*} avatar
+ * @returns
  */
 exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
     const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
-        throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+        throw new Error(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
 
     } else {
         if (nickname != null && aGuildUser.nickname != nickname) {
             aGuildUser.set({
-                nickname: nickname
+                nickname: nickname,
             });
         }
 
         if (avatar != null && aGuildUser.avatar != avatar) {
             aGuildUser.set({
-                avatar: maxPlayavatarerPerLobby
+                avatar: avatar,
             });
         }
 
@@ -296,16 +296,16 @@ exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null
             return await aGuildUser.save();
         }
     }
-}
+};
 
 /**
- * Change the guid user presence. 
+ * Change the guid user presence.
  * @returns {BOT_GuildUser}
  */
 exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
     const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
-        throw new Exception(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+        throw new Error(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
 
     } else {
         if (hasLeft == false) {
@@ -325,4 +325,4 @@ exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
         }
         console.verbose(`GuildUser state change, hasLeft : ${hasLeft} for **(${guildId}, ${userId})**.`);
     }
-}
+};

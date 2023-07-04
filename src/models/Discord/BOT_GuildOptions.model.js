@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
 
   BOT_GuildOptions.getModels = function () {
     return this.sequelize.models;
-  }
+  };
 
   BOT_GuildOptions.init({
     guildId: {

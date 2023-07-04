@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
   API_CommandPermissions.getModels = function () {
     return this.sequelize.models;
-  }
+  };
 
   API_CommandPermissions.init({
     guildCommandId: {

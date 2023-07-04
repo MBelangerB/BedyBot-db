@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
 
     API_Modules.getModels = function () {
         return this.sequelize.models;
-      }
+      };
 
     API_Modules.init({
         moduleId: {

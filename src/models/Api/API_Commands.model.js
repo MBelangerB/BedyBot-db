@@ -1,6 +1,6 @@
 'use strict';
 
-const { Model, Sequelize} = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 
   API_Commands.getModels = function () {
     return this.sequelize.models;
-  }
+  };
 
   API_Commands.init({
     commandId: {
@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       field: 'commandType',
       defaultValue: BedyAPIConst.BedyModuleType.GLOBAL,
-      allowNull: false,    
+      allowNull: false,
     },
     applicationCommandType: {
       type: DataTypes.INTEGER,

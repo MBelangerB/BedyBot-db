@@ -1,12 +1,12 @@
 'use strict';
-const { BedyAPIConst } = require('../BedyAPIConst');
-const Sequelize = require('sequelize');
 
-// const { v4: uuidv4 } = require('uuid');
+const { BedyAPIConst } = require('../BedyAPIConst');
+// const Sequelize = require('sequelize');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  /* eslint-disable-next-line no-unused-vars */
+  async up(queryInterface, DateTypes) {
     return queryInterface.sequelize.transaction(async (t) => {
 
       // *******************************************
@@ -17,37 +17,37 @@ module.exports = {
           {
             commandId: BedyAPIConst.CommandGuid.GLOBAL.HELP,
             moduleId: BedyAPIConst.ModuleGuid.GLOBAL,
-            name: "help",
-            description: "Obtenir la liste des commandes disponibles.",
+            name: 'help',
+            description: 'Obtenir la liste des commandes disponibles.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.GLOBAL
+            commandType: BedyAPIConst.BedyModuleType.GLOBAL,
           },
 
           {
             commandId: BedyAPIConst.CommandGuid.GLOBAL.CONTACT_US,
             moduleId: BedyAPIConst.ModuleGuid.GLOBAL,
-            name: "contactus",
-            description: "Contactez l\'équipe de développement.",
+            name: 'contactus',
+            description: 'Contactez l\'équipe de développement.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.GLOBAL
+            commandType: BedyAPIConst.BedyModuleType.GLOBAL,
           },
           {
             commandId: BedyAPIConst.CommandGuid.GLOBAL.USERINFO,
             moduleId: BedyAPIConst.ModuleGuid.GLOBAL,
-            name: "userinfo",
-            description: "Obtenir les informations sur le profile de l'utilisateur.",
+            name: 'userinfo',
+            description: 'Obtenir les informations sur le profile de l\'utilisateur.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.GLOBAL
+            commandType: BedyAPIConst.BedyModuleType.GLOBAL,
           },
           {
             commandId: BedyAPIConst.CommandGuid.GLOBAL.SET_USER,
             moduleId: BedyAPIConst.ModuleGuid.GLOBAL,
-            name: "setUser",
-            description: "Permet à l'utilisateur de paramétrer son profile.",
+            name: 'setUser',
+            description: 'Permet à l\'utilisateur de paramétrer son profile.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.GLOBAL
+            commandType: BedyAPIConst.BedyModuleType.GLOBAL,
           },
-        ], { transaction: t })
+        ], { transaction: t });
 
       // *******************************************
       // ADD TOURNAMENT MODULE COMMANDS
@@ -57,36 +57,36 @@ module.exports = {
           {
             commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CREATE,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-            name: "create",
-            description: "Permet de créer un nouveau tournoi.",
+            name: 'create',
+            description: 'Permet de créer un nouveau tournoi.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
-            commandType:  BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE
+            commandType:  BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,
           },
           {
             commandId: BedyAPIConst.CommandGuid.TOURNAMENT.CLOSE,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-            name: "close",
-            description: "Permet de clore un tournoi existant.",
+            name: 'close',
+            description: 'Permet de clore un tournoi existant.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE
+            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,
           },
           {
             commandId: BedyAPIConst.CommandGuid.TOURNAMENT.TOURNAMENT,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-            name: "tournament",
-            description: "Permet de lancer un tournoi.",
+            name: 'tournament',
+            description: 'Permet de lancer un tournoi.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE
+            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,
           },
           {
             commandId: BedyAPIConst.CommandGuid.TOURNAMENT.SET_CONFIGURATION,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-            name: "set",
-            description: "Permet à l'utilisateur de configurer son profile.",
+            name: 'set',
+            description: 'Permet à l\'utilisateur de configurer son profile.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
-            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE
-          }
-        ], { transaction: t })
+            commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,
+          },
+        ], { transaction: t });
 
       // *******************************************
       // ADD ROLE MODULE COMMANDS
@@ -96,18 +96,18 @@ module.exports = {
           {
             commandId: BedyAPIConst.CommandGuid.ROLE.ROLE,
             moduleId: BedyAPIConst.ModuleGuid.ROLE,
-            name: "role",
-            description: "Permet à l'utilisateur de sélectionner un rôle.",
+            name: 'role',
+            description: 'Permet à l\'utilisateur de sélectionner un rôle.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
-            commandType:BedyAPIConst.BedyModuleType.ROLE_MODULE
+            commandType:BedyAPIConst.BedyModuleType.ROLE_MODULE,
           },
-        ], { transaction: t })
+        ], { transaction: t });
       // End Transaction
     });
   },
 
-
-  async down(queryInterface, Sequelize) {
+  /* eslint-disable-next-line no-unused-vars */
+  async down(queryInterface, DateTypes) {
     await queryInterface.bulkDelete('API_Commands', null, {});
-  }
+  },
 };

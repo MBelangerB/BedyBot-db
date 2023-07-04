@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'guildCommandId', // Source Key In SOURCE
         onDelete: 'CASCADE',
     });
-    
+
       API_GuildCommands.belongsTo(models.BOT_Guilds, {
         foreignKey: 'guildId', // Key name on source
         targetKey: 'guildId', // Key name on TARGET
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 
   API_GuildCommands.getModels = function () {
     return this.sequelize.models;
-  }
+  };
 
 
   API_GuildCommands.init({
@@ -73,14 +73,14 @@ module.exports = (sequelize, DataTypes) => {
       field: 'allowFor',
       allowNull: false,
       defaultValue: false,
-      comment: ''
+      comment: '',
     },
     deniedFor: {
       type: DataTypes.BOOLEAN,
       field: 'deniedFor',
       allowNull: false,
       defaultValue: false,
-      comment: ''
+      comment: '',
     },
     isActive: {
       type: DataTypes.INTEGER,
@@ -103,7 +103,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'API_GuildCommands',
-      tableName: 'API_GuildCommands'
+      tableName: 'API_GuildCommands',
     });
 
   return API_GuildCommands;

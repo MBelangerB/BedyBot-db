@@ -76,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
         // getUsername(dbGuildMember) {
         //     return (dbGuildMember && dbGuildMember.length > 0 && dbGuildMember[0].hasUsername() ? dbGuildMember[0].nickname : this.defaultUsername);
         // }
-   
+
 
         // /**
         //  * Update the username
@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
 
     BOT_Users.getModels = function () {
         return this.sequelize.models;
-    }
+    };
 
     BOT_Users.init({
         userId: {

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
   API_GuildModules.getModels = function () {
     return this.sequelize.models;
-  }
+  };
 
   API_GuildModules.init({
     guildId: {

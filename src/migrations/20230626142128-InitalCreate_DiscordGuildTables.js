@@ -182,6 +182,7 @@ module.exports = {
 
   },
 
+  /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('BOT_Roles');
     await queryInterface.dropTable('BOT_GuildOptions');

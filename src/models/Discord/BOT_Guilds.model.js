@@ -1,5 +1,5 @@
 'use strict';
-const { Model, Sequelize } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
     class BOT_Guilds extends Model {
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
 
     BOT_Guilds.getModels = function () {
         return this.sequelize.models;
-    }
+    };
 
     BOT_Guilds.init({
         guildId: {
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
         },
         guildOwnerId: {
-            type: DataTypes.BIGINT.UNSIGNED, // DataTypes.STRING(80),
+            type: DataTypes.BIGINT.UNSIGNED,
             field: 'guildOwnerId',
             allowNull: false,
         },

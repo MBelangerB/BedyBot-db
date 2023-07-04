@@ -152,6 +152,7 @@ module.exports = {
     });
   },
 
+  /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('BOT_GuildUser');
     await queryInterface.dropTable('BOT_UserDetails');

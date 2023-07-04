@@ -6,28 +6,27 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
+// const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/config/config')[env];
 
 // Initiale fonction
 let dbConfigFilePath = '';
-let authorizedPath = [path.join(__dirname, '/config/config.js'), path.join(process.cwd(), process.env.CONFIG_FILE_PATH)]
+const authorizedPath = [path.join(__dirname, '/config/config.js'), path.join(process.cwd(), process.env.CONFIG_FILE_PATH)];
 const getConfigFilePath = function () {
   let successfully = false;
   for (const idx in authorizedPath) {
     const filePath = authorizedPath[idx];
-    if (fs.existsSync(filePath))
-    {
+    if (fs.existsSync(filePath)) {
       dbConfigFilePath = filePath;
       successfully = true;
       break;
     }
   }
   if (!successfully) {
-    throw new Error('Can\'t find config file');   
+    throw new Error('Can\'t find config file');
   }
-}
+};
 getConfigFilePath();
 const config = require(dbConfigFilePath)[env];
 
@@ -37,7 +36,7 @@ const controller = [];
 
 // Initialize Sequelize constructor
 let sequelize = null;
-if (process.env.DB_DRIVER == "sqlite") {
+if (process.env.DB_DRIVER == 'sqlite') {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 } else {
@@ -47,13 +46,6 @@ if (process.env.DB_DRIVER == "sqlite") {
     dialect: config.dialect,
   });
 }
-// const sequelize = new Sequelize(config.database, config.username, config.password, config);
-
-// const sequelize = new Sequelize(config.database, config.username, config.password, {
-//   host: config.host,
-//   port: config.port,
-//   dialect: config.dialect,
-// });
 
 // Define options
 sequelize.options.define = {
@@ -61,7 +53,6 @@ sequelize.options.define = {
   createdAt: false,
   updatedAt: false,
 };
-
 
 const testConnection = function () {
   // Test the connection
@@ -73,7 +64,6 @@ const testConnection = function () {
       console.error('Unable to connect to the database:', error);
     });
 };
-
 
 const readModelScript = function (folder = './models') {
   const fullPath = path.resolve(__dirname, folder);
@@ -89,25 +79,18 @@ const readModelScript = function (folder = './models') {
 
     } else {
       // Vérifier si le fichier a l'extension ".model"
+      /* eslint-disable-next-line no-lonely-if */
       if (path.extname(subFilePath) === '.js' && subFilePath.slice(-9) === '.model.js') {
         const model = require(path.join(fullPath, file))(sequelize, Sequelize.DataTypes);
         db[model.name] = model;
-        console.log('Read model : ', model.name)
+        console.log('Read model : ', model.name);
       }
     }
 
   });
-
-  // fs.readdirSync(fullPath).filter(file => {
-
-  //   return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-9) === '.model.js');
-  // })
-  //   .forEach(file => {
-  //     const model = require(path.join(fullPath, file))(sequelize, Sequelize.DataTypes);
-  //     db[model.name] = model;
-  //   });
 };
 
+/* eslint-disable-next-line no-unused-vars */
 const readControllerScript = function (folder = './controllers') {
   const fullPath = path.resolve(__dirname, folder);
   const files = fs.readdirSync(fullPath);
@@ -122,12 +105,13 @@ const readControllerScript = function (folder = './controllers') {
 
     } else {
       // Vérifier si le fichier a l'extension ".model"
+      /* eslint-disable-next-line no-lonely-if */
       if (path.extname(subFilePath) === '.js' && subFilePath.slice(-13) === 'Controller.js') {
         // TODO: Pour mettre en application, il faudrait transformer les controllers sous le principe des modeles, mais en param les models
         /*
             module.exports = (models) => {
               Class XXXController {
-                
+
                 listFunction
               }
             }

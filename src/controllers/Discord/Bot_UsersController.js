@@ -2,14 +2,14 @@ const { sequelize } = require('../../dbSchema');
 const { BOT_Users, BOT_UserDetails } = sequelize.models;
 
 // ******************************************
-// BOT_Users 
+// BOT_Users
 // ******************************************
 
 /**
  * Get BOT_Users by userId
- * @param {BigInt} roleId 
- * @param {*} withInclude 
- * @returns 
+ * @param {BigInt} userId
+ * @param {*} withInclude
+ * @returns
  */
 exports.getUserByUserId = async (userId, includeModels = []) => {
     if (includeModels && includeModels.length > 0) {
@@ -17,19 +17,19 @@ exports.getUserByUserId = async (userId, includeModels = []) => {
     } else {
         return await BOT_Users.findOne({ where: { userId: userId } });
     }
-}
+};
 
 /**
  * Create a new discord user
  * @param {BIGINT} userId  (mandatory)
  * @param {String} username  (mandatory)
- * @param {*} globalUsername 
- * @param {*} discriminator 
- * @param {*} email 
- * @param {*} avatar 
- * @param {*} banner 
- * @param {*} accentColor 
- * @returns 
+ * @param {*} globalUsername
+ * @param {*} discriminator
+ * @param {*} email
+ * @param {*} avatar
+ * @param {*} banner
+ * @param {*} accentColor
+ * @returns
  */
 exports.createNewUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
     return await BOT_Users.create({
@@ -40,25 +40,25 @@ exports.createNewUser = async (userId, username, globalUsername = null, discrimi
         email: email,
         avatar: avatar,
         banner: banner,
-        accentColor: accentColor
+        accentColor: accentColor,
     });
-}
+};
 
 /**
  * Update DB Role
  * @param {BIGINT} userId  (mandatory)
  * @param {String} username  (mandatory)
- * @param {*} globalUsername 
- * @param {*} discriminator 
- * @param {*} email 
- * @param {*} avatar 
- * @param {*} banner 
- * @param {*} accentColor 
+ * @param {*} globalUsername
+ * @param {*} discriminator
+ * @param {*} email
+ * @param {*} avatar
+ * @param {*} banner
+ * @param {*} accentColor
  */
 exports.updateUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
-    let aUser = await this.getUserByUserId(roleId);
+    const aUser = await this.getUserByUserId(userId);
     if (!aUser) {
-        throw new Exception(`UserId ${userId} doesn't exist.`)
+        throw new Error(`UserId ${userId} doesn't exist.`);
     } else {
 
         if (username !== aUser.username) {
@@ -103,25 +103,25 @@ exports.updateUser = async (userId, username, globalUsername = null, discriminat
             await aUser.save();
         }
     }
-}
+};
 
 // ******************************************
-// BOT_UserDetails 
+// BOT_UserDetails
 // ******************************************
 
 /**
  * Initialize a BOT_UserDetails
- * @param {BIGINT} userId 
- * @returns 
+ * @param {BIGINT} userId
+ * @returns
  */
 exports.initializeUserDetails = async (userId) => {
     return await BOT_UserDetails.create({
         userId: userId,
         switchFriendCode: null,
         switchUsername: null,
-        twitchUsername: null
+        twitchUsername: null,
     });
-}
+};
 
 exports.getUserDetailsByUserId = async (userId, withInclude = true) => {
     if (withInclude) {
@@ -129,12 +129,12 @@ exports.getUserDetailsByUserId = async (userId, withInclude = true) => {
     } else {
         return await BOT_UserDetails.findOne({ where: { userId: userId } });
     }
-}
+};
 
 exports.updateUserDetails = async (userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) => {
-    let aUserDetails = await this.getUserDetailsByUserId(userId);
+    const aUserDetails = await this.getUserDetailsByUserId(userId);
     if (!aUserDetails) {
-        throw new Exception(`User details for userId ${userId} doesn't exist.`)
+        throw new Error(`User details for userId ${userId} doesn't exist.`);
     } else {
         if (switchFriendCode != null && switchFriendCode !== aUserDetails.switchFriendCode) {
             aUserDetails.set({
@@ -157,4 +157,4 @@ exports.updateUserDetails = async (userId, switchFriendCode = null, switchUserna
             await aUserDetails.save();
         }
     }
-}
+};
