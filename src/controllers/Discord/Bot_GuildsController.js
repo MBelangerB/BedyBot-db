@@ -1,5 +1,5 @@
 const { sequelize } = require('../../dbSchema');
-const { BOT_Guilds, BOT_GuildOptions, BOT_GuildUser } = sequelize.models;
+const { BOT_Guilds, BOT_GuildOptions, BOT_GuildUser, BOT_Channels } = sequelize.models;
 
 // ******************************************
 // BOT_Guilds
@@ -37,7 +37,7 @@ exports.getAllActiveGuilds = async (includeModels = []) => {
  * @param {Models[]} includeModels Array of Sequelize models
  * @returns {BOT_Guilds[]}
  */
- exports.getAllGuilds = async (includeModels = []) => {
+exports.getAllGuilds = async (includeModels = []) => {
     if (includeModels && includeModels.length > 0) {
         return await BOT_Guilds.findAll({ include: includeModels });
     } else {
@@ -300,6 +300,9 @@ exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null
 
 /**
  * Change the guid user presence.
+ * @param {*} guildId 
+ * @param {*} userId 
+ * @param {*} hasLeft If true, a UserId has left the server
  * @returns {BOT_GuildUser}
  */
 exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
@@ -326,3 +329,101 @@ exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
         console.verbose(`GuildUser state change, hasLeft : ${hasLeft} for **(${guildId}, ${userId})**.`);
     }
 };
+
+// ******************************************
+// BOT_Channels
+// ******************************************
+
+/**
+ * Create a new guild Channel
+ * @param {*} guildId 
+ * @param {*} channelId 
+ * @param {*} channelName 
+ * @param {*} channelType 
+ * @param {*} parentId 
+ * @param {*} channelTopic 
+ * @param {*} permission 
+ * @returns 
+ */
+exports.createGuildChannel = async (guildId, channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
+    return await BOT_Channels.create({
+        guildId: guildId,
+        channelId: channelId,
+        channelName: channelName,
+        channelType: channelType,
+        parentId: parentId,
+        channelTopic: channelTopic,
+        permission: permission
+    });
+}
+
+/**
+ * Get discord Channel by ChannelId
+ * @param {*} channelId 
+ * @returns 
+ */
+exports.getChannelById = async (channelId) => {
+    return await BOT_Channels.findOne({ where: { channelId: channelId }});
+}
+
+/**
+ * Update discord channel
+ * @param {*} channelId 
+ * @param {*} channelName 
+ * @param {*} channelType 
+ * @param {*} parentId 
+ * @param {*} channelTopic 
+ * @param {*} permission 
+ * @returns 
+ */
+exports.updateChannel = async (channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
+    const aChannel = await this.getChannelById(channelId);
+    if (!aChannel) {
+        throw new Error(`Channel ${channelId} doesn't exist.`);
+
+    } else {
+        if (aChannel.channelName != channelName) {
+            aChannel.set({
+                channelName: channelName,
+            });
+        }
+        if (aChannel.channelType != channelType) {
+            aChannel.set({
+                channelType: channelType,
+            });
+        }
+        if (aChannel.parentId != parentId) {
+            aChannel.set({
+                parentId: parentId,
+            });
+        }
+        if (aChannel.channelTopic != channelTopic) {
+            aChannel.set({
+                channelTopic: channelTopic,
+            });
+        }
+        if (aChannel.permission != permission) {
+            aChannel.set({
+                permission: permission,
+            });
+        }
+
+        if (aChannel.changed() && aChannel.changed.length > 0) {
+            return await aChannel.save();
+        }  
+    }
+}
+
+/**
+ * Delete a discord channel
+ * @param {*} channelId 
+ */
+exports.deleteChannel = async (channelId) => {
+    const aChannel = await this.getChannelById(channelId);
+    if (!aChannel) {
+        throw new Error(`Channel ${channelId} doesn't exist.`);
+
+    } else {
+        await aChannel.destroy();
+    }
+}

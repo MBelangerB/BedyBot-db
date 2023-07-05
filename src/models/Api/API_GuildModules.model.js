@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'guildId',
       primaryKey: true,
-      unique: true,
+      // unique: true,
       allowNull: false,
       // references: {
       //   model: 'BOT_Guilds', // This is a reference to another model

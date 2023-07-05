@@ -25,36 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       });
 
     }
-
-    // /**
-    //  * Init the guild user
-    //  * @param {string} userId
-    //  * @returns
-    //  */
-    // static async initGuildUser(guildId, userId, nickname) {
-    //   return await this.create({
-    //     userId: userId,
-    //     guildId: guildId,
-    //     nickname: nickname,
-    //   });
-    // }
-
-    // /**
-    //  * Update the guild member nickname
-    //  * @param {string} nickname
-    //  */
-    // async updateUsername(nickname) {
-    //   if (nickname) {
-    //     this.set({
-    //       nickname: nickname,
-    //     });
-    //     await this.save();
-    //   }
-    // }
-
-    // hasUsername() {
-    //   return (this.nickname && this.nickname.length > 0);
-    // }
   }
 
   BOT_GuildUser.getModels = function () {
@@ -66,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'guildId',
       primaryKey: true,
-      unique: true,
+      // unique: true,
       allowNull: false,
       // references: {
       //   model: 'BOT_Guilds', // This is a reference to another model

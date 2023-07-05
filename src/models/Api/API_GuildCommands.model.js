@@ -47,13 +47,12 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'guildId',
       allowNull: false,
-      // J'aime pas ça, la boucle ...
       // references: {
       //   model: 'BOT_Guilds', // This is a reference to another model
       //   key: 'guildId', // This is the column name of the referenced model
+      //   onDelete: 'CASCADE',
+      //   onUpdate: 'CASCADE',
       // },
-      // onDelete: 'CASCADE',
-      // onUpdate: 'CASCADE',
     },
     commandId: {
       type: DataTypes.UUID,
@@ -67,6 +66,11 @@ module.exports = (sequelize, DataTypes) => {
       // },
       // onDelete: 'CASCADE',
       // onUpdate: 'CASCADE',
+    },
+    discordCommandId: {
+      type: Sequelize.BIGINT.UNSIGNED,
+      field: 'discordCommandId',
+      allowNull: true
     },
     allowFor: {
       type: DataTypes.BOOLEAN,

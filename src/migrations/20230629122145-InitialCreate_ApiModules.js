@@ -49,6 +49,7 @@ module.exports = {
           type: DataTypes.UUID,
           field: 'commandId',
           primaryKey: true,
+          unique: true,
           allowNull: false,
           defaultValue: Sequelize.UUIDV4,
         },
@@ -56,7 +57,6 @@ module.exports = {
           type: DataTypes.UUID,
           field: 'moduleId',
           allowNull: false,
-          // primaryKey: true,
           references: {
             model: 'API_Modules',
             key: 'moduleId',
@@ -97,14 +97,14 @@ module.exports = {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
-          unique: true,
+          // unique: true, // Maybe false
           allowNull: false,
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
           },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
         },
         moduleId: {
           type: DataTypes.UUID,
@@ -142,13 +142,12 @@ module.exports = {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'guildId',
           allowNull: false,
-          // J'aime pas ça, la boucle ...
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
           },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
         },
         commandId: {
           type: DataTypes.UUID,
@@ -162,6 +161,11 @@ module.exports = {
           },
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE',
+        },
+        discordCommandId: {
+          type: Sequelize.BIGINT.UNSIGNED,
+          field: 'discordCommandId',
+          allowNull: true
         },
         allowFor: {
           type: DataTypes.BOOLEAN,
@@ -215,7 +219,7 @@ module.exports = {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'roleId',
           primaryKey: true,
-          unique: true,
+          // unique: true,
           allowNull: false,
           references: {
             model: 'BOT_Roles', // This is a reference to another model

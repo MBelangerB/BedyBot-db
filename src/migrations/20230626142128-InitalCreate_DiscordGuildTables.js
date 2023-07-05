@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -177,12 +178,71 @@ module.exports = {
         {
           transaction: t,
         });
-    });
+
+      // ******************************************
+      // BOT_Channels
+      // ******************************************
+      await queryInterface.createTable('BOT_Channels', {
+        channelId: {
+          type: Sequelize.BIGINT.UNSIGNED,
+          field: 'guildId',
+          primaryKey: true,
+          unique: true,
+          allowNull: false,
+        },
+        guildId: {
+          type: Sequelize.BIGINT.UNSIGNED,
+          field: 'guildId',
+          allowNull: true,
+          references: {
+            model: 'BOT_Guilds', // This is a reference to another model
+            key: 'guildId', // This is the column name of the referenced model
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+        },
+        channelParentId: {
+          type: Sequelize.BIGINT.UNSIGNED,
+          field: 'channelParentId',
+          allowNull: false,
+          comment:'A parent category can contains max 50 channels'
+        },
+        /**
+         * @param {BedyAPIConst.DiscordChannelTypes}
+         */
+        channelType: {
+          type: DataTypes.INTEGER,
+          field: 'channelType',
+          allowNull: false,
+        },
+        channelName: {
+          type: DataTypes.STRING(100),
+          field: 'channelName',
+          allowNull: true,
+        },
+        channelTopic: {
+          type: DataTypes.STRING(4096),
+          field: 'channelTopic',
+          allowNull: true,
+        },
+        channelPermission: {
+          type: DataTypes.STRING(255),
+          field: 'channelPermission',
+          allowNull: true,
+        }, 
+      },
+        {
+          transaction: t,
+          comment: 'List of discord channels where the bot has been installed.',
+        });
+
+    }); // End transaction
 
   },
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable('BOT_Channels');
     await queryInterface.dropTable('BOT_Roles');
     await queryInterface.dropTable('BOT_GuildOptions');
     await queryInterface.dropTable('BOT_Guilds');
