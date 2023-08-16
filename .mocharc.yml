@@ -1,0 +1,27 @@
+# require: 'test/'
+ui: 'bdd'
+require: 
+  - ./tests/setup.spec.js
+parallel: false
+recursive: false
+node-option:
+  - 'unhandled-rejections=strict' # without leading "--", also V8 flags
+package: './package.json'
+env:
+  NODE_ENV: test
+watch-ignore:
+  - '.*'
+  - 'src/**'
+  - 'node_modules'
+  - 'coverage'
+# reporter: 'spec'
+timeout: 15000 # same as "timeout: '5s'"
+slow: 75
+spec:
+  - 'tests/**/*.spec.js' # the positional arguments!
+color: true
+# delay: false
+diff: true
+exit: true
+
+# extension: ['spec.js', 'spec.ts']

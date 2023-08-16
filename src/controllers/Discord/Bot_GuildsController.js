@@ -1,5 +1,6 @@
 const { sequelize } = require('../../dbSchema');
 const { BOT_Guilds, BOT_GuildOptions, BOT_GuildUser, BOT_Channels } = sequelize.models;
+const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 // ******************************************
 // BOT_Guilds
@@ -57,6 +58,7 @@ exports.getAllGuilds = async (includeModels = []) => {
  * @returns
  */
 exports.createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
+    // TOOD: Devrais-je activé directement le GuildOption ? 
     return await BOT_Guilds.create({
         guildId: guildId,
         guildName: guildName,
@@ -83,17 +85,17 @@ exports.createGuild = async (guildId, guildName, ownerId, region = null, preferr
 exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
     const aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
-        throw new Error(`GuildId ${guildId} doesn't exist.`);
+        throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
     } else {
         if (guildName != null && aGuild.guildName != guildName) {
             aGuild.set({
-                guildName: region,
+                guildName: guildName,
             });
         }
         if (ownerId != null && aGuild.guildOwnerId != ownerId) {
             aGuild.set({
-                guildOwnerId: region,
+                guildOwnerId: ownerId,
             });
         }
 
@@ -132,30 +134,43 @@ exports.updateGuild = async (guildId, guildName, ownerId, region = null, preferr
  * @param {boolean} newStatut new guild Statut
  * @returns {BOT_Guilds}
  */
-exports.updateGuildStatut = async (guildId, newStatut) => {
+exports.updateGuildStatut = async (guildId, isActive) => {
     const aGuild = await this.getGuildByGuildId(guildId);
     if (!aGuild) {
-        throw new Error(`GuildId ${guildId} doesn't exist.`);
+        throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
-    } else if (aGuild.isActive !== newStatut && newStatut == true) {
+    } else if (aGuild.isActive !== isActive && isActive == true) {
         // Guild is comeback
         aGuild.set({
-            isActive: newStatut,
+            isActive: isActive,
             joinedAt: Date.now(),
             leftAt: null,
         });
         return await aGuild.save();
 
-    } else if (aGuild.isActive !== newStatut && newStatut == false) {
+    } else if (aGuild.isActive !== isActive && isActive == false) {
         // Guild is left
         aGuild.set({
-            isActive: newStatut,
+            isActive: isActive,
             leftAt: Date.now(),
         });
         return await aGuild.save();
     }
     console.verbose(`Guild status and date for **${aGuild.id}** has been updated.`);
 };
+
+/**
+ * Delete a guild
+ * @param {*} guildId 
+ */
+exports.deleteGuild = async(guildId) => {
+    const aGuild = await this.getGuildByGuildId(guildId);
+    if (!aGuild) {
+        throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+    }
+    
+    await aGuild.destroy();
+}
 
 // ******************************************
 // BOT_GuildOptions
@@ -184,7 +199,7 @@ exports.initOptionForGuildId = async (guildId) => {
 exports.updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null) => {
     const aGuildOption = await this.getGuildOptionByGuildId(guildId);
     if (!aGuildOption) {
-        throw new Error(`GuildOption for ${guildId} doesn't exist.`);
+        throw new InvalidEntityException(guildId, 'BOT_GuildOptions', 'Guild options doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
     } else {
         if (announcementChannelId != null && aGuildOption.announcementChannelId != announcementChannelId) {
@@ -277,7 +292,7 @@ exports.getGuildUserByUserId = async (guildId, userId, includeGuild = false, inc
 exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
     const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
-        throw new Error(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+        throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
     } else {
         if (nickname != null && aGuildUser.nickname != nickname) {
@@ -308,7 +323,7 @@ exports.updateGuildUser = async (guildId, userId, nickname = null, avatar = null
 exports.updateGuildUserStatut = async (guildId, userId, hasLeft) => {
     const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
     if (!aGuildUser) {
-        throw new Error(`GuildUser for (${guildId}, ${userId}) doesn't exist.`);
+        throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
     } else {
         if (hasLeft == false) {

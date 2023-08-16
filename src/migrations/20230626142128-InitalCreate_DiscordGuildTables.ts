@@ -1,11 +1,8 @@
-'use strict';
-
-const Sequelize = require('sequelize');
-const { BedyAPIConst } = require('../BedyAPIConst');
+import { QueryInterface, DataTypes, literal } from 'sequelize';
+import { BedyAPIConst } from '../BedyAPIConst';
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, DataTypes) {
+  export async function up(queryInterface: QueryInterface) {
     return queryInterface.sequelize.transaction(async (t) => {
 
       // ******************************************
@@ -13,7 +10,7 @@ module.exports = {
       // ******************************************
       await queryInterface.createTable('BOT_Guilds', {
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
           unique: true,
@@ -35,7 +32,7 @@ module.exports = {
           allowNull: true,
         },
         guildOwnerId: {
-          type: Sequelize.BIGINT.UNSIGNED, // DataTypes.STRING(80),
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildOwnerId',
           allowNull: false,
         },
@@ -70,7 +67,7 @@ module.exports = {
           type: DataTypes.DATE,
           field: 'joinedAt',
           allowNull: false,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          defaultValue: literal('CURRENT_TIMESTAMP'),
         },
         leftAt: {
           type: DataTypes.DATE,
@@ -80,7 +77,6 @@ module.exports = {
       },
         {
           transaction: t,
-          comment: 'List of discord guilds where the bot has been installed.',
         });
 
       // ******************************************
@@ -88,7 +84,7 @@ module.exports = {
       // ******************************************
       await queryInterface.createTable('BOT_GuildOptions', {
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
           unique: true,
@@ -102,7 +98,7 @@ module.exports = {
         },
         // Todo: Move to « Module » table ?
         announcementChannelId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'announcementChannelId',
           allowNull: true,
         },
@@ -125,7 +121,7 @@ module.exports = {
       // ******************************************
       await queryInterface.createTable('BOT_Roles', {
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
           allowNull: false,
@@ -137,7 +133,7 @@ module.exports = {
           onUpdate: 'CASCADE',
         },
         roleId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'roleId',
           primaryKey: true,
           unique: true,
@@ -172,7 +168,7 @@ module.exports = {
           type: DataTypes.DATE,
           field: 'lastUpdated',
           allowNull: false,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          defaultValue: literal('CURRENT_TIMESTAMP'),
         },
       },
         {
@@ -184,25 +180,25 @@ module.exports = {
       // ******************************************
       await queryInterface.createTable('BOT_Channels', {
         channelId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
           unique: true,
           allowNull: false,
         },
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           allowNull: true,
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         channelParentId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'channelParentId',
           allowNull: false,
           comment:'A parent category can contains max 50 channels'
@@ -232,19 +228,18 @@ module.exports = {
         }, 
       },
         {
-          transaction: t,
-          comment: 'List of discord channels where the bot has been installed.',
+          transaction: t
         });
 
     }); // End transaction
 
-  },
+  }
 
-  /* eslint-disable-next-line no-unused-vars */
-  async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('BOT_Channels');
-    await queryInterface.dropTable('BOT_Roles');
-    await queryInterface.dropTable('BOT_GuildOptions');
-    await queryInterface.dropTable('BOT_Guilds');
-  },
-};
+export async function down(queryInterface: QueryInterface) {
+  return queryInterface.sequelize.transaction(async (transaction) => {
+    await queryInterface.dropTable('BOT_Channels', { transaction });
+    await queryInterface.dropTable('BOT_Roles', { transaction });
+    await queryInterface.dropTable('BOT_GuildOptions', { transaction });
+    await queryInterface.dropTable('BOT_Guilds', { transaction });
+  });
+}

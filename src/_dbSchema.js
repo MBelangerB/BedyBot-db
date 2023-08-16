@@ -12,7 +12,8 @@ const env = process.env.NODE_ENV || 'development';
 
 // Initiale fonction
 let dbConfigFilePath = '';
-const authorizedPath = [path.join(__dirname, '/config/config.js'), path.join(process.cwd(), process.env.CONFIG_FILE_PATH)];
+const authorizedPath = [path.join(__dirname, '/config/config.js'),  
+                        path.join(process.cwd(), process.env.CONFIG_FILE_PATH)];
 const getConfigFilePath = function () {
   let successfully = false;
   for (const idx in authorizedPath) {
@@ -33,6 +34,7 @@ const config = require(dbConfigFilePath)[env];
 // Sequelize Variable
 const db = {};
 const controller = [];
+const migrations = [];
 
 // Initialize Sequelize constructor
 let sequelize = null;
@@ -125,6 +127,35 @@ const readControllerScript = function (folder = './controllers') {
   });
 };
 
+/* eslint-disable-next-line no-unused-vars */
+const readMigrationsScript = function (folder = './migrations') {
+  const fullPath = path.resolve(__dirname, folder);
+  const files = fs.readdirSync(fullPath);
+
+  files.forEach(file => {
+    const subFilePath = path.join(fullPath, file);
+
+    // Vérifier si l'élément est un dossier
+    if (fs.statSync(subFilePath).isDirectory()) {
+      // Appeler récursivement la fonction pour parcourir le sous-répertoire
+      readModelScript(subFilePath);
+
+    } else {
+      // Vérifier si le fichier a l'extension ".model"
+      /* eslint-disable-next-line no-lonely-if */
+      if (path.extname(subFilePath) === '.js') {
+        const migration = require(path.join(fullPath, file)); // (sequelize, Sequelize.DataTypes);
+
+        var name = path.parse(file).name;
+        // migrations[name] = migration;   
+        migrations.push(migration);
+        console.log('Read migrations : ',name)
+      }
+    }
+
+  });
+};
+
 const initializeModel = function () {
   Object.keys(db).forEach(modelName => {
     if (db[modelName].associate) {
@@ -134,13 +165,18 @@ const initializeModel = function () {
 
   db.sequelize = sequelize;
   db.Sequelize = Sequelize;
+  if (env == "test") {
+    db.migrations = migrations;
+  }
 };
 
 testConnection();
-
 readModelScript();
-
 initializeModel();
+
+if (env == "test") {
+  readMigrationsScript();
+}
 
 
 module.exports = db;

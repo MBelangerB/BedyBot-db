@@ -1,12 +1,11 @@
-'use strict';
-
-const Sequelize = require('sequelize');
-const { BedyAPIConst } = require('../BedyAPIConst');
+import { QueryInterface, DataTypes, literal, UUIDV4 } from 'sequelize';
+import { BedyAPIConst } from '../BedyAPIConst';
+// import { v4 as uuidv4 } from 'uuid';
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, DataTypes) {
-    return queryInterface.sequelize.transaction(async (t) => {
+export async function up(queryInterface: QueryInterface) {
+  return queryInterface.sequelize.transaction(async (t) => {
+
       // TODO: Lien -> GuildModules
 
       // ******************************************
@@ -18,7 +17,7 @@ module.exports = {
           field: 'moduleId',
           primaryKey: true,
           allowNull: false,
-          defaultValue: Sequelize.UUIDV4,
+          defaultValue: UUIDV4,
         },
         name: {
           type: DataTypes.STRING,
@@ -51,7 +50,7 @@ module.exports = {
           primaryKey: true,
           unique: true,
           allowNull: false,
-          defaultValue: Sequelize.UUIDV4,
+          defaultValue: UUIDV4,
         },
         moduleId: {
           type: DataTypes.UUID,
@@ -60,9 +59,9 @@ module.exports = {
           references: {
             model: 'API_Modules',
             key: 'moduleId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         name: {
           type: DataTypes.STRING,
@@ -94,7 +93,7 @@ module.exports = {
       // ******************************************
       await queryInterface.createTable('API_GuildModules', {
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           primaryKey: true,
           // unique: true, // Maybe false
@@ -102,9 +101,9 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         moduleId: {
           type: DataTypes.UUID,
@@ -115,9 +114,9 @@ module.exports = {
           references: {
             model: 'API_Modules',
             key: 'moduleId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         isActive: {
           type: DataTypes.INTEGER,
@@ -136,18 +135,18 @@ module.exports = {
           field: 'guildCommandId',
           primaryKey: true,
           allowNull: false,
-          defaultValue: Sequelize.UUIDV4,
+          defaultValue: UUIDV4,
         },
         guildId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'guildId',
           allowNull: false,
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         commandId: {
           type: DataTypes.UUID,
@@ -163,7 +162,7 @@ module.exports = {
           onUpdate: 'CASCADE',
         },
         discordCommandId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'discordCommandId',
           allowNull: true
         },
@@ -213,10 +212,10 @@ module.exports = {
             model: 'API_GuildCommands', // This is a reference to another model
             key: 'guildCommandId', // This is the column name of the referenced model
           },
-          defaultValue: Sequelize.UUIDV4,
+          defaultValue: UUIDV4,
         },
         roleId: {
-          type: Sequelize.BIGINT.UNSIGNED,
+          type: DataTypes.BIGINT.UNSIGNED,
           field: 'roleId',
           primaryKey: true,
           // unique: true,
@@ -232,18 +231,18 @@ module.exports = {
           type: DataTypes.DATE,
           field: 'ts',
           allowNull: false,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          defaultValue: literal('CURRENT_TIMESTAMP'),
         },
       }, { transaction: t });
     }); // End transaction
-  },
+}
 
-  /* eslint-disable-next-line no-unused-vars */
-  async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('API_CommandPermissions');
-    await queryInterface.dropTable('API_GuildCommands');
-    await queryInterface.dropTable('API_GuildModules');
-    await queryInterface.dropTable('API_Commands');
-    await queryInterface.dropTable('API_Modules');
-  },
-};
+export async function down(queryInterface: QueryInterface) {
+  return queryInterface.sequelize.transaction(async (transaction) => {
+    await queryInterface.dropTable('API_CommandPermissions', { transaction });
+    await queryInterface.dropTable('API_GuildCommands', { transaction });
+    await queryInterface.dropTable('API_GuildModules', { transaction });
+    await queryInterface.dropTable('API_Commands', { transaction });
+    await queryInterface.dropTable('API_Modules', { transaction });
+  });
+}

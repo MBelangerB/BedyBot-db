@@ -2,8 +2,13 @@
   "name": "bedybot-db",
   "version": "2023.06.1",
   "description": "Database model and migration or BedyBot tools",
-  "main": "dbSchema.js",
+  "main": "build/sequelize.js",
+  "types": "./build/sequelize.d.ts",
   "scripts": {
+    "compile:npx": "npx tsc",
+    "compile:rim": "rimraf ./build && tsc",
+    "compile:rimAll": "rimraf ./build && tsc -p tsconfig.json",
+    "start:dev": "npx nodemon",
     "start": "node src/test",
     "eslint": "eslint .",
     "eslintFix": "eslint . --fix",
@@ -15,8 +20,17 @@
     "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
     "migrate:create": "npx sequelize-cli migration:generate --name=$1",
     "prepare:db": "npm run migrate:dbCreate && npm run migrate:up && npm run migrate:seed",
-    "package:pack": "npm pack --pack-destination ./dist"
+    "package:pack": "npm pack --pack-destination ./dist",
+    "test:updateDb": "set NODE_ENV=test&& npm run migrate:up && npm run migrate:seed",
+    "test:js_run": "mocha ./tests/*.spec.js --timeout 10000",
+    "test:js_run2": "mocha --timeout 10000",
+    "test:js_coverage": "set NODE_ENV=test && nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000",
+    "build:dev": "tsc -p tsconfig.json",
+    "build:prod": "tsc -p tsconfig.prod.json"
   },
+  "files": [
+    "/build"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MBelangerB/BedyBot-db.git"
@@ -28,13 +42,26 @@
   },
   "homepage": "https://github.com/MBelangerB/BedyBot-db#readme",
   "devDependencies": {
+    "@types/node": "^20.4.8",
+    "chai": "^4.3.7",
     "dotenv": "^16.0.2",
     "eslint": "^8.13.0",
-    "sequelize-cli": "^6.6.1"
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "nyc": "^15.1.0",
+    "rimraf": "^5.0.1",
+    "sequelize-cli": "^6.6.1",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
+    "@types/sequelize": "^4.28.15",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
     "mysql2": "^3.4.2",
     "sequelize": "^6.32.1",
+    "sequelize-typescript": "^2.1.5",
     "uuid": "^9.0.0"
   }
 }

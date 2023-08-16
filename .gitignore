@@ -110,3 +110,6 @@ config/*.json
 /Backup
 /src/OldMigration
 src/config/config.js
+
+build/**
+bin/**
