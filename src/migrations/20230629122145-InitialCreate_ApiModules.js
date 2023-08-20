@@ -5,6 +5,8 @@ const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
+  name: "InitalCreate_ApiModules",
+
   async up(queryInterface, DataTypes) {
     return queryInterface.sequelize.transaction(async (t) => {
       // TODO: Lien -> GuildModules

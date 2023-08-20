@@ -5,6 +5,7 @@
   "main": "dbSchema.js",
   "scripts": {
     "start": "node src/test",
+    "startTest2": "node src/testContext",
     "eslint": "eslint .",
     "eslintFix": "eslint . --fix",
     "cleanState": "npm ci",
@@ -15,7 +16,11 @@
     "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
     "migrate:create": "npx sequelize-cli migration:generate --name=$1",
     "prepare:db": "npm run migrate:dbCreate && npm run migrate:up && npm run migrate:seed",
-    "package:pack": "npm pack --pack-destination ./dist"
+    "package:pack": "npm pack --pack-destination ./dist",
+    "test:updateDb": "set NODE_ENV=test&& npm run migrate:up && npm run migrate:seed",
+    "test:js_run": "mocha ./tests/*.spec.js --timeout 10000",
+    "test:js_run2": "mocha --timeout 10000",
+    "test:js_coverage": "set NODE_ENV=test && nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000"
   },
   "repository": {
     "type": "git",
@@ -28,8 +33,11 @@
   },
   "homepage": "https://github.com/MBelangerB/BedyBot-db#readme",
   "devDependencies": {
+    "chai": "^4.3.7",
     "dotenv": "^16.0.2",
     "eslint": "^8.13.0",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
     "sequelize-cli": "^6.6.1"
   },
   "dependencies": {

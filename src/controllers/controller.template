@@ -1,0 +1,13 @@
+const InvalidEntityException = require('../../declarations/InvalidEntityException');
+
+module.exports = (sequelize, context) => {
+    class ClassName {
+
+        static MethodName = async () => {
+
+        };
+
+    } // End Class
+
+    return ClassName;
+} // End export

@@ -1,0 +1,55 @@
+'use strict';
+
+const Sequelize = require('sequelize');
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, DataTypes) {
+    return queryInterface.sequelize.transaction(async (t) => {
+
+      // ******************************************
+        // BOT_GuildOptions
+        // ******************************************
+        await queryInterface.createTable('BOT_GuildOptions', {
+          guildId: {
+            type: Sequelize.BIGINT.UNSIGNED,
+            field: 'guildId',
+            primaryKey: true,
+            unique: true,
+            allowNull: false,
+            references: {
+              model: 'BOT_Guilds', // This is a reference to another model
+              key: 'guildId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          // Todo: Move to « Module » table ?
+          announcementChannelId: {
+            type: Sequelize.BIGINT.UNSIGNED,
+            field: 'announcementChannelId',
+            allowNull: true,
+          },
+          maxPlayerPerLobby: {
+            type: DataTypes.INTEGER,
+            field: 'maxPlayerPerLobby',
+            allowNull: false,
+            defaultValue: 12,
+          },
+          addEveryone: {
+            type: DataTypes.BOOLEAN,
+            field: 'addEveryone',
+            defaultValue: false,
+            allowNull: true,
+          },
+        }, { transaction: t });
+
+
+    });
+
+  },
+
+  async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable('BOT_GuildOptions');
+  },
+};

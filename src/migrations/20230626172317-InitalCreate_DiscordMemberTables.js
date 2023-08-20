@@ -4,6 +4,8 @@ const Sequelize = require('sequelize');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
+  name: "InitalCreate_DiscordMemberTables",
+
   async up(queryInterface, DataTypes) {
     return queryInterface.sequelize.transaction(async (t) => {
       // ******************************************
