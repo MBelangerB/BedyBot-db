@@ -52,8 +52,8 @@ class SequelizeSchema {
         return this.dbConfigFilePath;
     }
 
-    readSequelizeFileContent(sequelize, dbContext, type = SequelizeSchema.ReadingType.MODELS, folderPath, fileExt = '.js', 
-                            sliceLength = 0, sliceValue = '') {
+    readSequelizeFileContent(sequelize, dbContext, type = SequelizeSchema.ReadingType.MODELS, folderPath, fileExt = '.js',
+        sliceLength = 0, sliceValue = '') {
 
         const fullPath = path.resolve(__dirname, "../", folderPath);
         console.log(`Read Type (${type}) FileContent : ${fullPath}`);
@@ -85,9 +85,9 @@ class SequelizeSchema {
                             case SequelizeSchema.ReadingType.MIGRATION:
                                 if (path.extname(subFilePath) === fileExt) {
                                     const migration = require(path.join(fullPath, file));
-                                    var name = migration.name; 
+                                    var name = migration.name;
                                     if (!name || name.length == 0) {
-                                        name =  path.parse(file).name;
+                                        name = path.parse(file).name;
                                     }
                                     dbContext.migrations[name] = migration;
                                     console.log('Read migrations : ', name);
@@ -99,12 +99,12 @@ class SequelizeSchema {
                                     const controller = require(path.join(fullPath, file))(sequelize, dbContext);
                                     var name = "";
                                     if (!name || name.length == 0) {
-                                        name =  path.parse(file).name;
+                                        name = path.parse(file).name;
                                     }
                                     dbContext.controller[name] = controller;
                                     console.log('Read Controller : ', name);
                                 }
-                                break; 
+                                break;
                         }
                     }
                 }
@@ -160,6 +160,28 @@ class SequelizeSchema {
             console.error('Unable to connect to the database:', error);
             return false;
         });
+    }
+
+    async dropDatabase(sequelize) {
+        await sequelize.drop();
+        console.log('Database has been dropped!');
+    }
+
+
+    async resetDatabase(sequelize) {
+        try {
+            await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+
+            await sequelize.sync({ force: true });
+
+            await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+
+            console.log('All tables have been reinitialized!');
+        } catch (ex) {
+            console.error(ex);
+            throw ex;
+        }
+
     }
 }
 

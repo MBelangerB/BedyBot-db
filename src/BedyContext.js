@@ -52,11 +52,9 @@ function InitalizeContext() {
       console.error(ex);
     }
 
-    // dbContext.sequelize.models = dbConfigFilePath.models;
     // if (env == "test") {
     //   schema.readMigrationsScript();
     // }
-  // }
 }
 
 InitalizeContext();

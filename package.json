@@ -13,14 +13,17 @@
     "migrate:up": "npx sequelize-cli db:migrate",
     "migrate:seed": "npx sequelize-cli db:seed:all",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "migrate:undoAll": "npx sequelize-cli db:migrate:undo:all",
     "migrate:undoTo": "npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX.js",
     "migrate:create": "npx sequelize-cli migration:generate --name=$1",
     "prepare:db": "npm run migrate:dbCreate && npm run migrate:up && npm run migrate:seed",
     "package:pack": "npm pack --pack-destination ./dist",
+    "test:downDB": "set NODE_ENV=test&& npm run migrate:undoAll",
     "test:updateDb": "set NODE_ENV=test&& npm run migrate:up && npm run migrate:seed",
     "test:js_run": "mocha ./tests/*.spec.js --timeout 10000",
     "test:js_run2": "mocha --timeout 10000",
-    "test:js_coverage": "set NODE_ENV=test && nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000"
+    "test:js_coverage": "set NODE_ENV=test && nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000",
+    "test:db:js_coverage": "set NODE_ENV=test && npm run test:downDB && npm run  test:updateDb && npm run test:js_coverage"
   },
   "repository": {
     "type": "git",

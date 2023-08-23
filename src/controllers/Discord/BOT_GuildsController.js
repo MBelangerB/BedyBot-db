@@ -1,7 +1,7 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
-    class Bot_GuildsController {
+    class BOT_GuildsController {
 
         /**
          * Get BOT_Guilds by guildId
@@ -123,6 +123,8 @@ module.exports = (sequelize, context) => {
                 if (aGuild.changed() && aGuild.changed.length > 0) {
                     return await aGuild.save();
                 }
+
+                return aGuild;
             }
         };
 
@@ -132,7 +134,7 @@ module.exports = (sequelize, context) => {
          * @returns {BOT_Guilds}
          */
         static updateGuildStatut = async (guildId, isActive) => {
-            const aGuild = await this.getGuildByGuildId(guildId);
+            let aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
                 throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
 
@@ -143,7 +145,7 @@ module.exports = (sequelize, context) => {
                     joinedAt: Date.now(),
                     leftAt: null,
                 });
-                return await aGuild.save();
+                aGuild = await aGuild.save();
 
             } else if (aGuild.isActive !== isActive && isActive == false) {
                 // Guild is left
@@ -151,9 +153,11 @@ module.exports = (sequelize, context) => {
                     isActive: isActive,
                     leftAt: Date.now(),
                 });
-                return await aGuild.save();
+                aGuild = await aGuild.save();
             }
-            console.verbose(`Guild status and date for **${aGuild.id}** has been updated.`);
+
+            console.log(`Guild status and date for **${aGuild.id}** has been updated.`);
+            return aGuild;
         };
 
         /**
@@ -171,5 +175,5 @@ module.exports = (sequelize, context) => {
 
     } // End class
 
-    return Bot_GuildsController;
+    return BOT_GuildsController;
 }; // End export

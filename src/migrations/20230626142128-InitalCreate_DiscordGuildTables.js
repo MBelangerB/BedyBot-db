@@ -207,7 +207,7 @@ module.exports = {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'channelParentId',
           allowNull: false,
-          comment:'A parent category can contains max 50 channels'
+          comment: 'A parent category can contains max 50 channels'
         },
         /**
          * @param {BedyAPIConst.DiscordChannelTypes}
@@ -231,7 +231,7 @@ module.exports = {
           type: DataTypes.STRING(255),
           field: 'channelPermission',
           allowNull: true,
-        }, 
+        },
       },
         {
           transaction: t,
@@ -244,9 +244,9 @@ module.exports = {
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('BOT_Channels');
     await queryInterface.dropTable('BOT_Roles');
     await queryInterface.dropTable('BOT_GuildOptions');
+    await queryInterface.dropTable('BOT_Channels');
     await queryInterface.dropTable('BOT_Guilds');
   },
 };

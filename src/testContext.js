@@ -1,6 +1,6 @@
 const { sequelize, models, migrations, controller } = require('./BedyContext');
 const { BOT_Guilds } = models;
-const { BOT_GuildsController, BOT_GuildsOptionsController, Bot_RolesController} = controller;
+const { BOT_GuildsController, BOT_GuildOptionsController, Bot_RolesController} = controller;
 
 
 async function getGuild() {
@@ -24,7 +24,7 @@ async function canTreatArrayAsAnd() {
     // console.log('-------------------');
 
     const guildId = listGuild[0].guildId;
-    const optionInfo = await BOT_GuildsOptionsController.getGuildOptionByGuildId(guildId, false);
+    const optionInfo = await BOT_GuildOptionsController.getGuildOptionByGuildId(guildId, false);
     console.log('-------------------');
     console.log('Guild Option');
     console.log(optionInfo.toJSON());
