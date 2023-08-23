@@ -1,5 +1,5 @@
-process.env.NODE_ENV = "test";
-process.env.DB_NAME = "bedybot_mochaTest";
+process.env.NODE_ENV = 'test';
+process.env.DB_NAME = 'bedybot_mochaTest';
 
 console.info(process.env.NODE_ENV);
 // const { sequelize, models } = require('../src/BedyContext');

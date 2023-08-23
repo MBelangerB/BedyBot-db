@@ -1,10 +1,11 @@
+  /* eslint-disable-next-line no-unused-vars */
 const { sequelize, models, migrations, controller } = require('./BedyContext');
 const { BOT_Guilds } = models;
-const { BOT_GuildsController, BOT_GuildOptionsController, Bot_RolesController} = controller;
+const { BOT_GuildsController, BOT_GuildOptionsController, Bot_RolesController } = controller;
 
 
 async function getGuild() {
-    let data = await BOT_Guilds.findAll({ where: { isActive: true } });
+    const data = await BOT_Guilds.findAll({ where: { isActive: true } });
     console.log(data);
     return data;
 }

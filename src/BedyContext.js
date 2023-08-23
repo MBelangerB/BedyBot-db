@@ -37,8 +37,8 @@ const dbContext = {
   migrations: {},
   controller: {},
   sequelize: sequelize,
-  schema: schema
-}
+  schema: schema,
+};
 
 function InitalizeContext() {
   // if (await schema.testConnection(sequelize)) {

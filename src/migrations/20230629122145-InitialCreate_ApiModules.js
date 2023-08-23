@@ -5,7 +5,7 @@ const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  name: "InitalCreate_ApiModules",
+  name: 'InitalCreate_ApiModules',
 
   async up(queryInterface, DataTypes) {
     return queryInterface.sequelize.transaction(async (t) => {
@@ -167,7 +167,7 @@ module.exports = {
         discordCommandId: {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'discordCommandId',
-          allowNull: true
+          allowNull: true,
         },
         allowFor: {
           type: DataTypes.BOOLEAN,

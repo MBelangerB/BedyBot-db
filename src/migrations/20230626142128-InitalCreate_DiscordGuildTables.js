@@ -5,7 +5,7 @@ const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  name: "InitalCreate_DiscordGuildTables",
+  name: 'InitalCreate_DiscordGuildTables',
 
   async up(queryInterface, DataTypes) {
     return queryInterface.sequelize.transaction(async (t) => {
@@ -207,7 +207,7 @@ module.exports = {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'channelParentId',
           allowNull: false,
-          comment: 'A parent category can contains max 50 channels'
+          comment: 'A parent category can contains max 50 channels',
         },
         /**
          * @param {BedyAPIConst.DiscordChannelTypes}

@@ -55,7 +55,7 @@ module.exports = (sequelize, context) => {
          * @returns
          */
         static createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
-            // TOOD: Devrais-je activé directement le GuildOption ? 
+            // TOOD: Devrais-je activé directement le GuildOption ?
             return await context.models.BOT_Guilds.create({
                 guildId: guildId,
                 guildName: guildName,
@@ -136,7 +136,7 @@ module.exports = (sequelize, context) => {
         static updateGuildStatut = async (guildId, isActive) => {
             let aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
-                throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+                throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else if (aGuild.isActive !== isActive && isActive == true) {
                 // Guild is comeback
@@ -162,16 +162,16 @@ module.exports = (sequelize, context) => {
 
         /**
          * Delete a guild
-         * @param {*} guildId 
+         * @param {*} guildId
          */
         static deleteGuild = async (guildId) => {
             const aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
-                throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+                throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
             }
 
             await aGuild.destroy();
-        }
+        };
 
     } // End class
 

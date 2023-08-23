@@ -33,9 +33,9 @@ class InvalidEntityException extends Error {
     if (this.entityId != null) {
       return this.entityId;
     } else if (this.entityIds != null && this.entityIds.length > 0) {
-      return `(${this.entityIds.join(", ")})`;
+      return `(${this.entityIds.join(', ')})`;
     } else {
-      return 'N/A'
+      return 'N/A';
     }
   }
 
@@ -47,6 +47,6 @@ InvalidEntityException.ErrorType = {
    * Primary key doesn't exist for this entity.
    */
   INVALID_PK: 100,
-}
+};
 
 module.exports = InvalidEntityException;

@@ -26,7 +26,7 @@ module.exports = (sequelize, context) => {
         static updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null) => {
             const aGuildOption = await this.getGuildOptionByGuildId(guildId);
             if (!aGuildOption) {
-                throw new InvalidEntityException(guildId, 'BOT_GuildOptions', 'Guild options doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+                throw new InvalidEntityException(guildId, 'BOT_GuildOptions', 'Guild options doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
                 if (announcementChannelId != null && aGuildOption.announcementChannelId != announcementChannelId) {

@@ -1,6 +1,6 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
-const { models, controller } = require('../../src/BedyContext');
+const { controller } = require('../../src/BedyContext');
 const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
 
 describe('BOT_GuildOptionsController', () => {
@@ -9,7 +9,7 @@ describe('BOT_GuildOptionsController', () => {
     const guildId = generateUnsignedBigInt64();
     const ownerId = generateUnsignedBigInt64();
     const channelId = generateUnsignedBigInt64();
-    const initialGuildName = 'Guild Option Test'
+    const initialGuildName = 'Guild Option Test';
 
     after(async () => {
         console.log('============== after 2 ==============');
@@ -18,7 +18,7 @@ describe('BOT_GuildOptionsController', () => {
             for (let index = 0; index < allGuilds.length; index++) {
                 const aGuild = allGuilds[index];
                 await BOT_GuildsController.deleteGuild(aGuild.guildId);
-                
+
             }
         }
     });
@@ -30,20 +30,13 @@ describe('BOT_GuildOptionsController', () => {
             const aGuild = await BOT_GuildsController.createGuild(guildId, initialGuildName, ownerId);
             expect(aGuild).to.be.an('object');
             expect(aGuild.guildName).to.equal(initialGuildName);
-            // if (!aGuild || aGuild == null) {
-            //     assert.fail('Error !  Guild doesn\'t exists');
-            // }
-          
+
             const aGuildOption = await BOT_GuildOptionsController.initOptionForGuildId(guildId);
             expect(aGuildOption).to.be.an('object');
             expect(aGuildOption.guildId).to.equal(guildId);
         });
 
         it('should updated GuildOption for a existing guild', async () => {
-            // const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId, [ models.BOT_GuildOptions]);
-            // expect(aGuild).to.be.an('object');
-            // expect(aGuild.guildName).to.equal(initialGuildName);
-
             const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, 4, true);
 
             expect(aGuildOption).to.be.an('object');
@@ -88,18 +81,18 @@ describe('BOT_GuildOptionsController', () => {
                 if (error instanceof InvalidEntityException) {
                     assert.ok(error);
                 } else {
-                    assert.fail('Invalid exception')
+                    assert.fail('Invalid exception');
                 }
             }
         });
-       
+
     }); // 2nd describe
 
 }); // first describe
 
-
+// TODO : Put this in a Services
 function generateUnsignedBigInt64() {
-    const maxUint64 = BigInt("18446744073709551615"); // 2^64 - 1
+    const maxUint64 = BigInt('18446744073709551615'); // 2^64 - 1
     const randomUint64 = BigInt(Math.floor(Math.random() * Number(maxUint64)));
     return randomUint64;
 }

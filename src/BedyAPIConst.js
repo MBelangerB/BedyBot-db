@@ -71,19 +71,19 @@ BedyAPIConst.DiscordChannelTypes = {
     /**
      * a channel that users can follow and crosspost into their own server (formerly news channels)
      */
-    GUILD_ANNOUNCEMENT:	5,	
+    GUILD_ANNOUNCEMENT:	5,
     /**
      * a temporary sub-channel within a GUILD_ANNOUNCEMENT channel
      */
-    ANNOUNCEMENT_THREAD:	10	,
+    ANNOUNCEMENT_THREAD:	10,
     /**
      * a temporary sub-channel within a GUILD_TEXT or GUILD_FORUM channel
      */
-    PUBLIC_THREAD:	11,	
+    PUBLIC_THREAD:	11,
     /**
      * a temporary sub-channel within a GUILD_TEXT channel that is only viewable by those invited and those with the MANAGE_THREADS permission
      */
-    PRIVATE_THREAD:	12,	
+    PRIVATE_THREAD:	12,
     /**
      * 	a voice channel for hosting events with an audience
      */
@@ -96,7 +96,7 @@ BedyAPIConst.DiscordChannelTypes = {
      * 	Channel that can only contain threads
      */
     GUILD_FORUM	:15,
-}
+};
 /**
  * Discord application command type (Global or guild command)
  */
