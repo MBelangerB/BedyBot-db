@@ -1,7 +1,8 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
-
+const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
 const { controller } = require('../../src/BedyContext');
 const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
+const { after, describe, it } = require('mocha');
 
 describe('BOT_GuildOptionsController', () => {
 

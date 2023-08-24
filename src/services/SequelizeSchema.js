@@ -83,24 +83,24 @@ class SequelizeSchema {
                             case SequelizeSchema.ReadingType.MIGRATION:
                                 if (path.extname(subFilePath) === fileExt) {
                                     const migration = require(path.join(fullPath, file));
-                                    var name = migration.name;
-                                    if (!name || name.length == 0) {
-                                        name = path.parse(file).name;
+                                    let migrationName = migration.name;
+                                    if (!migrationName || migrationName.length == 0) {
+                                        migrationName = path.parse(file).name;
                                     }
-                                    dbContext.migrations[name] = migration;
-                                    console.log('Read migrations : ', name);
+                                    dbContext.migrations[migrationName] = migration;
+                                    console.log('Read migrations : ', migrationName);
                                 }
                                 break;
 
                             case SequelizeSchema.ReadingType.CONTROLLER:
                                 if (path.extname(subFilePath) === fileExt) {
                                     const controller = require(path.join(fullPath, file))(sequelize, dbContext);
-                                    var name = '';
-                                    if (!name || name.length == 0) {
-                                        name = path.parse(file).name;
+                                    let ctrllerName = '';
+                                    if (!ctrllerName || ctrllerName.length == 0) {
+                                        ctrllerName = path.parse(file).name;
                                     }
-                                    dbContext.controller[name] = controller;
-                                    console.log('Read Controller : ', name);
+                                    dbContext.controller[ctrllerName] = controller;
+                                    console.log('Read Controller : ', ctrllerName);
                                 }
                                 break;
                         }

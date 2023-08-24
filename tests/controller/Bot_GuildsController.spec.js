@@ -1,7 +1,9 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
 
+  /* eslint-disable-next-line no-unused-vars */
 const { sequelize, models, migrations, controller, schema } = require('../../src/BedyContext');
+const { before, after, describe, it } = require('mocha');
 
 const { BOT_GuildsController } = controller;
 
