@@ -1,10 +1,27 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
+
 const { controller } = require('../../src/BedyContext');
 const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
-const { after, describe, it } = require('mocha');
+const { before, after, describe, it } = require('mocha');
 
-describe('BOT_GuildOptionsController', () => {
+const { beforeCheckState, afterCheckState, resetState } = require('../mocha-setup');
+const { generateUnsignedBigInt64 } = require('../../src/services/TestService');
+
+describe('01.02 - BOT_GuildOptionsController', () => {
+
+
+    before(async () => {
+        console.log('============== Setup (Before on GuildOptionController) ==============');
+        await beforeCheckState();
+    });
+
+    after(async () => {
+        console.log('============== Setup (After on GuildOptionController) ==============');
+        resetState();
+        await afterCheckState();
+    });
+
 
     // Declare const
     const guildId = generateUnsignedBigInt64();
@@ -12,20 +29,11 @@ describe('BOT_GuildOptionsController', () => {
     const channelId = generateUnsignedBigInt64();
     const initialGuildName = 'Guild Option Test';
 
-    after(async () => {
-        console.log('============== after 2 ==============');
-        const allGuilds = await BOT_GuildsController.getAllGuilds();
-        if (allGuilds != null) {
-            for (let index = 0; index < allGuilds.length; index++) {
-                const aGuild = allGuilds[index];
-                await BOT_GuildsController.deleteGuild(aGuild.guildId);
+    context('1.0 - without data', () => {
 
-            }
-        }
-    });
+    }); // End wihtout data Context
 
-    // Declare « grouping » test
-    describe('GuildOption Management', () => {
+    context('1.1 - valid CRUD action', () => {
 
         it('should activated GuildOption for a new guild', async () => {
             const aGuild = await BOT_GuildsController.createGuild(guildId, initialGuildName, ownerId);
@@ -39,9 +47,20 @@ describe('BOT_GuildOptionsController', () => {
 
         it('should updated GuildOption for a existing guild', async () => {
             const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, 4, true);
+            // console.log(aGuildOption)
 
             expect(aGuildOption).to.be.an('object');
-            expect(aGuildOption.guildId).to.equal(guildId);
+            expect(BigInt(aGuildOption.guildId)).to.equal(guildId);
+            expect(BigInt(aGuildOption.announcementChannelId)).to.equal(channelId);
+            expect(aGuildOption.maxPlayerPerLobby).to.equal(4);
+            expect(aGuildOption.addEveryone).to.equal(true);
+        });
+
+        it('should updated GuildOption without changed value for a existing guild', async () => {
+            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, null, null);
+
+            expect(aGuildOption).to.be.an('object');
+            expect(BigInt(aGuildOption.guildId)).to.equal(guildId);
             expect(BigInt(aGuildOption.announcementChannelId)).to.equal(channelId);
             expect(aGuildOption.maxPlayerPerLobby).to.equal(4);
             expect(aGuildOption.addEveryone).to.equal(true);
@@ -51,29 +70,24 @@ describe('BOT_GuildOptionsController', () => {
             const aGuildOption = await BOT_GuildOptionsController.getGuildOptionByGuildId(guildId, true);
 
             expect(aGuildOption).to.be.an('object');
-            expect(aGuildOption.guildId).to.equal(guildId);
-            expect(BigInt(aGuildOption.BOT_Guild.guildName)).to.equal(initialGuildName);
+            expect(BigInt(aGuildOption.guildId)).to.equal(guildId);
+            expect(aGuildOption.BOT_Guild.guildName).to.equal(initialGuildName);
             expect(aGuildOption.maxPlayerPerLobby).to.equal(4);
         });
 
         it('should get GuildOption for a existing guild without include BOT_Guild', async () => {
             const aGuildOption = await BOT_GuildOptionsController.getGuildOptionByGuildId(guildId, false);
+            // console.log(JSON.stringify(aGuildOption));
+            // console.log(aGuildOption);
 
             expect(aGuildOption).to.be.an('object');
-            expect(aGuildOption.guildId).to.equal(guildId);
-            expect(BigInt(aGuildOption.BOT_Guild)).to.be.null;
+            expect(BigInt(aGuildOption.guildId)).to.equal(guildId);
+            expect(aGuildOption.BOT_Guild).to.be.undefined;
         });
 
-        it('should updated GuildOption without changed value for a existing guild', async () => {
-            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, null, null);
+    }); // End Context CRUD
 
-            expect(aGuildOption).to.be.an('object');
-            expect(aGuildOption.guildId).to.equal(guildId);
-            expect(BigInt(aGuildOption.announcementChannelId)).to.equal(channelId);
-            expect(aGuildOption.maxPlayerPerLobby).to.equal(4);
-            expect(aGuildOption.addEveryone).to.equal(true);
-        });
-
+    context('1.2 - error action', () => {
         it('should throw a exception for update guildOption with a invalid guild id', async () => {
             try {
                 await BOT_GuildOptionsController.updateGuildOption(generateUnsignedBigInt64(), channelId, null, null);
@@ -86,14 +100,6 @@ describe('BOT_GuildOptionsController', () => {
                 }
             }
         });
-
-    }); // 2nd describe
+    }); // End error context
 
 }); // first describe
-
-// TODO : Put this in a Services
-function generateUnsignedBigInt64() {
-    const maxUint64 = BigInt('18446744073709551615'); // 2^64 - 1
-    const randomUint64 = BigInt(Math.floor(Math.random() * Number(maxUint64)));
-    return randomUint64;
-}

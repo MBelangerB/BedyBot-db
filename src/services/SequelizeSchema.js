@@ -57,7 +57,7 @@ class SequelizeSchema {
         sliceLength = 0, sliceValue = '') {
 
         const fullPath = path.resolve(__dirname, '../', folderPath);
-        console.log(`Read Type (${type}) FileContent : ${fullPath}`);
+        // console.log(`Read Type (${type}) FileContent : ${fullPath}`);
 
         // const fullPath = path.resolve(__dirname, folderPath);
         // console.log('REadFile Content : ', fullPath);
@@ -75,7 +75,7 @@ class SequelizeSchema {
                         if (path.extname(subFilePath) === fileExt && subFilePath.slice(sliceLength) === sliceValue) {
                             const model = require(path.join(fullPath, file))(sequelize, Sequelize.DataTypes);
                             dbContext.models[model.name] = model;
-                            console.log('Read Models : ', model.name);
+                            // console.log('Read Models : ', model.name);
                         }
 
                     } else {
@@ -88,7 +88,7 @@ class SequelizeSchema {
                                         migrationName = path.parse(file).name;
                                     }
                                     dbContext.migrations[migrationName] = migration;
-                                    console.log('Read migrations : ', migrationName);
+                                    // console.log('Read migrations : ', migrationName);
                                 }
                                 break;
 
@@ -100,7 +100,7 @@ class SequelizeSchema {
                                         ctrllerName = path.parse(file).name;
                                     }
                                     dbContext.controller[ctrllerName] = controller;
-                                    console.log('Read Controller : ', ctrllerName);
+                                    // console.log('Read Controller : ', ctrllerName);
                                 }
                                 break;
                         }
@@ -112,7 +112,7 @@ class SequelizeSchema {
 
     readModelScript(sequelize, dbContext, folderPath = './models', baseExt = '.js') {
         const fullPath = path.resolve(__dirname, '../', folderPath);
-        console.log('REadFile Content : ', fullPath);
+        // console.log('REadFile Content : ', fullPath);
 
         const files = fs.readdirSync(fullPath);
         console.dir(files);
@@ -128,7 +128,7 @@ class SequelizeSchema {
                     const modelFilename = path.join(fullPath, file);
                     const model = require(modelFilename)(sequelize, Sequelize.DataTypes);
                     dbContext.models[model.name] = model;
-                    console.log('Read Models : ', model.name);
+                    // console.log('Read Models : ', model.name);
                 }
             }
         });
@@ -138,7 +138,7 @@ class SequelizeSchema {
         Object.keys(dbContext.models).forEach((modelName) => {
             if (dbContext.models[modelName].associate) {
                 dbContext.models[modelName].associate(dbContext.models);
-                console.log(`Add association for ${modelName}`);
+                // console.log(`Add association for ${modelName}`);
             }
         });
     }

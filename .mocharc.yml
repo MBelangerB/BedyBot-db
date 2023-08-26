@@ -1,14 +1,16 @@
 # require: 'test/'
 ui: 'bdd'
 require: 
-  - ./tests/setup.spec.js
+  - tests/mocha-setup.js
 parallel: false
-recursive: false
+recursive: false # Parcourir tout les répertoire
 node-option:
   - 'unhandled-rejections=strict' # without leading "--", also V8 flags
 package: './package.json'
 env:
   NODE_ENV: test
+  DB_NAME: 'bedybot_mochaTest'
+
 watch-ignore:
   - '.*'
   - 'src/**'

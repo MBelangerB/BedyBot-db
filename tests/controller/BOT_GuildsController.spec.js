@@ -1,39 +1,18 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
 
-  /* eslint-disable-next-line no-unused-vars */
+/* eslint-disable-next-line no-unused-vars */
 const { sequelize, models, migrations, controller, schema } = require('../../src/BedyContext');
 const { before, after, describe, it } = require('mocha');
-
 const { BOT_GuildsController } = controller;
 
 // const { v4: uuidv4 } = require('uuid');
 
-// TODO: Retester le setup en renommant « setup.spec.js » ou en ajoutant le fichier comme « autorisé »
-// before(async () => {
-//     console.log('before');
-//     // for (const migration of migrations) {
-//     //     await migration.up(sequelize.getQueryInterface(), sequelize);
-//     // }
-
-//     await sequelize.sync({ force: true }); // Synchronisez les modèles avec la base de données
-// });
-
-// Après chaque test
-// after(async () => {
-//     console.log('after');
-//     // await sequelize.drop(); // Supprimez les tables de la base de données
-// });
-
-// before(async () => {
-//     // let data = models;
-//     await schema.dropDatabase(sequelize);
-//     await schema.resetDatabase(sequelize);
-//     // resetDatabase();
-// });
+const { beforeCheckState, afterCheckState, resetState } = require('../mocha-setup');
+const { generateUnsignedBigInt64 } = require('../../src/services/TestService');
 
 
-describe('BOT_GuildsController', () => {
+describe('01.00 - BOT_GuildsController', () => {
 
     // Declare const
     const guildId = generateUnsignedBigInt64(); // uuidv4();
@@ -44,36 +23,22 @@ describe('BOT_GuildsController', () => {
     const unModifiedGuidId = generateUnsignedBigInt64();
     const UnModifiedGuildName = 'Unmodified';
 
-    before(async () => {
-        console.log('============== before 1 ==============');
-        const allGuilds = await BOT_GuildsController.getAllGuilds();
-        if (allGuilds != null) {
-            for (let index = 0; index < allGuilds.length; index++) {
-                const aGuild = allGuilds[index];
-                await BOT_GuildsController.deleteGuild(aGuild.guildId);
 
-            }
-        }
+    before(async () => {
+        console.log('============== Setup (Before on GuildController) ==============');
+        await beforeCheckState();
         // await sequelize.drop(); // Supprimez les tables de la base de données
     });
 
     after(async () => {
-        console.log('============== after 2 ==============');
-        const allGuilds = await BOT_GuildsController.getAllGuilds();
-        if (allGuilds != null) {
-            for (let index = 0; index < allGuilds.length; index++) {
-                const aGuild = allGuilds[index];
-                await BOT_GuildsController.deleteGuild(aGuild.guildId);
-
-            }
-        }
+        console.log('============== Setup (After on GuildController) ==============');
+        resetState();
+        await afterCheckState();
         // await sequelize.drop(); // Supprimez les tables de la base de données
     });
 
 
-    // Declare « grouping » test
-    describe('Guild Management', () => {
-
+    context('1.0 - without data', () => {
         it('should be empty - Try to get all actives guilds', async () => {
             const allActiveGuilds = await BOT_GuildsController.getAllActiveGuilds();
             console.log(`Nb Active Guild : ${allActiveGuilds == null ? null : allActiveGuilds.length}`);
@@ -88,6 +53,9 @@ describe('BOT_GuildsController', () => {
             expect(allGuilds).to.be.an('array');
             expect(allGuilds).to.be.empty;
         });
+    }); // Context Without Data
+
+    context('1.1 - valid CRUD action', () => {
 
         it('should create a new guild', async () => {
             const createdGuild = await BOT_GuildsController.createGuild(guildId, initialGuildName, ownerId);
@@ -101,30 +69,11 @@ describe('BOT_GuildsController', () => {
         it('should create and delete a guild', async () => {
             const lGuildId = generateUnsignedBigInt64();
             const aGuild = await BOT_GuildsController.createGuild(lGuildId, initialGuildName, ownerId);
+
             expect(aGuild).to.be.an('object');
             expect(aGuild.guildName).to.equal(initialGuildName);
 
             await BOT_GuildsController.deleteGuild(lGuildId);
-        });
-
-         it('should get Guild for a existing guild with include BOT_GuildOptions', async () => {
-            const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId, [ models.BOT_GuildOptions]);
-            expect(aGuild).to.be.an('object');
-            expect(aGuild.guildName).to.equal(initialGuildName);
-            expect(aGuild.BOT_GuildOption).not.equal(null);
-        });
-
-        it('should throw a exception for update a invalid guild id', async () => {
-            try {
-                await BOT_GuildsController.updateGuild(generateUnsignedBigInt64(), 'test', null);
-                assert.fail('Error !  BOT_GuildsController.updateGuild has\' return a error.');
-            } catch (error) {
-                if (error instanceof InvalidEntityException) {
-                    assert.ok(error);
-                } else {
-                    assert.fail('Invalid exception');
-                }
-            }
         });
 
         it('should update the guild name for a existing guild', async () => {
@@ -141,7 +90,7 @@ describe('BOT_GuildsController', () => {
         });
 
         it('should return the guild unchanged, as no value has been modified. (unmodified)', async () => {
-            const aGuild = await BOT_GuildsController.createGuild(unModifiedGuidId, UnModifiedGuildName, ownerId);
+            const aGuild = await BOT_GuildsController.createGuild(unModifiedGuidId, UnModifiedGuildName, ownerId, null, null, null, null, true);
 
             expect(aGuild).to.be.an('object');
             expect(aGuild.guildName).to.equal(UnModifiedGuildName);
@@ -155,6 +104,14 @@ describe('BOT_GuildsController', () => {
 
             updatedGuild = await BOT_GuildsController.updateGuildStatut(unModifiedGuidId, false);
             expect(updatedGuild.isActive).to.equal(false);
+        });
+
+        it('should get Guild for a existing guild with include BOT_GuildOptions', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(unModifiedGuidId, [models.BOT_GuildOptions]);
+
+            expect(aGuild).to.be.an('object');
+            expect(aGuild.guildName).to.equal(UnModifiedGuildName);
+            expect(aGuild.BOT_GuildOption).not.equal(null);
         });
 
         it('should update the guild owner for a existing guild', async () => {
@@ -202,6 +159,38 @@ describe('BOT_GuildsController', () => {
             expect(updatedGuild.leftAt).to.equal(null); // .to.be.null();
         });
 
+        it('should be not empty - Get all actives guilds', async () => {
+            const allActiveGuilds = await BOT_GuildsController.getAllActiveGuilds([models.BOT_GuildOptions]);
+
+            expect(allActiveGuilds).to.be.an('array');
+            expect(allActiveGuilds).to.be.not.empty;
+        });
+
+        it('should be not empty - Get all guilds', async () => {
+            const allGuilds = await BOT_GuildsController.getAllGuilds([models.BOT_GuildOptions]);
+
+            expect(allGuilds).to.be.an('array');
+            expect(allGuilds).to.be.not.empty;
+            expect(allGuilds).to.have.length(2);
+        });
+
+
+    }) // Context (CRUD Action)
+
+    context('1.2 - error action', () => {
+        it('should throw a exception for update a invalid guild id', async () => {
+            try {
+                await BOT_GuildsController.updateGuild(generateUnsignedBigInt64(), 'test', null);
+                assert.fail('Error !  BOT_GuildsController.updateGuild has\' return a error.');
+            } catch (error) {
+                if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
         it('should throw a exception for update guid statut for a invalid guild id', async () => {
             try {
                 await BOT_GuildsController.updateGuildStatut(generateUnsignedBigInt64(), false);
@@ -213,21 +202,6 @@ describe('BOT_GuildsController', () => {
                     assert.fail('Invalid exception');
                 }
             }
-        });
-
-        it('should be not empty - Get all actives guilds', async () => {
-            const allActiveGuilds = await BOT_GuildsController.getAllActiveGuilds([ models.BOT_GuildOptions ]);
-
-            expect(allActiveGuilds).to.be.an('array');
-            expect(allActiveGuilds).to.be.not.empty;
-        });
-
-        it('should be not empty - Get all guilds', async () => {
-            const allGuilds = await BOT_GuildsController.getAllGuilds([ models.BOT_GuildOptions ]);
-
-            expect(allGuilds).to.be.an('array');
-            expect(allGuilds).to.be.not.empty;
-            expect(allGuilds).to.have.length(2);
         });
 
         it('should be a exception - Delete a guild we don\' exists.', async () => {
@@ -243,15 +217,15 @@ describe('BOT_GuildsController', () => {
                 }
             }
         });
-
-    }); // 2nd describe
+    });
 
 }); // first describe
 
 
+
 // TODO : Put this in a Services
-function generateUnsignedBigInt64() {
-    const maxUint64 = BigInt('18446744073709551615'); // 2^64 - 1
-    const randomUint64 = BigInt(Math.floor(Math.random() * Number(maxUint64)));
-    return randomUint64;
-}
+// function generateUnsignedBigInt64() {
+//     const maxUint64 = BigInt('18446744073709551615'); // 2^64 - 1
+//     const randomUint64 = BigInt(Math.floor(Math.random() * Number(maxUint64)));
+//     return randomUint64;
+// }
