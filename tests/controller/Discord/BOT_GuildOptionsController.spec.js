@@ -1,12 +1,12 @@
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
-const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
+const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
 
-const { controller } = require('../../src/BedyContext');
+const { controller } = require('../../../src/BedyContext');
 const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
 const { before, after, describe, it } = require('mocha');
 
-const { beforeCheckState, afterCheckState, resetState } = require('../mocha-setup');
-const { generateUnsignedBigInt64 } = require('../../src/services/TestService');
+const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
+const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
 
 describe('01.02 - BOT_GuildOptionsController', () => {
 

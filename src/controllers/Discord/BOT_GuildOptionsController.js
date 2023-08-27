@@ -50,6 +50,8 @@ module.exports = (sequelize, context) => {
                 if (aGuildOption.changed() && aGuildOption.changed.length > 0) {
                     return await aGuildOption.save();
                 }
+
+                return aGuildOption;
             }
         };
 

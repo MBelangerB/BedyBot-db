@@ -51,7 +51,7 @@ module.exports = (sequelize, context) => {
         static updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
             const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
             if (!aGuildUser) {
-                throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+                throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
                 if (nickname != null && aGuildUser.nickname != nickname) {
@@ -74,15 +74,15 @@ module.exports = (sequelize, context) => {
 
         /**
          * Change the guid user presence.
-         * @param {*} guildId 
-         * @param {*} userId 
+         * @param {*} guildId
+         * @param {*} userId
          * @param {*} hasLeft If true, a UserId has left the server
          * @returns {BOT_GuildUser}
          */
         static updateGuildUserStatut = async (guildId, userId, hasLeft) => {
             const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
             if (!aGuildUser) {
-                throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK)
+                throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
                 if (hasLeft == false) {

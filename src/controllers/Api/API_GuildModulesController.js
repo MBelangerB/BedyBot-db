@@ -8,13 +8,13 @@ module.exports = (sequelize, context) => {
             return await context.models.API_GuildModules.create({
                 guildId: guildId,
                 moduleId: moduleId,
-                isActive: isActive
+                isActive: isActive,
             });
-        }
+        };
 
         // Update
         static getGuildModuleById = async (moduleId, guildId, includeModule = false) => {
-            let includes = [];
+            const includes = [];
             includes.push(context.models.BOT_Guilds);
 
             if (includeModule) {
@@ -22,11 +22,11 @@ module.exports = (sequelize, context) => {
             }
 
             return await context.models.API_GuildModules.findOne({ where: { moduleId: moduleId, guildId: guildId }, include: includes });
-        }
+        };
 
         // Create
         static updateGuildModule = async (guildId, moduleId, isActive = true) => {
-            let aGuildModule = this.getGuildModuleById(guildId, moduleId, true);
+            const aGuildModule = this.getGuildModuleById(guildId, moduleId, true);
             if (!aGuildModule) {
                 throw new InvalidEntityException([guildId, moduleId], 'API_GuildModules', 'Guild modules doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
@@ -39,9 +39,9 @@ module.exports = (sequelize, context) => {
                     await aGuildModule.save();
                 }
             }
-        }
+        };
 
     } // End Class
 
     return API_GuildModulesController;
-} // End export
+}; // End export

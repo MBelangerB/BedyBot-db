@@ -5,14 +5,14 @@ module.exports = (sequelize, context) => {
 
         /**
          * Create a new guild Channel
-         * @param {*} guildId 
-         * @param {*} channelId 
-         * @param {*} channelName 
-         * @param {*} channelType 
-         * @param {*} parentId 
-         * @param {*} channelTopic 
-         * @param {*} permission 
-         * @returns 
+         * @param {*} guildId
+         * @param {*} channelId
+         * @param {*} channelName
+         * @param {*} channelType
+         * @param {*} parentId
+         * @param {*} channelTopic
+         * @param {*} permission
+         * @returns
          */
         static createGuildChannel = async (guildId, channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
             return await context.models.BOT_Channels.create({
@@ -22,28 +22,28 @@ module.exports = (sequelize, context) => {
                 channelType: channelType,
                 parentId: parentId,
                 channelTopic: channelTopic,
-                permission: permission
+                permission: permission,
             });
-        }
+        };
 
         /**
          * Get discord Channel by ChannelId
-         * @param {*} channelId 
-         * @returns 
+         * @param {*} channelId
+         * @returns
          */
         static getChannelById = async (channelId) => {
             return await context.models.BOT_Channels.findOne({ where: { channelId: channelId } });
-        }
+        };
 
         /**
          * Update discord channel
-         * @param {*} channelId 
-         * @param {*} channelName 
-         * @param {*} channelType 
-         * @param {*} parentId 
-         * @param {*} channelTopic 
-         * @param {*} permission 
-         * @returns 
+         * @param {*} channelId
+         * @param {*} channelName
+         * @param {*} channelType
+         * @param {*} parentId
+         * @param {*} channelTopic
+         * @param {*} permission
+         * @returns
          */
         static updateChannel = async (channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
             const aChannel = await this.getChannelById(channelId);
@@ -81,11 +81,11 @@ module.exports = (sequelize, context) => {
                     return await aChannel.save();
                 }
             }
-        }
+        };
 
         /**
          * Delete a discord channel
-         * @param {*} channelId 
+         * @param {*} channelId
          */
         static deleteChannel = async (channelId) => {
             const aChannel = await this.getChannelById(channelId);
@@ -95,7 +95,7 @@ module.exports = (sequelize, context) => {
             } else {
                 await aChannel.destroy();
             }
-        }
+        };
 
     } // End class
 

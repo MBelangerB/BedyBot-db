@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.BIGINT.UNSIGNED,
             field: 'channelParentId',
             allowNull: false,
-            comment: 'A parent category can contains max 50 channels'
+            comment: 'A parent category can contains max 50 channels',
         },
         channelType: {
             type: DataTypes.INTEGER,

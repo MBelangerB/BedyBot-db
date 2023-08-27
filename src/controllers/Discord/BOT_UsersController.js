@@ -1,7 +1,7 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
-    class Bot_UsersController {
+    class BOT_UsersController {
 
         /**
          * Get BOT_Users by userId
@@ -106,5 +106,5 @@ module.exports = (sequelize, context) => {
 
     } // End Class
 
-    return Bot_UsersController;
-} // End export
+    return BOT_UsersController;
+}; // End export

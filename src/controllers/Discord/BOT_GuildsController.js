@@ -54,9 +54,9 @@ module.exports = (sequelize, context) => {
          * @param {*} bannerUrl
          * @returns
          */
-        static createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
+        static createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null, initOption = false) => {
             // TOOD: Devrais-je activé directement le GuildOption ?
-            return await context.models.BOT_Guilds.create({
+            const aGuild = await context.models.BOT_Guilds.create({
                 guildId: guildId,
                 guildName: guildName,
                 guildIconUrl: iconUrl,
@@ -66,6 +66,15 @@ module.exports = (sequelize, context) => {
                 guildPreferredLocale: preferredLocal,
                 isActive: true,
             });
+
+            if (initOption && initOption == true) {
+                const aOption = await context.models.BOT_GuildOptions.create({
+                    guildId: guildId,
+                    maxPlayerPerLobby: 12,
+                });  
+            }
+
+            return aGuild;
         };
 
         /**

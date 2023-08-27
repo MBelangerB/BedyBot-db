@@ -34,6 +34,11 @@ async function afterCheckState() {
     }
 }
 
+async function resetState()  {
+    beforeIsInitialize = false;
+    afterIsInitialize = false;
+}
+
 // A valider
 // const BOT_TablesTest = [
 //     require('./controller/BOT_GuildsController.spec'),
@@ -43,5 +48,6 @@ async function afterCheckState() {
 
 module.exports = {
     beforeCheckState,
-    afterCheckState
+    afterCheckState,
+    resetState
   };

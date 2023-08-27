@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
     discordCommandId: {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'discordCommandId',
-      allowNull: true
+      allowNull: true,
     },
     allowFor: {
       type: DataTypes.BOOLEAN,

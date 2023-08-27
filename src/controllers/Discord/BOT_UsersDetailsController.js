@@ -1,7 +1,7 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
-    class Bot_UsersDetailsController {
+    class BOT_UsersDetailsController {
 
         /**
       * Initialize a BOT_UserDetails
@@ -28,8 +28,8 @@ module.exports = (sequelize, context) => {
         static updateUserDetails = async (userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) => {
             const aUserDetails = await this.getUserDetailsByUserId(userId);
             if (!aUserDetails) {
-                // throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
-                throw new Error(`User details for userId ${userId} doesn't exist.`);
+                throw new InvalidEntityException(userId, 'BOT_UserDetails', 'User doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
+                // throw new Error(`User details for userId ${userId} doesn't exist.`);
 
             } else {
                 if (switchFriendCode != null && switchFriendCode !== aUserDetails.switchFriendCode) {
@@ -57,5 +57,5 @@ module.exports = (sequelize, context) => {
 
     } // End Class
 
-    return Bot_UsersDetailsController;
-} // End export
+    return BOT_UsersDetailsController;
+}; // End export

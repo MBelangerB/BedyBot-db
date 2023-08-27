@@ -37,9 +37,9 @@ module.exports = (sequelize, context) => {
          * @param {string} roleId (mandatory)
          * @param {string} roleName (mandatory)
          * @param {*} permission (mandatory)
-         * @param {*} color 
-         * @param {*} type 
-         * @param {*} position 
+         * @param {*} color
+         * @param {*} type
+         * @param {*} position
          * @returns
          */
         static createRoleOnDB = async (guildId, roleId, roleName, permission, color = null, type = null, position = null) => {
@@ -109,6 +109,5 @@ module.exports = (sequelize, context) => {
     } // End Class
 
     return BOT_RolesController;
-} // End export
-
+}; // End export
 
