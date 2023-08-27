@@ -1,15 +1,16 @@
-const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
-const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
-
-const { controller } = require('../../../src/BedyContext');
-const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
 const { before, after, describe, it } = require('mocha');
+const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
+const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
 const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
 const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
 
-describe('01.02 - BOT_GuildOptionsController', () => {
+/* eslint-disable-next-line no-unused-vars */
+const { controller } = require('../../../src/BedyContext');
+const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
 
+
+describe('01.02 - BOT_GuildOptionsController', () => {
 
     before(async () => {
         console.log('============== Setup (Before on GuildOptionController) ==============');
@@ -30,7 +31,7 @@ describe('01.02 - BOT_GuildOptionsController', () => {
     const initialGuildName = 'Guild Option Test';
 
     context('1.0 - without data', () => {
-
+        // No test in this context
     }); // End wihtout data Context
 
     context('1.1 - valid CRUD action', () => {
@@ -57,7 +58,7 @@ describe('01.02 - BOT_GuildOptionsController', () => {
         });
 
         it('should updated GuildOption without changed value for a existing guild', async () => {
-            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, null, null);
+            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId);
 
             expect(aGuildOption).to.be.an('object');
             expect(BigInt(aGuildOption.guildId)).to.equal(guildId);
@@ -77,8 +78,6 @@ describe('01.02 - BOT_GuildOptionsController', () => {
 
         it('should get GuildOption for a existing guild without include BOT_Guild', async () => {
             const aGuildOption = await BOT_GuildOptionsController.getGuildOptionByGuildId(guildId, false);
-            // console.log(JSON.stringify(aGuildOption));
-            // console.log(aGuildOption);
 
             expect(aGuildOption).to.be.an('object');
             expect(BigInt(aGuildOption.guildId)).to.equal(guildId);

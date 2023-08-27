@@ -3,7 +3,7 @@ ui: 'bdd'
 require: 
   - tests/mocha-setup.js
 parallel: false
-recursive: false # Parcourir tout les répertoire
+recursive: true # Parcourir tout les répertoire
 node-option:
   - 'unhandled-rejections=strict' # without leading "--", also V8 flags
 package: './package.json'

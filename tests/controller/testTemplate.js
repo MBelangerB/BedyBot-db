@@ -28,14 +28,14 @@ describe('01.02 - BOT_UsersController', () => {
 
     context('1.0 - without data', () => {
 
-    });
+    }); //  End context « without data »
 
     context('1.1 - valid CRUD action', () => {
 
-    });
+    }); // End context « Crud Action »
 
     context('1.2 - error action', () => {
 
-    });
+    }); // End context « error action »
 
 });

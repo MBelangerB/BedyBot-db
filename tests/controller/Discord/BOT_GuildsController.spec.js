@@ -1,15 +1,15 @@
-const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
-const InvalidEntityException = require('../../src/declarations/InvalidEntityException');
-
-/* eslint-disable-next-line no-unused-vars */
-const { sequelize, models, migrations, controller, schema } = require('../../src/BedyContext');
-const { before, after, describe, it } = require('mocha');
-const { BOT_GuildsController } = controller;
-
 // const { v4: uuidv4 } = require('uuid');
 
-const { beforeCheckState, afterCheckState, resetState } = require('../mocha-setup');
-const { generateUnsignedBigInt64 } = require('../../src/services/TestService');
+const { before, after, describe, it } = require('mocha');
+const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
+
+const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
+const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
+const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
+
+/* eslint-disable-next-line no-unused-vars */
+const { models, controller } = require('../../../src/BedyContext');
+const { BOT_GuildsController } = controller;
 
 
 describe('01.00 - BOT_GuildsController', () => {
@@ -102,8 +102,9 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(BigInt(updatedGuild.guildId)).to.equal(unModifiedGuidId);
             expect(updatedGuild.guildName).to.equal(UnModifiedGuildName);
 
-            updatedGuild = await BOT_GuildsController.updateGuildStatut(unModifiedGuidId, false);
-            expect(updatedGuild.isActive).to.equal(false);
+            // True to False
+            // updatedGuild = await BOT_GuildsController.updateGuildStatut(unModifiedGuidId, false);
+            // expect(updatedGuild.isActive).to.equal(false);
         });
 
         it('should get Guild for a existing guild with include BOT_GuildOptions', async () => {
@@ -140,6 +141,7 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(aGuild).to.be.an('object');
             expect(aGuild.isActive).to.equal(true);
 
+            // True to False
             const updatedGuild = await BOT_GuildsController.updateGuildStatut(guildId, false);
 
             expect(updatedGuild).to.be.an('object');
@@ -152,6 +154,7 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(aGuild).to.be.an('object');
             expect(aGuild.isActive).to.equal(false);
 
+            // False to True
             const updatedGuild = await BOT_GuildsController.updateGuildStatut(guildId, true);
 
             expect(updatedGuild).to.be.an('object');

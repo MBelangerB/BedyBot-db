@@ -4,7 +4,7 @@ process.env.DB_NAME = 'bedybot_mochaTest';
 
 // Requirement
 const { controller } = require('../src/BedyContext');
-const { BOT_GuildsController } = controller;
+const { BOT_GuildsController, BOT_UsersController } = controller;
 
 let beforeIsInitialize = false;
 let afterIsInitialize = false;
@@ -18,10 +18,23 @@ async function cleanAllGuild() {
         }
     }
 }
+
+async function cleanAllUsers() {
+    const allUsers = await BOT_UsersController.getAllUsers();
+    if (allUsers != null) {
+        for (let index = 0; index < allUsers.length; index++) {
+            const aUser = allUsers[index];
+            await BOT_UsersController.deleteUser(aUser.userId);
+        }
+    }
+}
+
 async function beforeCheckState() {
     if (!beforeIsInitialize) {
         console.log(' ====> Before Clean All Guilds');
         await cleanAllGuild();
+        console.log(' ====> Before Clean All Users');
+        await cleanAllUsers();
         beforeIsInitialize = true;
     }
 }
@@ -30,6 +43,8 @@ async function afterCheckState() {
     if (!afterIsInitialize) {
         console.log(' ====> After Clean All Guilds');
         await cleanAllGuild();
+        console.log(' ====> Before Clean All Users');
+        await cleanAllUsers();
         afterIsInitialize = true;
     }
 }

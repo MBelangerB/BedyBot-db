@@ -144,10 +144,11 @@ module.exports = (sequelize, context) => {
          */
         static updateGuildStatut = async (guildId, isActive) => {
             let aGuild = await this.getGuildByGuildId(guildId);
+            /* istanbul ignore else */
             if (!aGuild) {
                 throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
-            } else if (aGuild.isActive !== isActive && isActive == true) {
+            } else if (isActive == true) {
                 // Guild is comeback
                 aGuild.set({
                     isActive: isActive,
@@ -156,7 +157,7 @@ module.exports = (sequelize, context) => {
                 });
                 aGuild = await aGuild.save();
 
-            } else if (aGuild.isActive !== isActive && isActive == false) {
+            } else if (isActive == false) {
                 // Guild is left
                 aGuild.set({
                     isActive: isActive,

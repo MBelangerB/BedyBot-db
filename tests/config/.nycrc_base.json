@@ -17,5 +17,6 @@
         "text",
         "text-summary"
     ],
-    "report-dir": "coverage"
+    "report-dir": "coverage",
+    "cache": false
 }
