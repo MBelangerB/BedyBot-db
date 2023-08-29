@@ -17,9 +17,17 @@ BedyAPIConst.ModuleGuid = {
      */
     TOURNAMENT: '590aa6bd-f5f9-4f57-bea2-deccbf933590',
     /**
-     * Role module
+     * Role module (Choipeau / Rules)
      */
     ROLE: 'b10520ff-0fe1-439f-89b1-5dac309f9641',
+    /**
+     * Annoncement module (Twitch, Youtube)
+     */
+    ANNONCEMENT: 'a27c1b0b-94cd-438b-9291-20b3f1e0722a',
+    /**
+     * GREETING_MODULE (welcome message, leave message, get MemberRole)
+     */
+    USERACTION_MODULE: '535b2516-cf67-431c-a7cb-418c388f88c5'
 };
 
 /**

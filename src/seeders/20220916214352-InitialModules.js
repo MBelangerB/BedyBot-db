@@ -15,8 +15,16 @@ module.exports = {
           name: 'Tournament',
         },
         {
+          moduleId: BedyAPIConst.ModuleGuid.ANNONCEMENT,
+          name: 'Annoncement',
+        },
+        {
           moduleId: BedyAPIConst.ModuleGuid.ROLE,
           name: 'Role',
+        },
+        {
+          moduleId: BedyAPIConst.ModuleGuid.USERACTION_MODULE,
+          name: 'UserAction',
         },
       ]);
   },
