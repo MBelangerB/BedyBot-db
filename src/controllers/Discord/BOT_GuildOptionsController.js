@@ -1,4 +1,6 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
+const InvalidCRONException = require('../../declarations/InvalidCRONException');
+const cronValidate = require('cron-validate');
 
 module.exports = (sequelize, context) => {
     class BOT_GuildOptionsController {
@@ -12,6 +14,8 @@ module.exports = (sequelize, context) => {
             return await context.models.BOT_GuildOptions.create({
                 guildId: guildId,
                 maxPlayerPerLobby: 12,
+                addEveryone: false,
+                CRONConfiguration: null
             });
         };
 
@@ -23,7 +27,7 @@ module.exports = (sequelize, context) => {
          * @param {*} addEveryone
          * @returns
          */
-        static updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null) => {
+        static updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null, CRONConfiguration = null) => {
             const aGuildOption = await this.getGuildOptionByGuildId(guildId);
             if (!aGuildOption) {
                 throw new InvalidEntityException(guildId, 'BOT_GuildOptions', 'Guild options doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
@@ -43,6 +47,15 @@ module.exports = (sequelize, context) => {
                 if (addEveryone != null && aGuildOption.addEveryone != addEveryone) {
                     aGuildOption.set({
                         addEveryone: addEveryone,
+                    });
+                }
+                if (CRONConfiguration != null && aGuildOption.CRONConfiguration != CRONConfiguration) {
+                    const isValid = cronValidate(CRONConfiguration).isValid();
+                    if (!isValid) {
+                        throw new InvalidCRONException(CRONConfiguration, 'Invalid CRON configuration');
+                    }
+                    aGuildOption.set({
+                        CRONConfiguration: CRONConfiguration,
                     });
                 }
 

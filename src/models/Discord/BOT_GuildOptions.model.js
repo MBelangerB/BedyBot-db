@@ -67,6 +67,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false,
       allowNull: true,
     },
+    annoncementCRONConfiguration: {
+      type: DataTypes.STRING(100),
+      field: 'annoncementCRONConfiguration',
+      allowNull: true,
+      defaultValue: "5 * * * *",
+    },
   }, {
     sequelize,
     modelName: 'BOT_GuildOptions',

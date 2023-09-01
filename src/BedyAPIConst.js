@@ -21,9 +21,9 @@ BedyAPIConst.ModuleGuid = {
      */
     ROLE: 'b10520ff-0fe1-439f-89b1-5dac309f9641',
     /**
-     * Annoncement module (Twitch, Youtube)
+     * NOTIFICATION module (Twitch, Youtube)
      */
-    ANNONCEMENT: 'a27c1b0b-94cd-438b-9291-20b3f1e0722a',
+    NOTIFICATION: 'a27c1b0b-94cd-438b-9291-20b3f1e0722a',
     /**
      * GREETING_MODULE (welcome message, leave message, get MemberRole)
      */
@@ -44,12 +44,34 @@ BedyAPIConst.CommandGuid = {
         SET_CONFIGURATION: '0b9e26a9-f735-491d-994a-d59fbe383a88',
         CREATE: '6f85bee9-f4d3-4e35-853d-759f2a9daff7',
         CLOSE: '8c112553-82ed-49f3-98fe-e8485a7d888b',
-        TOURNAMENT: '9f8e83d2-2d01-4d8d-abd4-4fc5280c1d4f',
+        LAUNCH: '9f8e83d2-2d01-4d8d-abd4-4fc5280c1d4f',
     },
     ROLE: {
         ROLE: 'afb8cf41-1de8-4160-800e-77d4c2cd3206',
     },
 };
+
+/**
+ * Notification type for notification module
+ */
+BedyAPIConst.NotificationType = {
+    /**
+     * Twitch Notification
+     */
+    TWITCH: 0,
+    /**
+     * Youtube notification
+     */
+    YOUTUBE: 1
+}
+
+/**
+ * Authentification source
+ */
+BedyAPIConst.AuthSource = {
+    TWITCH: 0,
+    DISCORD: 1
+}
 
 /**
  * A Discord channel available type

@@ -90,9 +90,9 @@ module.exports = (sequelize, DataTypes) => {
         // }
     }
 
-    BOT_Users.getModels = function () {
-        return this.sequelize.models;
-    };
+    // BOT_Users.getModels = function () {
+    //     return this.sequelize.models;
+    // };
 
     BOT_Users.init({
         userId: {

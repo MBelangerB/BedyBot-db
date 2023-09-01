@@ -71,9 +71,9 @@ module.exports = {
             commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,
           },
           {
-            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.TOURNAMENT,
+            commandId: BedyAPIConst.CommandGuid.TOURNAMENT.LAUNCH,
             moduleId: BedyAPIConst.ModuleGuid.TOURNAMENT,
-            name: 'tournament',
+            name: 'launch',
             description: 'Permet de lancer un tournoi.',
             applicationCommandType: BedyAPIConst.ApplicationCommandType.APPLICATION_GUILD_COMMANDS,
             commandType: BedyAPIConst.BedyModuleType.TOURNAMENT_MODULE,

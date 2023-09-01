@@ -120,6 +120,12 @@ module.exports = {
           defaultValue: false,
           allowNull: true,
         },
+        annoncementCRONConfiguration: {
+          type: DataTypes.STRING(100),
+          field: 'annoncementCRONConfiguration',
+          allowNull: true,
+          defaultValue: "5 * * * *",
+        },
       }, { transaction: t });
 
       // ******************************************
@@ -133,10 +139,10 @@ module.exports = {
           allowNull: false,
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
-            key: 'guildId', // This is the column name of the referenced model
+            key: 'guildId', // This is the column name of the referenced model      
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
           },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
         },
         roleId: {
           type: Sequelize.BIGINT.UNSIGNED,
@@ -187,7 +193,7 @@ module.exports = {
       await queryInterface.createTable('BOT_Channels', {
         channelId: {
           type: Sequelize.BIGINT.UNSIGNED,
-          field: 'guildId',
+          field: 'channelId',
           primaryKey: true,
           unique: true,
           allowNull: false,
@@ -244,9 +250,9 @@ module.exports = {
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
+    await queryInterface.dropTable('BOT_Channels');
     await queryInterface.dropTable('BOT_Roles');
     await queryInterface.dropTable('BOT_GuildOptions');
-    await queryInterface.dropTable('BOT_Channels');
     await queryInterface.dropTable('BOT_Guilds');
   },
 };

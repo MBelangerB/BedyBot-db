@@ -15,8 +15,8 @@ module.exports = {
           name: 'Tournament',
         },
         {
-          moduleId: BedyAPIConst.ModuleGuid.ANNONCEMENT,
-          name: 'Annoncement',
+          moduleId: BedyAPIConst.ModuleGuid.NOTIFICATION,
+          name: 'Notification',
         },
         {
           moduleId: BedyAPIConst.ModuleGuid.ROLE,
