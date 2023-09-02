@@ -41,23 +41,23 @@ module.exports = (sequelize, DataTypes) => {
             field: 'guildId',
             unique: true,
             allowNull: false,
-            // references: {
-            //     model: 'BOT_Guilds', // This is a reference to another model
-            //     key: 'guildId', // This is the column name of the referenced model
-            //     onDelete: 'CASCADE',
-            //     onUpdate: 'CASCADE',
-            //   },
+            references: {
+                model: 'BOT_Guilds', // This is a reference to another model
+                key: 'guildId', // This is the column name of the referenced model
+              },
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE',
         },
         channelId: {
             type: Sequelize.BIGINT.UNSIGNED,
             field: 'channelId',
             allowNull: true,
-            // references: {
-            //     model: 'BOT_Channels', // This is a reference to another model
-            //     key: 'channelId', // This is the column name of the referenced model
-            //     onDelete: 'CASCADE',
-            //     onUpdate: 'CASCADE',
-            // },
+            references: {
+                model: 'BOT_Channels', // This is a reference to another model
+                key: 'channelId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         notificationMessage: {
             type: DataTypes.TEXT,

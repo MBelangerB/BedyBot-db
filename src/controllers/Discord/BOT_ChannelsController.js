@@ -1,7 +1,7 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
-    class BOT_GuildChannelsController {
+    class BOT_ChannelsController {
 
         /**
          * Create a new guild Channel
@@ -99,5 +99,5 @@ module.exports = (sequelize, context) => {
 
     } // End class
 
-    return BOT_GuildChannelsController;
+    return BOT_ChannelsController;
 }; // End export

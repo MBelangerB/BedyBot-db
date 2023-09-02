@@ -2,6 +2,7 @@ const { before, after, describe, it } = require('mocha');
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
 const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
+const InvalidCRONException = require('../../../src/declarations/InvalidCRONException');
 const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
 const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
 
@@ -47,7 +48,7 @@ describe('01.02 - BOT_GuildOptionsController', () => {
         });
 
         it('should updated GuildOption for a existing guild', async () => {
-            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, 4, true);
+            const aGuildOption = await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, 4, true, '* * * 10 *');
             // console.log(aGuildOption)
 
             expect(aGuildOption).to.be.an('object');
@@ -90,9 +91,22 @@ describe('01.02 - BOT_GuildOptionsController', () => {
         it('should throw a exception for update guildOption with a invalid guild id', async () => {
             try {
                 await BOT_GuildOptionsController.updateGuildOption(generateUnsignedBigInt64(), channelId, null, null);
-                assert.fail('Error !  BOT_GuildOptionsController.updateGuild has\' return a error.');
+                assert.fail('Error !  BOT_GuildOptionsController.updateGuildOption has\' return a error.');
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
+        it('should throw a exception for update guildOption with a invalid CRON value', async () => {
+            try {
+                await BOT_GuildOptionsController.updateGuildOption(guildId, channelId, 4, true, 'test');
+                assert.fail('Error !  BOT_GuildOptionsController.updateGuildOption has\' return a error.');
+            } catch (error) {
+                if (error instanceof InvalidCRONException) {
                     assert.ok(error);
                 } else {
                     assert.fail('Invalid exception');

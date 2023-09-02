@@ -25,64 +25,65 @@ module.exports = (sequelize, DataTypes) => {
                 onUpdate: 'CASCADE',
             });
 
-            MOD_SessionChannels.belongsTo(models.MOD_SessionChannels, {
-                foreignKey: 'parentId', // Set FK name on SOURCE
-                targetKey: 'sessionChannelId', // Key name on TARGET
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
-            });
+            // A voir utilité, c'est peut-être plus dans BOT_Channels pour hiérachie
+            // MOD_SessionChannels.belongsTo(models.MOD_SessionChannels, {
+            //     foreignKey: 'parentId', // Set FK name on SOURCE
+            //     targetKey: 'sessionChannelId', // Key name on TARGET
+            //     onDelete: 'CASCADE',
+            //     onUpdate: 'CASCADE',
+            // });
         }
     }
 
     MOD_SessionChannels.init({
-        sessionChannelId: {
-            type: DataTypes.UUID,
-            field: 'sessionChannelId',
-            primaryKey: true,
-            unique: true,
-            allowNull: false,
-            defaultValue: Sequelize.UUIDV4,
-        },
+        // sessionChannelId: {
+        //     type: DataTypes.UUID,
+        //     field: 'sessionChannelId',
+        //     primaryKey: true,
+        //     unique: true,
+        //     allowNull: false,
+        //     defaultValue: Sequelize.UUIDV4,
+        // },
         sessionId: {
             type: DataTypes.UUID,
             allowNull: false,
-            // primaryKey: true,
+            primaryKey: true,
             field: 'sessionId',
             references: {
                 model: 'MOD_TournamentSessions', // This is a reference to another model
                 key: 'sessionId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
-            }
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         channelId: {
             allowNull: false,
-            // primaryKey: true,
+            primaryKey: true,
             type: Sequelize.BIGINT.UNSIGNED,
             field: 'channelId',
             references: {
                 model: 'BOT_Channels', // This is a reference to another model
                 key: 'channelId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
-        parentId: {
-            type: DataTypes.UUID,
-            field: 'parentId',
-            allowNull: true,
-            references: {
-                model: 'MOD_SessionChannel', // This is a reference to another model
-                key: 'sessionChannelId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
-            },
-        },
-        channelType: {
-            type: DataTypes.INTEGER,
-            field: 'channelType',
-            allowNull: false,
-        },
+        // parentId: {
+        //     type: DataTypes.UUID,
+        //     field: 'parentId',
+        //     allowNull: true,
+        //     references: {
+        //         model: 'MOD_SessionChannel', // This is a reference to another model
+        //         key: 'sessionChannelId', // This is the column name of the referenced model
+        //         onDelete: 'CASCADE',
+        //         onUpdate: 'CASCADE',
+        //     },
+        // },
+        // channelType: {
+        //     type: DataTypes.INTEGER,
+        //     field: 'channelType',
+        //     allowNull: false,
+        // },
     }, {
         sequelize,
         modelName: 'MOD_SessionChannels',

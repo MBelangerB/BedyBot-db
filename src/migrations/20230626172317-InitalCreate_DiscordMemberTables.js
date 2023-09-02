@@ -72,9 +72,9 @@ module.exports = {
           references: {
             model: 'BOT_Users', // This is a reference to another model
             key: 'userId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         switchFriendCode: {
           type: DataTypes.STRING(20),

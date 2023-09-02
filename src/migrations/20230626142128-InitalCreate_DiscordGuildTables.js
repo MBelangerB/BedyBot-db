@@ -140,9 +140,9 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model      
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         roleId: {
           type: Sequelize.BIGINT.UNSIGNED,
@@ -205,14 +205,14 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         channelParentId: {
           type: Sequelize.BIGINT.UNSIGNED,
           field: 'channelParentId',
-          allowNull: false,
+          allowNull: true,
           comment: 'A parent category can contains max 50 channels',
         },
         /**

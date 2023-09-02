@@ -71,6 +71,8 @@ module.exports = (sequelize, context) => {
                 const aOption = await context.models.BOT_GuildOptions.create({
                     guildId: guildId,
                     maxPlayerPerLobby: 12,
+                    addEveryone: false,
+                    CRONConfiguration: null
                 });  
             }
 

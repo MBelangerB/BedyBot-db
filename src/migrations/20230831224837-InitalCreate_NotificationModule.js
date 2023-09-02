@@ -28,9 +28,9 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         channelId: {
             type: Sequelize.BIGINT.UNSIGNED,
@@ -39,9 +39,9 @@ module.exports = {
             references: {
               model: 'BOT_Channels', // This is a reference to another model
               key: 'channelId', // This is the column name of the referenced model
-              onDelete: 'CASCADE',
-              onUpdate: 'CASCADE',
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         notificationMessage: {
           type: DataTypes.TEXT,

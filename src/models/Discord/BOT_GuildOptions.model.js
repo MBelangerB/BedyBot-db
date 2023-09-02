@@ -31,10 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  BOT_GuildOptions.getModels = function () {
-    return this.sequelize.models;
-  };
-
   BOT_GuildOptions.init({
     guildId: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -42,12 +38,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       unique: true,
       allowNull: false,
-      // references: {
-      //   model: 'BOT_Guilds', // This is a reference to another model
-      //   key: 'guildId', // This is the column name of the referenced model
-      // },
-      // onDelete: 'CASCADE',
-      // onUpdate: 'CASCADE',
+      references: {
+        model: 'BOT_Guilds', // This is a reference to another model
+        key: 'guildId', // This is the column name of the referenced model
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     // Todo: Move to « Module » table ?
     announcementChannelId: {
@@ -77,17 +73,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'BOT_GuildOptions',
     tableName: 'BOT_GuildOptions',
-    // indexes: [
-    //     {
-    //         name: 'PK_guildOptions_id',
-    //         unique: true,
-    //         fields: [{ name: 'id' }],
-    //     },
-    //     {
-    //         name: 'IDX_guildOptions_guildId',
-    //         fields: [{ name: 'guildId' }],
-    //     },
-    // ],
   });
 
   return BOT_GuildOptions;

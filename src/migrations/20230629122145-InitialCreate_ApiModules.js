@@ -62,9 +62,9 @@ module.exports = {
           references: {
             model: 'API_Modules',
             key: 'moduleId',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         name: {
           type: DataTypes.STRING,
@@ -104,9 +104,9 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         moduleId: {
           type: DataTypes.UUID,
@@ -147,9 +147,9 @@ module.exports = {
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
             key: 'guildId', // This is the column name of the referenced model
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
           },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
         commandId: {
           type: DataTypes.UUID,

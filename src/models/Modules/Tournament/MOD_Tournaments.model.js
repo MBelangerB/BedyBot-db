@@ -146,9 +146,9 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: 'BOT_Guilds', // This is a reference to another model
                 key: 'guildId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         ownerId: {
             type: Sequelize.BIGINT.UNSIGNED,
@@ -157,9 +157,9 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: 'BOT_Users', // This is a reference to another model
                 key: 'userId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         // announcementChannelId: {
         //     type: Sequelize.BIGINT.UNSIGNED,

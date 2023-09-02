@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
                 onUpdate: 'CASCADE',
             });
 
-            BOT_Channels.hasMany(models.MOD_Notification, {
+            BOT_Channels.hasMany(models.MOD_Notifications, {
                 foreignKey: 'channelId', // Set FK name on TARGET
                 sourceKey: 'channelId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
@@ -25,10 +25,6 @@ module.exports = (sequelize, DataTypes) => {
 
         } // End associate
     }
-
-    // BOT_Channels.getModels = function () {
-    //     return this.sequelize.models;
-    // };
 
     BOT_Channels.init({
         channelId: {
@@ -45,14 +41,14 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: 'BOT_Guilds', // This is a reference to another model
                 key: 'guildId', // This is the column name of the referenced model
-                onDelete: 'CASCADE',
-                onUpdate: 'CASCADE',
             },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         channelParentId: {
             type: Sequelize.BIGINT.UNSIGNED,
             field: 'channelParentId',
-            allowNull: false,
+            allowNull: true,
             comment: 'A parent category can contains max 50 channels',
         },
         channelType: {

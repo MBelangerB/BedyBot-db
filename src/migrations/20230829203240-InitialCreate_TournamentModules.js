@@ -29,9 +29,9 @@ module.exports = {
                     references: {
                         model: 'BOT_Guilds', // This is a reference to another model
                         key: 'guildId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
                     },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 ownerId: {
                     type: Sequelize.BIGINT.UNSIGNED,
@@ -40,9 +40,9 @@ module.exports = {
                     references: {
                         model: 'BOT_Users', // This is a reference to another model
                         key: 'userId', // This is the column name of the referenced model
-                        onDelete: 'set NULL',
-                        onUpdate: 'CASCADE',
                     },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 // announcementChannelId: {
                 //     type: Sequelize.BIGINT.UNSIGNED,
@@ -101,9 +101,9 @@ module.exports = {
                     references: {
                         model: 'MOD_Tournaments', // This is a reference to another model
                         key: 'tournamentId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
-                    }
+                    },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 sessionNumber: {
                     type: DataTypes.INTEGER,
@@ -145,9 +145,9 @@ module.exports = {
                     references: {
                         model: 'MOD_TournamentSessions', // This is a reference to another model
                         key: 'sessionId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
-                    }
+                    },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 userId: {
                     allowNull: false,
@@ -157,9 +157,9 @@ module.exports = {
                     references: {
                         model: 'BOT_Users', // This is a reference to another model
                         key: 'userId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
                     },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 // voiceChannelId: {
                 //     allowNull: true,
@@ -194,54 +194,54 @@ module.exports = {
             // MOD_SessionChannel
             // ******************************************
             await queryInterface.createTable('MOD_SessionChannels', {
-                sessionChannelId: {
-                    type: DataTypes.UUID,
-                    field: 'sessionChannelId',
-                    primaryKey: true,
-                    unique: true,
-                    allowNull: false,
-                    defaultValue: Sequelize.UUIDV4,
-                },
+                // sessionChannelId: {
+                //     type: DataTypes.UUID,
+                //     field: 'sessionChannelId',
+                //     primaryKey: true,
+                //     unique: true,
+                //     allowNull: false,
+                //     defaultValue: Sequelize.UUIDV4,
+                // },
                 sessionId: {
                     type: DataTypes.UUID,
                     allowNull: false,
-                    // primaryKey: true,
+                    primaryKey: true,
                     field: 'sessionId',
                     references: {
                         model: 'MOD_TournamentSessions', // This is a reference to another model
                         key: 'sessionId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
-                    }
+                    },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
                 channelId: {
                     allowNull: false,
-                    // primaryKey: true,
+                    primaryKey: true,
                     type: Sequelize.BIGINT.UNSIGNED,
                     field: 'channelId',
                     references: {
                         model: 'BOT_Channels', // This is a reference to another model
                         key: 'channelId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
                     },
+                    onDelete: 'CASCADE',
+                    onUpdate: 'CASCADE',
                 },
-                parentId: {
-                    type: DataTypes.UUID,
-                    field: 'parentId',
-                    allowNull: true,
-                    references: {
-                        model: 'MOD_SessionChannels', // This is a reference to another model
-                        key: 'sessionChannelId', // This is the column name of the referenced model
-                        onDelete: 'CASCADE',
-                        onUpdate: 'CASCADE',
-                    },
-                },
-                channelType: {
-                    type: DataTypes.INTEGER,
-                    field: 'channelType',
-                    allowNull: false,
-                },
+                // parentId: {
+                //     type: DataTypes.UUID,
+                //     field: 'parentId',
+                //     allowNull: true,
+                //     references: {
+                //         model: 'MOD_SessionChannels', // This is a reference to another model
+                //         key: 'sessionChannelId', // This is the column name of the referenced model
+                //         onDelete: 'CASCADE',
+                //         onUpdate: 'CASCADE',
+                //     },
+                // },
+                // channelType: {
+                //     type: DataTypes.INTEGER,
+                //     field: 'channelType',
+                //     allowNull: false,
+                // },
             }, {
                 transaction: t,
                 comment: 'List of discord channels for each session.',

@@ -36,10 +36,6 @@ module.exports = (sequelize, DataTypes) => {
 
         }
 
-        // static models() {
-        //     return this.sequelize.models;
-        // }
-
         // /**
         //  * Create a new session in DB for a tournament
         //  * @param {*} tournamentId
@@ -147,12 +143,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
             defaultValue: Sequelize.UUIDV4,
-            // references: {
-            //     model: 'MOD_Tournament', // This is a reference to another model
-            //     key: 'tournamentId', // This is the column name of the referenced model
-            //     onDelete: 'CASCADE',
-            //     onUpdate: 'CASCADE',
-            // }
+            references: {
+                model: 'MOD_Tournament', // This is a reference to another model
+                key: 'tournamentId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         sessionNumber: {
             type: DataTypes.INTEGER,

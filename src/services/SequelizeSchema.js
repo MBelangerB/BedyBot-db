@@ -70,6 +70,7 @@ class SequelizeSchema {
                 const subFilePath = path.join(fullPath, file);
                 if (fs.statSync(subFilePath).isDirectory()) {
                     this.readSequelizeFileContent(sequelize, dbContext, type, subFilePath, fileExt, sliceLength, sliceValue);
+
                 } else if (sliceLength > 0 && type == SequelizeSchema.ReadingType.MODELS) {
 
                         if (path.extname(subFilePath) === fileExt && subFilePath.slice(sliceLength) === sliceValue) {
@@ -121,6 +122,7 @@ class SequelizeSchema {
             const subFilePath = path.join(fullPath, file);
             if (fs.statSync(subFilePath).isDirectory()) {
                 this.readModelScript(sequelize, dbContext, subFilePath);
+                
             } else {
                 const sliceExt = `.model${baseExt}`;
                 if (path.extname(subFilePath) === baseExt && subFilePath.slice(-9) === sliceExt) {

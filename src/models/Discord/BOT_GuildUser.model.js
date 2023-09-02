@@ -27,23 +27,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  BOT_GuildUser.getModels = function () {
-    return this.sequelize.models;
-  };
-
   BOT_GuildUser.init({
     guildId: {
       type: Sequelize.BIGINT.UNSIGNED,
       field: 'guildId',
       primaryKey: true,
-      // unique: true,
       allowNull: false,
-      // references: {
-      //   model: 'BOT_Guilds', // This is a reference to another model
-      //   key: 'guildId', // This is the column name of the referenced model
-      // },
-      // onDelete: 'CASCADE',
-      // onUpdate: 'CASCADE',
+      references: {
+        model: 'BOT_Guilds', // This is a reference to another model
+        key: 'guildId', // This is the column name of the referenced model
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     userId: {
       type: Sequelize.BIGINT.UNSIGNED,
@@ -51,12 +46,12 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       unique: true,
       allowNull: false,
-      // references: {
-      //   model: 'BOT_Users', // This is a reference to another model
-      //   key: 'userId', // This is the column name of the referenced model
-      // },
-      // onDelete: 'CASCADE',
-      // onUpdate: 'CASCADE',
+      references: {
+        model: 'BOT_Users', // This is a reference to another model
+        key: 'userId', // This is the column name of the referenced model
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
     nickname: {
       type: DataTypes.STRING(120),

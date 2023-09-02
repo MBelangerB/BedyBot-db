@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
             MOD_SessionUserRegistrations.belongsTo(models.BOT_Users, {
                 foreignKey: 'userId', // FK on source table
                 targetKey: 'userId', // Key name on target table
-                onDelete: 'Set NULL',
+                onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             });
             MOD_SessionUserRegistrations.belongsTo(models.MOD_TournamentSessions, {
                 foreignKey: 'sessionId', // FK on source table
                 targetKey: 'sessionId', // Key name on target table
-                onDelete: 'Set NULL',
+                onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             });
 
@@ -80,24 +80,24 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             unique: true,
             field: 'sessionId',
-            // references: {
-            //     model: 'MOD_TournamentSessions', // This is a reference to another model
-            //     key: 'sessionId', // This is the column name of the referenced model
-            //     onDelete: 'CASCADE',
-            //     onUpdate: 'CASCADE',
-            // }
+            references: {
+                model: 'MOD_TournamentSessions', // This is a reference to another model
+                key: 'sessionId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         userId: {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.BIGINT.UNSIGNED,
             field: 'userId',
-            // references: {
-            //     model: 'BOT_Users', // This is a reference to another model
-            //     key: 'userId', // This is the column name of the referenced model
-            //     onDelete: 'CASCADE',
-            //     onUpdate: 'CASCADE',
-            // },
+            references: {
+                model: 'BOT_Users', // This is a reference to another model
+                key: 'userId', // This is the column name of the referenced model
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
         },
         // voiceChannelId: {
         //     allowNull: true,

@@ -27,15 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    BOT_Roles.getModels = function () {
-        return this.sequelize.models;
-    };
-
+    // TODO: Move ailleurs ?
     BOT_Roles.RoleTypes = {
         MANAGER: 1,
         PLAYER: 2,
     };
-
 
     BOT_Roles.init({
         guildId: {
