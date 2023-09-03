@@ -141,7 +141,6 @@ module.exports = {
           field: 'joinedAt',
           allowNull: false,
           defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
-          // Sequelize.literal('CURRENT_TIMESTAMP'Sequelize.literal('CURRENT_TIMESTAMP'),
         },
         leftAt: {
           type: DataTypes.DATE,

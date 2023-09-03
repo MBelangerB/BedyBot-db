@@ -235,7 +235,6 @@ module.exports = {
           field: 'ts',
           allowNull: false,
           defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
-          // Sequelize.literal('CURRENT_TIMESTAMP'Sequelize.literal('CURRENT_TIMESTAMP'),
         },
       }, { transaction: t });
     }); // End transaction
