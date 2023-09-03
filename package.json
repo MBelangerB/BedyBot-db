@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "cron-validate": "^1.4.5",
-    "mysql2": "^3.4.2",
+    "mysql2": "^3.6.0",
     "sequelize": "^6.32.1",
     "uuid": "^9.0.0"
   }
