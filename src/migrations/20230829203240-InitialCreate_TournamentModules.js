@@ -73,7 +73,8 @@ module.exports = {
                     allowNull: false,
                     type: DataTypes.DATE,
                     field: 'createAt',
-                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                    defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
+          // Sequelize.literal('CURRENT_TIMESTAMP'Sequelize.literal('CURRENT_TIMESTAMP'),
                 },
             }, {
                 transaction: t,
@@ -183,7 +184,8 @@ module.exports = {
                     type: DataTypes.DATE,
                     field: 'ts',
                     allowNull: false,
-                    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+                    defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
+                    // Sequelize.literal('CURRENT_TIMESTAMP'Sequelize.literal('CURRENT_TIMESTAMP'),
                 },
             }, {
                 transaction: t,
