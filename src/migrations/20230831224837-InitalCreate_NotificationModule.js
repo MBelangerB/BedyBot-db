@@ -46,7 +46,7 @@ module.exports = {
         notificationMessage: {
           type: DataTypes.TEXT,
           field: 'notificationMessage',
-          allowNull: false,         
+          allowNull: false,
         },
         // BedyAPIConst.NotificationType
         notificationType: {
@@ -58,7 +58,7 @@ module.exports = {
         notificationTarget: {
           type: DataTypes.STRING(100),
           field: 'notificationTarget',
-          allowNull: false,       
+          allowNull: false,
         },
         enabled: {
           type: DataTypes.BOOLEAN,
@@ -72,6 +72,7 @@ module.exports = {
 
   },
 
+  /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
     await queryInterface.dropTable('MOD_Notifications');
   },

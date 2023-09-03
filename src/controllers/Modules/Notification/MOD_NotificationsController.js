@@ -5,9 +5,9 @@ module.exports = (sequelize, context) => {
 
         /**
          * Get all guild notification
-         * @param {*} guildId 
-         * @param {*} models 
-         * @returns 
+         * @param {*} guildId
+         * @param {*} models
+         * @returns
          */
         static getNotificationByGuildId = async (guildId, models = []) => {
             if (models && models.length > 0) {
@@ -19,9 +19,9 @@ module.exports = (sequelize, context) => {
 
         /**
          * Get notification by ID
-         * @param {*} notificationId 
-         * @param {*} models 
-         * @returns 
+         * @param {*} notificationId
+         * @param {*} models
+         * @returns
          */
         static getNotificationById = async (notificationId, models = []) => {
             if (models && models.length > 0) {
@@ -33,13 +33,13 @@ module.exports = (sequelize, context) => {
 
         /**
          * Create new notification
-         * @param {*} guildId 
-         * @param {*} notificationMessage 
-         * @param {*} notificationType 
-         * @param {*} notificationTarget 
-         * @param {*} enabled 
-         * @param {*} channelId 
-         * @returns 
+         * @param {*} guildId
+         * @param {*} notificationMessage
+         * @param {*} notificationType
+         * @param {*} notificationTarget
+         * @param {*} enabled
+         * @param {*} channelId
+         * @returns
          */
         static createNotification = async (guildId, notificationMessage, notificationType, notificationTarget, enabled, channelId = null) => {
             return await context.models.MOD_Notifications.create({
@@ -54,19 +54,19 @@ module.exports = (sequelize, context) => {
 
         /**
          * Update a notification
-         * @param {*} notificationId 
-         * @param {*} notificationMessage 
-         * @param {*} notificationType 
-         * @param {*} notificationTarget 
-         * @param {*} enabled 
-         * @param {*} channelId 
-         * @returns 
+         * @param {*} notificationId
+         * @param {*} notificationMessage
+         * @param {*} notificationType
+         * @param {*} notificationTarget
+         * @param {*} enabled
+         * @param {*} channelId
+         * @returns
          */
         static updateNotification = async (notificationId, notificationMessage, notificationType, notificationTarget, enabled, channelId = null) => {
             const aNotification = await this.getNotificationById(notificationId);
             if (!aNotification) {
                 throw new InvalidEntityException(notificationId, 'MOD_Notifications', 'Notification doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
-       
+
             } else {
                 if (aNotification.channelId != channelId) {
                     aNotification.set({
@@ -112,25 +112,25 @@ module.exports = (sequelize, context) => {
 
         /**
          * Delete all guild notification
-         * @param {*} guildId 
+         * @param {*} guildId
          */
         static deleteAllNotificationByGuildId = async (guildId) => {
             await context.models.MOD_Notifications.destroy({
                 where: {
-                    guildId: guildId
-                }
+                    guildId: guildId,
+                },
             }).then((rowsDeleted) => {
                 if (rowsDeleted === 0) {
                   throw new InvalidEntityException(guildId, 'MOD_Notifications', 'Notification doesn\'t exist for this guild.', InvalidEntityException.ErrorType.INVALID_PK);
                 }
-            });/*.catch((err) => {
+            });/* .catch((err) => {
                 throw new InvalidEntityException(guildId, 'MOD_Notifications', 'Notification doesn\'t exist for this guild.', InvalidEntityException.ErrorType.INVALID_PK);
             });*/
         };
 
         /**
          * Delete all guild notification
-         * @param {*} guildId 
+         * @param {*} guildId
          */
         static deleteNotificationId = async (notificationId) => {
             const aNotification = await this.getNotificationById(notificationId);
@@ -144,4 +144,4 @@ module.exports = (sequelize, context) => {
     } // End Class
 
     return MOD_NotificationsController;
-} // End export
+}; // End export

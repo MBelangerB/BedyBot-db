@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId', // Set FK name on TARGET
                 sourceKey: 'guildId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
-                hooks: true
+                hooks: true,
             });
 
             BOT_Guilds.hasMany(models.BOT_GuildUser, {
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
                 sourceKey: 'guildId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
             });
-              
+
             BOT_Guilds.hasMany(models.API_GuildModules, {
                 foreignKey: 'guildId', // Set FK name on TARGET
                 sourceKey: 'guildId', // Source Key In SOURCE
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'guildId', // Set FK name on TARGET
                 sourceKey: 'guildId', // Source Key In SOURCE
                 onDelete: 'CASCADE',
-                hooks: true
+                hooks: true,
             });
 
             BOT_Guilds.hasMany(models.MOD_Tournaments, {

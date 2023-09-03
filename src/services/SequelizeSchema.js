@@ -122,7 +122,7 @@ class SequelizeSchema {
             const subFilePath = path.join(fullPath, file);
             if (fs.statSync(subFilePath).isDirectory()) {
                 this.readModelScript(sequelize, dbContext, subFilePath);
-                
+
             } else {
                 const sliceExt = `.model${baseExt}`;
                 if (path.extname(subFilePath) === baseExt && subFilePath.slice(-9) === sliceExt) {

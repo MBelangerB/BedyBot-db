@@ -1,5 +1,3 @@
-// const { v4: uuidv4 } = require('uuid');
-
 const { before, after, describe, it } = require('mocha');
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
@@ -15,7 +13,7 @@ const { BOT_GuildsController } = controller;
 describe('01.00 - BOT_GuildsController', () => {
 
     // Declare const
-    const guildId = generateUnsignedBigInt64(); // uuidv4();
+    const guildId = generateUnsignedBigInt64();
     const ownerId = generateUnsignedBigInt64();
     const initialGuildName = 'Guild Test';
     const newGuildName = 'Guild BedyBot';
@@ -37,7 +35,7 @@ describe('01.00 - BOT_GuildsController', () => {
         // await sequelize.drop(); // Supprimez les tables de la base de données
     });
 
-
+    /* eslint-disable-next-line no-undef */
     context('1.0 - without data', () => {
         it('should be empty - Try to get all actives guilds', async () => {
             const allActiveGuilds = await BOT_GuildsController.getAllActiveGuilds();
@@ -55,6 +53,7 @@ describe('01.00 - BOT_GuildsController', () => {
         });
     }); // Context Without Data
 
+    /* eslint-disable-next-line no-undef */
     context('1.1 - valid CRUD action', () => {
 
         it('should create a new guild', async () => {
@@ -95,7 +94,7 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(aGuild).to.be.an('object');
             expect(aGuild.guildName).to.equal(UnModifiedGuildName);
 
-            let updatedGuild = await BOT_GuildsController.updateGuild(unModifiedGuidId, UnModifiedGuildName, null);
+            const updatedGuild = await BOT_GuildsController.updateGuild(unModifiedGuidId, UnModifiedGuildName, null);
 
             expect(updatedGuild).to.be.an('object');
             expect(BigInt(updatedGuild.guildOwnerId)).to.equal(ownerId);
@@ -178,8 +177,9 @@ describe('01.00 - BOT_GuildsController', () => {
         });
 
 
-    }) // Context (CRUD Action)
+    }); // Context (CRUD Action)
 
+    /* eslint-disable-next-line no-undef */
     context('1.2 - error action', () => {
         it('should throw a exception for update a invalid guild id', async () => {
             try {
@@ -223,12 +223,3 @@ describe('01.00 - BOT_GuildsController', () => {
     });
 
 }); // first describe
-
-
-
-// TODO : Put this in a Services
-// function generateUnsignedBigInt64() {
-//     const maxUint64 = BigInt('18446744073709551615'); // 2^64 - 1
-//     const randomUint64 = BigInt(Math.floor(Math.random() * Number(maxUint64)));
-//     return randomUint64;
-// }

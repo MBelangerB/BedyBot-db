@@ -31,10 +31,12 @@ describe('01.02 - BOT_GuildOptionsController', () => {
     const channelId = generateUnsignedBigInt64();
     const initialGuildName = 'Guild Option Test';
 
+    /* eslint-disable-next-line no-undef */
     context('1.0 - without data', () => {
         // No test in this context
     }); // End wihtout data Context
 
+    /* eslint-disable-next-line no-undef */
     context('1.1 - valid CRUD action', () => {
 
         it('should activated GuildOption for a new guild', async () => {
@@ -87,6 +89,7 @@ describe('01.02 - BOT_GuildOptionsController', () => {
 
     }); // End Context CRUD
 
+    /* eslint-disable-next-line no-undef */
     context('1.2 - error action', () => {
         it('should throw a exception for update guildOption with a invalid guild id', async () => {
             try {

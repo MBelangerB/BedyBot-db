@@ -15,7 +15,7 @@ module.exports = (sequelize, context) => {
                 guildId: guildId,
                 maxPlayerPerLobby: 12,
                 addEveryone: false,
-                CRONConfiguration: null
+                CRONConfiguration: null,
             });
         };
 

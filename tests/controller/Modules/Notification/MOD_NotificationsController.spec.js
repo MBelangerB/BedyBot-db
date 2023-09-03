@@ -10,21 +10,17 @@ const { before, after, describe, it } = require('mocha');
 const { MOD_NotificationsController } = controller;
 
 const { PrepareData, ResetData } = require('../../../mocha-setup');
-/* eslint-disable-next-line no-unused-vars */
-const { generateUnsignedBigInt64 } = require('../../../../src/services/TestService');
 const { BedyAPIConst } = require('../../../../src/BedyAPIConst');
 
 describe('03.01 - MOD_Notifications', () => {
     // Const
-    let defaultGuild = null;
     let newNotificationId = null;
     const notificationId = uuidv4();
 
     // Hook
     before(async () => {
         console.log('============== Setup (Before on MOD_Notifications) ==============');
-        defaultGuild = await PrepareData.GuildInitialization();
-        // await beforeCheckState();
+        await PrepareData.GuildInitialization();
     });
 
     after(async () => {
@@ -37,11 +33,9 @@ describe('03.01 - MOD_Notifications', () => {
         } catch (err) {
             console.error(err);
         }
-
-        // resetState();
-        // await afterCheckState();
     });
 
+    /* eslint-disable-next-line no-undef */
     context('1.0 - without data', () => {
 
         it('should be empty - Try to get all notifications for a specific guild', async () => {
@@ -64,12 +58,12 @@ describe('03.01 - MOD_Notifications', () => {
         });
     }); //  End context « without data »
 
+    /* eslint-disable-next-line no-undef */
     context('1.1 - valid CRUD action', () => {
 
         it('should create a new notification with channel', async () => {
             const createdNotif = await MOD_NotificationsController.createNotification(PrepareData.guildId, '',
                 BedyAPIConst.NotificationType.TWITCH, 'Streamer', true, PrepareData.channelId);
-            // newNotificationId = createdNotif.notificationId;
 
             expect(createdNotif).to.be.an('object');
             expect(createdNotif.notificationId).not.be.null;
@@ -163,6 +157,7 @@ describe('03.01 - MOD_Notifications', () => {
 
     }); // End context « Crud Action »
 
+    /* eslint-disable-next-line no-undef */
     context('1.2 - error action', () => {
 
         it('should throw a exception for trying to delete a invalid guild notification', async () => {

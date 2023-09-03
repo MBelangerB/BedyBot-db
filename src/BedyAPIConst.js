@@ -27,7 +27,7 @@ BedyAPIConst.ModuleGuid = {
     /**
      * GREETING_MODULE (welcome message, leave message, get MemberRole)
      */
-    USERACTION_MODULE: '535b2516-cf67-431c-a7cb-418c388f88c5'
+    USERACTION_MODULE: '535b2516-cf67-431c-a7cb-418c388f88c5',
 };
 
 /**
@@ -62,16 +62,16 @@ BedyAPIConst.NotificationType = {
     /**
      * Youtube notification
      */
-    YOUTUBE: 1
-}
+    YOUTUBE: 1,
+};
 
 /**
  * Authentification source
  */
 BedyAPIConst.AuthSource = {
     TWITCH: 0,
-    DISCORD: 1
-}
+    DISCORD: 1,
+};
 
 /**
  * A Discord channel available type

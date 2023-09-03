@@ -1,7 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
-const { BedyAPIConst } = require('../BedyAPIConst');
+// const { BedyAPIConst } = require('../BedyAPIConst');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -124,7 +124,7 @@ module.exports = {
           type: DataTypes.STRING(100),
           field: 'annoncementCRONConfiguration',
           allowNull: true,
-          defaultValue: "5 * * * *",
+          defaultValue: '5 * * * *',
         },
       }, { transaction: t });
 
@@ -139,7 +139,7 @@ module.exports = {
           allowNull: false,
           references: {
             model: 'BOT_Guilds', // This is a reference to another model
-            key: 'guildId', // This is the column name of the referenced model      
+            key: 'guildId', // This is the column name of the referenced model
           },
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE',

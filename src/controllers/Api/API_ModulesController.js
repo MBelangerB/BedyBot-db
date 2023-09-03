@@ -1,4 +1,3 @@
-const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
     class API_ModulesController {

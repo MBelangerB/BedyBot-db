@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       field: 'annoncementCRONConfiguration',
       allowNull: true,
-      defaultValue: "5 * * * *",
+      defaultValue: '5 * * * *',
     },
   }, {
     sequelize,

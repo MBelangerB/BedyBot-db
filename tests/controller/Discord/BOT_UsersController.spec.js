@@ -15,7 +15,7 @@ describe('01.02 - BOT_UsersController', () => {
     const username = 'TestUser';
     const newUsername = 'TestUser2';
     const globalUsername = 'Global test user';
-    const testEmail = 'test-email@localhost.com'
+    const testEmail = 'test-email@localhost.com';
 
     // Hook
     before(async () => {
@@ -29,28 +29,30 @@ describe('01.02 - BOT_UsersController', () => {
         await afterCheckState();
     });
 
+    /* eslint-disable-next-line no-undef */
     context('1.0 - without data', () => {
         it('should be empty - Try to get all actives users', async () => {
             const allUsers = await BOT_UsersController.getAllUsers();
-  
+
             expect(allUsers).to.be.an('array');
             expect(allUsers).to.be.empty;
         });
 
         it('should be empty - Try to get all actives users with includes', async () => {
             const allUsers = await BOT_UsersController.getAllUsers([models.BOT_UserDetails]);
-  
+
             expect(allUsers).to.be.an('array');
             expect(allUsers).to.be.empty;
         });
 
         it('should get null data', async () => {
-            let aUser = await BOT_UsersController.getUserByUserId(generateUnsignedBigInt64());
+            const aUser = await BOT_UsersController.getUserByUserId(generateUnsignedBigInt64());
             expect(aUser).to.be.null;
         });
 
     }); // End wihtout data Context
 
+    /* eslint-disable-next-line no-undef */
     context('1.1 - valid CRUD action', () => {
         it('should create a new user', async () => {
             const createdUser = await BOT_UsersController.createNewUser(userId, username);
@@ -104,6 +106,7 @@ describe('01.02 - BOT_UsersController', () => {
         });
     });
 
+    /* eslint-disable-next-line no-undef */
     context('1.2 - error action', () => {
         it('should throw a exception for update a invalid user', async () => {
             try {

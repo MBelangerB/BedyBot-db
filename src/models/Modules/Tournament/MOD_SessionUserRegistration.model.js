@@ -1,4 +1,6 @@
 'use strict';
+
+/* eslint-disable-next-line no-unused-vars */
 const { Op, Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -132,7 +134,7 @@ module.exports = (sequelize, DataTypes) => {
         //         key: 'id',
         //     },
         // },
-       
+
     }, {
         sequelize,
         modelName: 'MOD_SessionUserRegistrations',
