@@ -37,7 +37,7 @@ class SequelizeSchema {
      */
     getConfigFilePath() {
         let successfully = false;
-        console.dir(this.#authorizedPath);
+        // console.dir(this.#authorizedPath);
 
         for (const idx in this.#authorizedPath) {
             const filePath = this.#authorizedPath[idx];
@@ -64,7 +64,7 @@ class SequelizeSchema {
 
         if (fs.existsSync(fullPath)) {
             const files = fs.readdirSync(fullPath);
-            console.dir(files);
+            // console.dir(files);
 
             files.forEach(file => {
                 const subFilePath = path.join(fullPath, file);
@@ -116,7 +116,7 @@ class SequelizeSchema {
         // console.log('REadFile Content : ', fullPath);
 
         const files = fs.readdirSync(fullPath);
-        console.dir(files);
+        // console.dir(files);
 
         files.forEach(file => {
             const subFilePath = path.join(fullPath, file);
