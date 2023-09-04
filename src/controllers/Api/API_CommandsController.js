@@ -8,7 +8,15 @@ module.exports = (sequelize, context) => {
     class API_CommandsController {
 
         static createCommands = async(moduleId, commandId, name, description, commandType, applicationCommandType) => {
-
+            // BR pour valider que la commandType  et applicationCommandType soient conforme
+            return await context.models.API_Commands.create({
+                moduleId: moduleId,
+                commandId: commandId,
+                name: name,
+                description: description,
+                commandType: commandType,
+                applicationCommandType: applicationCommandType
+            });
         };
 
         static updateCommands = async(moduleId, commandId, name, description, commandType, applicationCommandType) => {

@@ -66,8 +66,11 @@ module.exports = (sequelize, context) => {
          * @param {*} banner
          * @param {*} accentColor
          */
-        static updateUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
-            const aUser = await this.getUserByUserId(userId);
+        static updateUser = async (aUser, userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
+            if (aUser == null) {
+                aUser = await this.getUserByUserId(userId);
+            }
+          
             if (!aUser) {
                 throw new InvalidEntityException(userId, 'BOT_Users', 'Users doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 

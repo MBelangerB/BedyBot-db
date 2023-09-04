@@ -25,6 +25,7 @@ module.exports = (sequelize, context) => {
          * @param {*} announcementChannelId
          * @param {*} maxPlayerPerLobby
          * @param {*} addEveryone
+         * @param {*} CRONConfiguration
          * @returns
          */
         static updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null, CRONConfiguration = null) => {

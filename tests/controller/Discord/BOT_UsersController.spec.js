@@ -63,13 +63,16 @@ describe('01.02 - BOT_UsersController', () => {
         });
 
         it('should get a existing user', async () => {
-            const aGuild = await BOT_UsersController.getUserByUserId(userId, [models.BOT_UserDetails]);
-            expect(aGuild).to.be.an('object');
-            expect(BigInt(aGuild.userId)).to.equal(userId);
+            const aUser = await BOT_UsersController.getUserByUserId(userId, [models.BOT_UserDetails]);
+            expect(aUser).to.be.an('object');
+            expect(BigInt(aUser.userId)).to.equal(userId);
         });
 
         it('should update the optional user field for a existing user', async () => {
-            const updatedUser = await BOT_UsersController.updateUser(userId, newUsername, globalUsername, '1234', testEmail, 'avatar.png',
+            const aUser = await BOT_UsersController.getUserByUserId(userId);
+            expect(aUser).to.be.an('object');
+
+            const updatedUser = await BOT_UsersController.updateUser(aUser, userId, newUsername, globalUsername, '1234', testEmail, 'avatar.png',
                 'banner.png', 2463422);
 
             expect(updatedUser).to.be.an('object');
@@ -82,7 +85,7 @@ describe('01.02 - BOT_UsersController', () => {
         });
 
         it('should return a unchanged user', async () => {
-            const updatedUser = await BOT_UsersController.updateUser(userId, newUsername, globalUsername, '1234', testEmail, 'avatar.png',
+            const updatedUser = await BOT_UsersController.updateUser(null, userId, newUsername, globalUsername, '1234', testEmail, 'avatar.png',
             'banner.png', 2463422);
 
             expect(updatedUser).to.be.an('object');
@@ -110,7 +113,7 @@ describe('01.02 - BOT_UsersController', () => {
     context('1.2 - error action', () => {
         it('should throw a exception for update a invalid user', async () => {
             try {
-                await BOT_UsersController.updateUser(generateUnsignedBigInt64(), 'TestUser');
+                await BOT_UsersController.updateUser(null, generateUnsignedBigInt64(), 'TestUser');
                 assert.fail('Error !  BOT_UsersController.updateUser has\' return a error.');
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
