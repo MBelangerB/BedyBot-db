@@ -20,6 +20,14 @@ module.exports = (sequelize, context) => {
             });
         };
 
+        /**
+         * Get a GuildUser (by UserId,GuildId)
+         * @param {*} guildId 
+         * @param {*} userId 
+         * @param {*} includeGuild 
+         * @param {*} includeUsers 
+         * @returns 
+         */
         static getGuildUserByUserId = async (guildId, userId, includeGuild = false, includeUsers = false) => {
             const includeList = [];
             if (includeGuild) {
@@ -54,6 +62,7 @@ module.exports = (sequelize, context) => {
                 throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
+                console.log(aGuildUser)
                 if (nickname != null && aGuildUser.nickname != nickname) {
                     aGuildUser.set({
                         nickname: nickname,
@@ -69,6 +78,8 @@ module.exports = (sequelize, context) => {
                 if (aGuildUser.changed() && aGuildUser.changed.length > 0) {
                     return await aGuildUser.save();
                 }
+
+                return aGuildUser;
             }
         };
 
