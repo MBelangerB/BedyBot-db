@@ -6,10 +6,10 @@ module.exports = (sequelize, context) => {
         /**
          * Get BOT_Guilds by guildId
          * @param {BigInt} guildId A Discord guildId
-         * @param {Models[]} includeModels Array of Sequelize models
-         * @returns {BOT_Guilds}
+         * @param {context.models[]} includeModels Array of Sequelize models
+         * @returns {context.models.BOT_Guilds}
          */
-        static getGuildByGuildId = async (guildId, includeModels = []) => {
+        static async getGuildByGuildId(guildId, includeModels = []) {
             if (includeModels && includeModels.length > 0) {
                 return await context.models.BOT_Guilds.findOne({ where: { guildId: guildId }, include: includeModels });
             } else {
@@ -19,10 +19,10 @@ module.exports = (sequelize, context) => {
 
         /**
          * Return all active guilds
-         * @param {Models[]} includeModels Array of Sequelize models
-         * @returns {BOT_Guilds[]}
+         * @param {context.models[]} includeModels Array of Sequelize models
+         * @returns {context.models.BOT_Guilds[]}
          */
-        static getAllActiveGuilds = async (includeModels = []) => {
+        static async getAllActiveGuilds(includeModels = []) {
             if (includeModels && includeModels.length > 0) {
                 return await context.models.BOT_Guilds.findAll({ where: { isActive: true }, include: includeModels });
             } else {
@@ -32,10 +32,10 @@ module.exports = (sequelize, context) => {
 
         /**
          * Return all guilds
-         * @param {Models[]} includeModels Array of Sequelize models
+         * @param {context.models[]} includeModels Array of Sequelize models
          * @returns {BOT_Guilds[]}
          */
-        static getAllGuilds = async (includeModels = []) => {
+        static async getAllGuilds(includeModels = []) {
             if (includeModels && includeModels.length > 0) {
                 return await context.models.BOT_Guilds.findAll({ include: includeModels });
             } else {
@@ -45,16 +45,18 @@ module.exports = (sequelize, context) => {
 
         /**
          * Add a new discord guild on DB
-         * @param {BIGINT} guildId (mandatory)
+         * @param {BigInt} guildId (mandatory)
          * @param {String} guildName (mandatory)
-         * @param {*} ownerId (mandatory)
-         * @param {*} region
-         * @param {*} preferredLocal
-         * @param {*} iconUrl
-         * @param {*} bannerUrl
+         * @param {BigInt} ownerId (mandatory)
+         * @param {string|null} region
+         * @param {string|null} preferredLocal
+         * @param {string|null} iconUrl
+         * @param {string|null} bannerUrl
+         * @param {boolean} isActive
+         * @param {boolean} initOption
          * @returns
          */
-        static createGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null, initOption = false) => {
+        static async createGuild(guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null, isActive = true, initOption = false) {
             const aGuild = await context.models.BOT_Guilds.create({
                 guildId: guildId,
                 guildName: guildName,
@@ -63,10 +65,10 @@ module.exports = (sequelize, context) => {
                 guildOwnerId: ownerId,
                 guildRegion: region,
                 guildPreferredLocale: preferredLocal,
-                isActive: true,
+                isActive: isActive,
             });
 
-            if (initOption && initOption == true) {
+            if (initOption && initOption === true) {
                 await context.models.BOT_GuildOptions.create({
                     guildId: guildId,
                     maxPlayerPerLobby: 12,
@@ -89,41 +91,41 @@ module.exports = (sequelize, context) => {
          * @param {*} bannerUrl
          * @returns
          */
-        static updateGuild = async (guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) => {
+        static async updateGuild(guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) {
             const aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
                 throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
-                if (guildName != null && aGuild.guildName != guildName) {
+                if (guildName != null && aGuild.guildName !== guildName) {
                     aGuild.set({
                         guildName: guildName,
                     });
                 }
-                if (ownerId != null && aGuild.guildOwnerId != ownerId) {
+                if (ownerId != null && aGuild.guildOwnerId !== ownerId) {
                     aGuild.set({
                         guildOwnerId: ownerId,
                     });
                 }
 
-                if (region != null && aGuild.guildRegion != region) {
+                if (region != null && aGuild.guildRegion !== region) {
                     aGuild.set({
                         guildRegion: region,
                     });
                 }
 
-                if (preferredLocal != null && aGuild.guildPreferredLocale != preferredLocal) {
+                if (preferredLocal != null && aGuild.guildPreferredLocale !== preferredLocal) {
                     aGuild.set({
                         guildPreferredLocale: preferredLocal,
                     });
                 }
 
-                if (iconUrl != null && aGuild.guildIconUrl != iconUrl) {
+                if (iconUrl != null && aGuild.guildIconUrl !== iconUrl) {
                     aGuild.set({
                         guildIconUrl: iconUrl,
                     });
                 }
-                if (bannerUrl != null && aGuild.guildBannerUrl != bannerUrl) {
+                if (bannerUrl != null && aGuild.guildBannerUrl !== bannerUrl) {
                     aGuild.set({
                         guildBannerUrl: bannerUrl,
                     });
@@ -139,17 +141,78 @@ module.exports = (sequelize, context) => {
         };
 
         /**
+         * Update the guildName
+         * @param {*} aGuild
+         * @param {*} newGuildName
+         * @returns
+         */
+        static async updateGuildName(aGuild, newGuildName) {
+            if (!aGuild) {
+                throw new InvalidEntityException(null, 'BOT_Guilds', 'Guild isn\'t defined.', InvalidEntityException.ErrorType.NULL_ENTITY);
+            }
+            if (typeof aGuild === 'bigint') {
+                throw new InvalidEntityException(aGuild, 'BOT_Guilds', 'Guild parameters isn\'t valid.', InvalidEntityException.ErrorType.INVALID_PARAM_BIGINT);
+            }
+
+            if (newGuildName != null && aGuild.guildName !== newGuildName) {
+                aGuild.set({
+                    guildName: newGuildName,
+                });
+            }
+
+            if (aGuild.changed() && aGuild.changed.length > 0) {
+                return await aGuild.save();
+            }
+
+            return aGuild;
+        };
+
+        /**
+         * Update guild owner
+         * @param {*} aGuild
+         * @param {*} newOwnerId
+         * @returns
+         */
+        static async updateGuildOwner(aGuild, newOwnerId) {
+            if (!aGuild) {
+                throw new InvalidEntityException(null, 'BOT_Guilds', 'Guild isn\'t defined.', InvalidEntityException.ErrorType.NULL_ENTITY);
+            }
+            if (typeof aGuild === 'bigint') {
+                throw new InvalidEntityException(aGuild, 'BOT_Guilds', 'Guild parameters isn\'t valid.', InvalidEntityException.ErrorType.INVALID_PARAM_BIGINT);
+            }
+
+            if (newOwnerId != null && aGuild.guildOwnerId !== newOwnerId) {
+                aGuild.set({
+                    guildOwnerId: newOwnerId,
+                });
+            }
+
+            if (aGuild.changed() && aGuild.changed.length > 0) {
+                return await aGuild.save();
+            }
+
+            return aGuild;
+        };
+
+        /**
          * Update the guild statut and date param.
-         * @param {boolean} newStatut new guild Statut
+         * @param {BigInt} guildId
+         * @param {boolean} isActive new guild statut
          * @returns {BOT_Guilds}
          */
-        static updateGuildStatut = async (guildId, isActive) => {
+        static async updateGuildStatut(guildId, isActive) {
             let aGuild = await this.getGuildByGuildId(guildId);
+
             /* istanbul ignore else */
             if (!aGuild) {
-                throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
+                throw new InvalidEntityException(null, 'BOT_Guilds', 'Guild isn\'t defined.', InvalidEntityException.ErrorType.NULL_ENTITY);
+            }
+            // if (typeof aGuild === "bigint") {
+            //     throw new InvalidEntityException(aGuild, 'BOT_Guilds', 'Guild parameters isn\'t valid.', InvalidEntityException.ErrorType.INVALID_PARAM_BIGINT);
+            // }
 
-            } else if (isActive == true) {
+            /* istanbul ignore else */
+            if (isActive === true) {
                 // Guild is comeback
                 aGuild.set({
                     isActive: isActive,
@@ -158,7 +221,8 @@ module.exports = (sequelize, context) => {
                 });
                 aGuild = await aGuild.save();
 
-            } else if (isActive == false) {
+            /* istanbul ignore else */
+            } else if (isActive === false) {
                 // Guild is left
                 aGuild.set({
                     isActive: isActive,
@@ -167,7 +231,7 @@ module.exports = (sequelize, context) => {
                 aGuild = await aGuild.save();
             }
 
-            console.log(`Guild status and date for **${aGuild.id}** has been updated.`);
+            console.log(`Guild status and date for **${aGuild.guildId}** has been updated.`);
             return aGuild;
         };
 
@@ -175,7 +239,7 @@ module.exports = (sequelize, context) => {
          * Delete a guild
          * @param {*} guildId
          */
-        static deleteGuild = async (guildId) => {
+        static async deleteGuild(guildId) {
             const aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
                 throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);

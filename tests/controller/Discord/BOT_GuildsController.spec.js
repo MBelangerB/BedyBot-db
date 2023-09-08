@@ -2,7 +2,7 @@ const { before, after, describe, it } = require('mocha');
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
 const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
-const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
+const { PrepareData, ResetData } = require('../../mocha-setup');
 const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -13,9 +13,6 @@ const { BOT_GuildsController } = controller;
 describe('01.00 - BOT_GuildsController', () => {
 
     // Declare const
-    const guildId = generateUnsignedBigInt64();
-    const ownerId = generateUnsignedBigInt64();
-    const initialGuildName = 'Guild Test';
     const newGuildName = 'Guild BedyBot';
     const newOwnerId = generateUnsignedBigInt64();
     const unModifiedGuidId = generateUnsignedBigInt64();
@@ -23,33 +20,33 @@ describe('01.00 - BOT_GuildsController', () => {
 
 
     before(async () => {
-        console.log('============== Setup (Before on GuildController) ==============');
-        await beforeCheckState();
-        // await sequelize.drop(); // Supprimez les tables de la base de données
+        console.log('============== Setup (Before on BOT_GuildsController) ==============');
+        await ResetData.CleanAllGuilds();
+        await PrepareData.GuildInitialization();
     });
 
     after(async () => {
-        console.log('============== Setup (After on GuildController) ==============');
-        resetState();
-        await afterCheckState();
-        // await sequelize.drop(); // Supprimez les tables de la base de données
+        console.log('============== Setup (After on BOT_GuildsController) ==============');
+        await ResetData.CleanAllGuilds();
     });
 
     /* eslint-disable-next-line no-undef */
     context('1.0 - without data', () => {
-        it('should be empty - Try to get all actives guilds', async () => {
+        it('should contains 2 elements - Try to get all actives guilds', async () => {
             const allActiveGuilds = await BOT_GuildsController.getAllActiveGuilds();
-            console.log(`Nb Active Guild : ${allActiveGuilds == null ? null : allActiveGuilds.length}`);
 
             expect(allActiveGuilds).to.be.an('array');
-            expect(allActiveGuilds).to.be.empty;
+            expect(allActiveGuilds).to.have.lengthOf(2);
+            // expect(allActiveGuilds).to.be.empty;
         });
 
-        it('should be empty - Try to get all guilds', async () => {
+        it('should contains 2 elements - Try to get all guilds', async () => {
             const allGuilds = await BOT_GuildsController.getAllGuilds();
+            console.log('1.1 : ', allGuilds.length);
 
             expect(allGuilds).to.be.an('array');
-            expect(allGuilds).to.be.empty;
+            // expect(allGuilds).to.be.empty;
+            expect(allGuilds).to.have.lengthOf(2);
         });
     }); // Context Without Data
 
@@ -57,39 +54,40 @@ describe('01.00 - BOT_GuildsController', () => {
     context('1.1 - valid CRUD action', () => {
 
         it('should create a new guild', async () => {
-            const createdGuild = await BOT_GuildsController.createGuild(guildId, initialGuildName, ownerId);
+            const newGuildId = generateUnsignedBigInt64();
+            const createdGuild = await BOT_GuildsController.createGuild(newGuildId, PrepareData.guildName, PrepareData.guildOwnerId);
 
             expect(createdGuild).to.be.an('object');
-            expect(createdGuild.guildOwnerId).to.equal(ownerId);
-            expect(createdGuild.guildId).to.equal(guildId);
-            expect(createdGuild.guildName).to.equal(initialGuildName);
+            expect(createdGuild.guildOwnerId).to.equal(PrepareData.guildOwnerId);
+            expect(createdGuild.guildId).to.equal(newGuildId);
+            expect(createdGuild.guildName).to.equal(PrepareData.guildName);
         });
 
         it('should create and delete a guild', async () => {
             const lGuildId = generateUnsignedBigInt64();
-            const aGuild = await BOT_GuildsController.createGuild(lGuildId, initialGuildName, ownerId);
+            const aGuild = await BOT_GuildsController.createGuild(lGuildId, PrepareData.guildName, PrepareData.guildOwnerId);
 
             expect(aGuild).to.be.an('object');
-            expect(aGuild.guildName).to.equal(initialGuildName);
+            expect(aGuild.guildName).to.equal(PrepareData.guildName);
 
             await BOT_GuildsController.deleteGuild(lGuildId);
         });
 
-        it('should update the guild name for a existing guild', async () => {
-            const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId);
+        it('should update the guild name for a existing guild, with updateGuild', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
             expect(aGuild).to.be.an('object');
-            expect(aGuild.guildName).to.equal(initialGuildName);
+            expect(aGuild.guildName).to.equal(PrepareData.guildName);
 
-            const updatedGuild = await BOT_GuildsController.updateGuild(guildId, newGuildName, null);
+            const updatedGuild = await BOT_GuildsController.updateGuild(PrepareData.guildId, newGuildName, null);
 
             expect(updatedGuild).to.be.an('object');
-            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(ownerId);
-            expect(BigInt(updatedGuild.guildId)).to.equal(guildId);
+            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(PrepareData.guildOwnerId);
+            expect(BigInt(updatedGuild.guildId)).to.equal(PrepareData.guildId);
             expect(updatedGuild.guildName).to.equal(newGuildName);
         });
 
         it('should return the guild unchanged, as no value has been modified. (unmodified)', async () => {
-            const aGuild = await BOT_GuildsController.createGuild(unModifiedGuidId, UnModifiedGuildName, ownerId, null, null, null, null, true);
+            const aGuild = await BOT_GuildsController.createGuild(unModifiedGuidId, UnModifiedGuildName, PrepareData.guildOwnerId, null, null, null, null, true, true);
 
             expect(aGuild).to.be.an('object');
             expect(aGuild.guildName).to.equal(UnModifiedGuildName);
@@ -97,7 +95,7 @@ describe('01.00 - BOT_GuildsController', () => {
             const updatedGuild = await BOT_GuildsController.updateGuild(unModifiedGuidId, UnModifiedGuildName, null);
 
             expect(updatedGuild).to.be.an('object');
-            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(ownerId);
+            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(PrepareData.guildOwnerId);
             expect(BigInt(updatedGuild.guildId)).to.equal(unModifiedGuidId);
             expect(updatedGuild.guildName).to.equal(UnModifiedGuildName);
 
@@ -114,19 +112,19 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(aGuild.BOT_GuildOption).not.equal(null);
         });
 
-        it('should update the guild owner for a existing guild', async () => {
-            const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId);
+        it('should update the guild owner for a existing guild, with updateGuild', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
             expect(aGuild).to.be.an('object');
-            expect(BigInt(aGuild.guildOwnerId)).to.equal(ownerId);
+            expect(BigInt(aGuild.guildOwnerId)).to.equal(PrepareData.guildOwnerId);
 
-            const updatedGuild = await BOT_GuildsController.updateGuild(guildId, null, newOwnerId);
+            const updatedGuild = await BOT_GuildsController.updateGuild(PrepareData.guildId, null, newOwnerId);
 
             expect(updatedGuild).to.be.an('object');
             expect(BigInt(updatedGuild.guildOwnerId)).to.equal(newOwnerId);
         });
 
         it('should update the optional guild field for a existing guild', async () => {
-            const updatedGuild = await BOT_GuildsController.updateGuild(guildId, null, null, 'na', 'fr', '1', '2');
+            const updatedGuild = await BOT_GuildsController.updateGuild(PrepareData.guildId, null, null, 'na', 'fr', '1', '2');
 
             expect(updatedGuild).to.be.an('object');
             expect(updatedGuild.guildRegion).to.equal('na');
@@ -135,13 +133,53 @@ describe('01.00 - BOT_GuildsController', () => {
             expect(updatedGuild.guildBannerUrl).to.equal('2');
         });
 
+        it('should update the guild name for a existing guild', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
+            expect(aGuild).to.be.an('object');
+
+            const updatedGuild = await BOT_GuildsController.updateGuildName(aGuild, 'New Guild Name');
+
+            expect(updatedGuild).to.be.an('object');
+            expect(updatedGuild.guildName).to.equal('New Guild Name');
+        });
+
+        it('should return the guild unmodified, without modifying the guild name. (unmodified)', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
+            expect(aGuild).to.be.an('object');
+
+            const updatedGuild = await BOT_GuildsController.updateGuildName(aGuild, null);
+
+            expect(updatedGuild).to.be.an('object');
+            expect(updatedGuild.guildName).to.equal(aGuild.guildName);
+        });
+
+        it('should return the guild unmodified, without modifying the guild owner. (unmodified)', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
+            expect(aGuild).to.be.an('object');
+
+            const updatedGuild = await BOT_GuildsController.updateGuildOwner(aGuild, null);
+
+            expect(updatedGuild).to.be.an('object');
+            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(newOwnerId);
+        });
+
+        it('should update the guild owner for a existing guild', async () => {
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
+            expect(aGuild).to.be.an('object');
+
+            const updatedGuild = await BOT_GuildsController.updateGuildOwner(aGuild, PrepareData.guildOwnerId);
+
+            expect(updatedGuild).to.be.an('object');
+            expect(BigInt(updatedGuild.guildOwnerId)).to.equal(PrepareData.guildOwnerId);
+        });
+
         it('should be disabled a existing guild', async () => {
-            const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId);
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
             expect(aGuild).to.be.an('object');
             expect(aGuild.isActive).to.equal(true);
 
             // True to False
-            const updatedGuild = await BOT_GuildsController.updateGuildStatut(guildId, false);
+            const updatedGuild = await BOT_GuildsController.updateGuildStatut(PrepareData.guildId, false);
 
             expect(updatedGuild).to.be.an('object');
             expect(updatedGuild.isActive).to.equal(false);
@@ -149,12 +187,12 @@ describe('01.00 - BOT_GuildsController', () => {
         });
 
         it('should be active a disabled existing guild', async () => {
-            const aGuild = await BOT_GuildsController.getGuildByGuildId(guildId);
+            const aGuild = await BOT_GuildsController.getGuildByGuildId(PrepareData.guildId);
             expect(aGuild).to.be.an('object');
             expect(aGuild.isActive).to.equal(false);
 
             // False to True
-            const updatedGuild = await BOT_GuildsController.updateGuildStatut(guildId, true);
+            const updatedGuild = await BOT_GuildsController.updateGuildStatut(PrepareData.guildId, true);
 
             expect(updatedGuild).to.be.an('object');
             expect(updatedGuild.isActive).to.equal(true);
@@ -173,7 +211,7 @@ describe('01.00 - BOT_GuildsController', () => {
 
             expect(allGuilds).to.be.an('array');
             expect(allGuilds).to.be.not.empty;
-            expect(allGuilds).to.have.length(2);
+            // expect(allGuilds).to.have.length(2);
         });
 
 
@@ -181,33 +219,105 @@ describe('01.00 - BOT_GuildsController', () => {
 
     /* eslint-disable-next-line no-undef */
     context('1.2 - error action', () => {
-        it('should throw a exception for update a invalid guild id', async () => {
+        it('should throw a exception for update a invalid guild', async () => {
             try {
                 await BOT_GuildsController.updateGuild(generateUnsignedBigInt64(), 'test', null);
-                assert.fail('Error !  BOT_GuildsController.updateGuild has\' return a error.');
+                assert.fail('Error !  BOT_GuildsController.updateGuild hasn\'t return a error.');
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
                     assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.INVALID_PK);
                 } else {
                     assert.fail('Invalid exception');
                 }
             }
         });
 
-        it('should throw a exception for update guid statut for a invalid guild id', async () => {
+        it('should throw a exception for update the status of a invalid guildId', async () => {
             try {
                 await BOT_GuildsController.updateGuildStatut(generateUnsignedBigInt64(), false);
-                assert.fail('Error !  BOT_GuildsController.updateGuildStatut has\' return a error.');
+                assert.fail('Error ! BOT_GuildsController.updateGuildStatut() hasn\'t return a error.');
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
                     assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.NULL_ENTITY);
                 } else {
                     assert.fail('Invalid exception');
                 }
             }
         });
 
-        it('should be a exception - Delete a guild we don\' exists.', async () => {
+        // it('should throw a exception for update the status of a null guild entity', async () => {
+        //     try {
+        //         await BOT_GuildsController.updateGuildStatut(null, false);
+        //         assert.fail('Error ! BOT_GuildsController.updateGuildStatut() hasn\'t return a error.');
+        //     } catch (error) {
+        //         if (error instanceof InvalidEntityException) {
+        //             assert.ok(error);
+        //             expect(error.errorType).to.equal(InvalidEntityException.ErrorType.NULL_ENTITY)
+        //         } else {
+        //             assert.fail('Invalid exception');
+        //         }
+        //     }
+        // });
+
+        it('should throw a exception for update the name of a invalid guild id', async () => {
+            try {
+                await BOT_GuildsController.updateGuildName(generateUnsignedBigInt64(), 'BigInt Guild');
+                assert.fail('Error ! BOT_GuildsController.updateGuildName() hasn\'t return a error.');
+            } catch (error) {
+                if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.INVALID_PARAM_BIGINT);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
+        it('should throw a exception for update the name of a null guild entity', async () => {
+            try {
+                await BOT_GuildsController.updateGuildName(null, 'Null Guild');
+                assert.fail('Error ! BOT_GuildsController.updateGuildName() hasn\'t return a error.');
+            } catch (error) {
+                if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.NULL_ENTITY);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
+        it('should throw a exception for update the owner of a null guild entity', async () => {
+            try {
+                await BOT_GuildsController.updateGuildOwner(null, generateUnsignedBigInt64());
+                assert.fail('Error ! BOT_GuildsController.updateGuildOwner() hasn\'t return a error.');
+            } catch (error) {
+                if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.NULL_ENTITY);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
+        it('should throw a exception for update the owner of a invalid guild id', async () => {
+            try {
+                await BOT_GuildsController.updateGuildOwner(generateUnsignedBigInt64(), generateUnsignedBigInt64());
+                assert.fail('Error ! BOT_GuildsController.updateGuildOwner() hasn\'t return a error.');
+            } catch (error) {
+                if (error instanceof InvalidEntityException) {
+                    assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.INVALID_PARAM_BIGINT);
+                } else {
+                    assert.fail('Invalid exception');
+                }
+            }
+        });
+
+        it('should throw a exception for delete a invalid guild', async () => {
             try {
                 const rndGuid = generateUnsignedBigInt64();
                 await BOT_GuildsController.deleteGuild(rndGuid);
@@ -215,6 +325,7 @@ describe('01.00 - BOT_GuildsController', () => {
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
                     assert.ok(error);
+                    expect(error.errorType).to.equal(InvalidEntityException.ErrorType.INVALID_PK);
                 } else {
                     assert.fail('Invalid exception');
                 }

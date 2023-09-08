@@ -10,7 +10,7 @@ module.exports = (sequelize, context) => {
          * @param {BIGINT} guildId
          * @returns
          */
-        static initOptionForGuildId = async (guildId) => {
+        static async initOptionForGuildId(guildId) {
             return await context.models.BOT_GuildOptions.create({
                 guildId: guildId,
                 maxPlayerPerLobby: 12,
@@ -21,14 +21,14 @@ module.exports = (sequelize, context) => {
 
         /**
          * Update GuildOption
-         * @param {*} guildId
-         * @param {*} announcementChannelId
-         * @param {*} maxPlayerPerLobby
-         * @param {*} addEveryone
-         * @param {*} CRONConfiguration
+         * @param {Bigint} guildId
+         * @param {Bigint} announcementChannelId
+         * @param {integer} maxPlayerPerLobby
+         * @param {boolean} addEveryone
+         * @param {string} CRONConfiguration
          * @returns
          */
-        static updateGuildOption = async (guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null, CRONConfiguration = null) => {
+        static async updateGuildOption(guildId, announcementChannelId = null, maxPlayerPerLobby = null, addEveryone = null, CRONConfiguration = null) {
             const aGuildOption = await this.getGuildOptionByGuildId(guildId);
             if (!aGuildOption) {
                 throw new InvalidEntityException(guildId, 'BOT_GuildOptions', 'Guild options doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
@@ -75,7 +75,7 @@ module.exports = (sequelize, context) => {
          * @param {Boolean} withInclude
          * @returns
          */
-        static getGuildOptionByGuildId = async (guildId, withInclude = true) => {
+        static async getGuildOptionByGuildId(guildId, withInclude = true) {
             if (withInclude) {
                 return await context.models.BOT_GuildOptions.findOne({ where: { guildId: guildId }, include: [context.models.BOT_Guilds] });
             } else {

@@ -1,25 +1,21 @@
-// const { sequelize } = require('./dbSchema');
-// const { Bot_Guilds } = sequelize.models;
-
-const GuildController = require('./controllers/Discord/Bot_GuildsController');
-// const GuildOptionController = require('./controllers/Discord/BOT_GuildOptionsController');
-const RolesController = require('./controllers/Discord/Bot_RolesController');
+const { sequelize, models, migrations, controller } = require('./BedyContext');
+const { BOT_GuildsController, BOT_GuildOptionsController, BOT_RolesController } = controller;
 
 async function canTreatArrayAsAnd() {
-    const listGuild = await GuildController.getAllActiveGuilds();
+    const listGuild = await BOT_GuildsController.getAllActiveGuilds();
     console.log('-------------------');
     console.log('Guild');
     console.log(listGuild.map((row) => row.toJSON()));
     console.log('-------------------');
 
     const guildId = listGuild[0].guildId;
-    const optionInfo = await GuildController.getGuildOptionByGuildId(guildId, false);
+    const optionInfo = await BOT_GuildsController.getGuildOptionByGuildId(guildId, false);
     console.log('-------------------');
     console.log('Guild Option');
     console.log(optionInfo.toJSON());
     console.log('-------------------');
 
-    const roles = await RolesController.getAllRolesByGuildId(guildId);
+    const roles = await BOT_RolesController.getAllRolesByGuildId(guildId);
     console.log('-------------------');
     console.log('Guild Roles');
     console.log(roles.map((row) => row.toJSON()));

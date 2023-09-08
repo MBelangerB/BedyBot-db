@@ -1,12 +1,12 @@
   /* eslint-disable-next-line no-unused-vars */
 const { sequelize, models, migrations, controller } = require('./BedyContext');
 const { BOT_Guilds } = models;
-const { BOT_GuildsController, BOT_GuildOptionsController, Bot_RolesController } = controller;
+const { BOT_GuildsController, BOT_GuildOptionsController, BOT_RolesController } = controller;
 
 
 async function getGuild() {
     const data = await BOT_Guilds.findAll({ where: { isActive: true } });
-    console.log(data);
+    console.log('getGuild  :', data);
     return data;
 }
 
@@ -31,7 +31,7 @@ async function canTreatArrayAsAnd() {
     console.log(optionInfo.toJSON());
     console.log('-------------------');
 
-    const roles = await Bot_RolesController.getAllRolesByGuildId(guildId);
+    const roles = await BOT_RolesController.getAllRolesByGuildId(guildId);
     console.log('-------------------');
     console.log('Guild Roles');
     console.log(roles.map((row) => row.toJSON()));

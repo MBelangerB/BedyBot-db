@@ -42,19 +42,18 @@ const dbContext = {
 
 function InitalizeContext() {
   // if (await schema.testConnection(sequelize)) {
+  try {
     schema.readModelScript(sequelize, dbContext, './models', '.js');
     schema.readSequelizeFileContent(sequelize, dbContext, SequelizeSchema.ReadingType.MIGRATION, './migrations', '.js', 0, '');
     schema.initializeAssociationModel(dbContext);
+    schema.readSequelizeFileContent(sequelize, dbContext, SequelizeSchema.ReadingType.CONTROLLER, './controllers', '.js', 0, '');
+  } catch (ex) {
+    console.error(ex);
+  }
 
-    try {
-      schema.readSequelizeFileContent(sequelize, dbContext, SequelizeSchema.ReadingType.CONTROLLER, './controllers', '.js', 0, '');
-    } catch (ex) {
-      console.error(ex);
-    }
-
-    // if (env == "test") {
-    //   schema.readMigrationsScript();
-    // }
+  // if (env == "test") {
+  //   schema.readMigrationsScript();
+  // }
 }
 
 InitalizeContext();

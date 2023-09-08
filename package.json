@@ -25,6 +25,9 @@
     "test:restoreDB": "set NODE_ENV=test&& npm run test:downDB && npm run test:updateDb && npm run test:noRestore",
     "test:noRestore": "set NODE_ENV=test&& nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  }, 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MBelangerB/BedyBot-db.git"
@@ -37,8 +40,8 @@
   "homepage": "https://github.com/MBelangerB/BedyBot-db#readme",
   "devDependencies": {
     "chai": "^4.3.7",
-    "dotenv": "^16.0.2",
-    "eslint": "^8.13.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.48.0",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "sequelize-cli": "^6.6.1"
@@ -46,7 +49,7 @@
   "dependencies": {
     "cron-validate": "^1.4.5",
     "mysql2": "^3.6.0",
-    "sequelize": "^6.32.1",
+    "sequelize": "^6.33.0",
     "uuid": "^9.0.0"
   }
 }
