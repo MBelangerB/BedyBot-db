@@ -3,8 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const InvalidEntityException = require('../../../../src/declarations/InvalidEntityException');
 
-/* eslint-disable-next-line no-unused-vars */
-const { sequelize, models, migrations, controller, schema } = require('../../../../src/BedyContext');
+const { models, controller } = require('../../../../src/BedyContext');
 const { before, after, describe, it } = require('mocha');
 
 const { MOD_NotificationsController } = controller;
@@ -21,6 +20,7 @@ describe('03.01 - MOD_Notifications', () => {
     before(async () => {
         console.log('============== Setup (Before on MOD_Notifications) ==============');
         await PrepareData.GuildInitialization();
+        await PrepareData.GuildChannelInitialization();
     });
 
     after(async () => {
@@ -64,22 +64,11 @@ describe('03.01 - MOD_Notifications', () => {
         it('should create a new notification with channel', async () => {
             const createdNotif = await MOD_NotificationsController.createNotification(PrepareData.guildId, '',
                 BedyAPIConst.NotificationType.TWITCH, 'Streamer', true, PrepareData.channelId);
-
-            expect(createdNotif).to.be.an('object');
-            expect(createdNotif.notificationId).not.be.null;
-            expect(createdNotif.channelId).not.be.null;
-            expect(createdNotif.notificationTarget).to.equal('Streamer');
-            expect(createdNotif.guildId).to.equal(PrepareData.guildId);
-        });
-
-        it('should create a new notification without channel', async () => {
-            const createdNotif = await MOD_NotificationsController.createNotification(PrepareData.guildId, '',
-                BedyAPIConst.NotificationType.TWITCH, 'Streamer', true, null);
             newNotificationId = createdNotif.notificationId;
 
             expect(createdNotif).to.be.an('object');
             expect(createdNotif.notificationId).not.be.null;
-            expect(createdNotif.channelId).be.null;
+            expect(createdNotif.channelId).not.be.null;
             expect(createdNotif.notificationTarget).to.equal('Streamer');
             expect(createdNotif.guildId).to.equal(PrepareData.guildId);
         });
@@ -120,8 +109,8 @@ describe('03.01 - MOD_Notifications', () => {
         });
 
         it('should return a unchanged notification, as no value has been modified. (unmodified)', async () => {
-            const updatedNotification = await MOD_NotificationsController.updateNotification(newNotificationId, 'My content',
-                BedyAPIConst.NotificationType.YOUTUBE, 'Youtube Streamer', false, PrepareData.channelId);
+            const updatedNotification = await MOD_NotificationsController.updateNotification(newNotificationId, null,
+                null, null, false, PrepareData.channelId);
 
             expect(updatedNotification).to.be.an('object');
             expect(updatedNotification.notificationId).not.be.null;

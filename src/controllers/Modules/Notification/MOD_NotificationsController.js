@@ -41,7 +41,7 @@ module.exports = (sequelize, context) => {
          * @param {*} channelId
          * @returns
          */
-        static createNotification = async (guildId, notificationMessage, notificationType, notificationTarget, enabled, channelId = null) => {
+        static createNotification = async (guildId, notificationMessage, notificationType, notificationTarget, enabled, channelId) => {
             return await context.models.MOD_Notifications.create({
                 guildId: guildId,
                 channelId: channelId,
@@ -62,7 +62,7 @@ module.exports = (sequelize, context) => {
          * @param {*} channelId
          * @returns
          */
-        static updateNotification = async (notificationId, notificationMessage, notificationType, notificationTarget, enabled, channelId = null) => {
+        static updateNotification = async (notificationId, notificationMessage, notificationType, notificationTarget, enabled, channelId) => {
             const aNotification = await this.getNotificationById(notificationId);
             if (!aNotification) {
                 throw new InvalidEntityException(notificationId, 'MOD_Notifications', 'Notification doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);

@@ -2,7 +2,7 @@ const { before, after, describe, it } = require('mocha');
 const { assert, expect } = require('chai'); // Utilisez l'assertion de votre choix (par exemple, Chai)
 
 const InvalidEntityException = require('../../../src/declarations/InvalidEntityException');
-const { beforeCheckState, afterCheckState, resetState } = require('../../mocha-setup');
+const { PrepareData, ResetData } = require('../../mocha-setup');
 const { generateUnsignedBigInt64 } = require('../../../src/services/TestService');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -20,13 +20,15 @@ describe('01.02 - BOT_UsersController', () => {
     // Hook
     before(async () => {
         console.log('============== Setup (Before on BOT_UsersController) ==============');
-        await beforeCheckState();
+        await ResetData.CleanAllGuilds();
+        await PrepareData.GuildInitialization();
+        await PrepareData.UserInitialization();
     });
 
     after(async () => {
         console.log('============== Setup (After on BOT_UsersController) ==============');
-        resetState();
-        await afterCheckState();
+        await ResetData.CleanAllUsers();
+        await ResetData.CleanAllGuilds();
     });
 
     /* eslint-disable-next-line no-undef */
@@ -45,8 +47,13 @@ describe('01.02 - BOT_UsersController', () => {
             expect(allUsers).to.be.empty;
         });
 
-        it('should get null data', async () => {
+        it('should get user without model, return null data', async () => {
             const aUser = await BOT_UsersController.getUserByUserId(generateUnsignedBigInt64());
+            expect(aUser).to.be.null;
+        });
+
+        it('should get user with models, return null data', async () => {
+            const aUser = await BOT_UsersController.getUserByUserId(generateUnsignedBigInt64(), [models.BOT_UserDetails]);
             expect(aUser).to.be.null;
         });
 
