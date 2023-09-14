@@ -6,10 +6,10 @@ module.exports = (sequelize, context) => {
         /**
          * Get BOT_Users by userId
          * @param {BigInt} userId
-         * @param {*} withInclude
+         * @param {boolean} withInclude
          * @returns
          */
-        static getUserByUserId = async (userId, includeModels = []) => {
+        static async getUserByUserId(userId, includeModels = []) {
             if (includeModels && includeModels.length > 0) {
                 return await context.models.BOT_Users.findOne({ where: { userId: userId }, include: includeModels });
             } else {
@@ -18,11 +18,30 @@ module.exports = (sequelize, context) => {
         };
 
         /**
-         * Get all BOT_Users
-         * @param {*} withInclude
+         * Get a user including GuildUser
+         * @param {BigInt} guildId
+         * @param {BigInt} userId
          * @returns
          */
-        static getAllUsers = async (includeModels = []) => {
+        static async getUserByGuildIdUserId(guildId, userId) {
+            return await context.models.BOT_Users.findOne({
+                where: { userId: userId },
+                include: {
+                    model: context.models.BOT_GuildUser,
+                    where: {
+                        guildId: guildId,
+                    },
+                    required: false,
+                },
+            });
+        };
+
+        /**
+         * Get all BOT_Users
+         * @param {boolean} withInclude
+         * @returns
+         */
+        static async getAllUsers(includeModels = []) {
             if (includeModels && includeModels.length > 0) {
                 return await context.models.BOT_Users.findAll({ include: includeModels });
             } else {
@@ -32,17 +51,17 @@ module.exports = (sequelize, context) => {
 
         /**
          * Create a new discord user
-         * @param {BIGINT} userId  (mandatory)
+         * @param {BigInt} userId  (mandatory)
          * @param {String} username  (mandatory)
-         * @param {*} globalUsername
-         * @param {*} discriminator
-         * @param {*} email
-         * @param {*} avatar
-         * @param {*} banner
-         * @param {*} accentColor
+         * @param {string} globalUsername
+         * @param {string} discriminator
+         * @param {string} email
+         * @param {string} avatar
+         * @param {string} banner
+         * @param {string} accentColor
          * @returns
          */
-        static createNewUser = async (userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
+        static async createNewUser(userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) {
             return await context.models.BOT_Users.create({
                 userId: userId,
                 username: username,
@@ -57,20 +76,20 @@ module.exports = (sequelize, context) => {
 
         /**
          * Update DB Role
-         * @param {BIGINT} userId  (mandatory)
-         * @param {String} username  (mandatory)
-         * @param {*} globalUsername
-         * @param {*} discriminator
-         * @param {*} email
-         * @param {*} avatar
-         * @param {*} banner
-         * @param {*} accentColor
+         * @param {BigInt} userId  (mandatory)
+         * @param {string} username  (mandatory)
+         * @param {string} globalUsername
+         * @param {string} discriminator
+         * @param {string} email
+         * @param {string} avatar
+         * @param {string} banner
+         * @param {string} accentColor
          */
-        static updateUser = async (aUser, userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) => {
+        static async updateUser(aUser, userId, username, globalUsername = null, discriminator = null, email = null, avatar = null, banner = null, accentColor = null) {
             if (aUser == null) {
                 aUser = await this.getUserByUserId(userId);
             }
-          
+
             if (!aUser) {
                 throw new InvalidEntityException(userId, 'BOT_Users', 'Users doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
@@ -135,9 +154,9 @@ module.exports = (sequelize, context) => {
 
         /**
        * Delete a user
-       * @param {*} userId
+       * @param {BigInt} userId
        */
-        static deleteUser = async (userId) => {
+        static async deleteUser(userId) {
             const aUser = await this.getUserByUserId(userId);
             if (!aUser) {
                 throw new InvalidEntityException(userId, 'BOT_Users', 'Users doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);

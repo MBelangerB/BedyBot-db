@@ -11,7 +11,7 @@ module.exports = (sequelize, context) => {
          * @param {*} avatar
          * @returns
          */
-        static initGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
+        static async initializeGuildUser(guildId, userId, nickname = null, avatar = null) {
             return await context.models.BOT_GuildUser.create({
                 guildId: guildId,
                 userId: userId,
@@ -22,30 +22,22 @@ module.exports = (sequelize, context) => {
 
         /**
          * Get a GuildUser (by UserId,GuildId)
-         * @param {*} guildId 
-         * @param {*} userId 
-         * @param {*} includeGuild 
-         * @param {*} includeUsers 
-         * @returns 
+         * @param {*} guildId
+         * @param {*} userId
+         * @param {*} includeGuild
+         * @param {*} includeUsers
+         * @returns
          */
-        static getGuildUserByUserId = async (guildId, userId, includeGuild = false, includeUsers = false) => {
+        static async getGuildUserByUserId(guildId, userId, includeGuild = false, includeUsers = false) {
             const includeList = [];
             if (includeGuild) {
                 includeList.push(context.models.BOT_Guilds);
             }
             if (includeUsers) {
                 includeList.push(context.models.BOT_Users);
-                // include.push({
-                //     model: BOT_GuildUser.getModels().BOT_Users,
-                //     include: [
-                //         {
-                //           model: BOT_UserDetails
-                //         }
-                //       ]
-                // });
             }
 
-            return await context.models.BOT_GuildUser.findAll({ where: { guildId: guildId, userId: userId }, include: includeList });
+            return await context.models.BOT_GuildUser.findOne({ where: { guildId: guildId, userId: userId }, include: includeList });
         };
 
         /**
@@ -56,13 +48,12 @@ module.exports = (sequelize, context) => {
          * @param {*} avatar
          * @returns
          */
-        static updateGuildUser = async (guildId, userId, nickname = null, avatar = null) => {
+        static async updateGuildUser(guildId, userId, nickname = null, avatar = null) {
             const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
             if (!aGuildUser) {
                 throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
-                console.log(aGuildUser)
                 if (nickname != null && aGuildUser.nickname != nickname) {
                     aGuildUser.set({
                         nickname: nickname,
@@ -90,7 +81,7 @@ module.exports = (sequelize, context) => {
          * @param {*} hasLeft If true, a UserId has left the server
          * @returns {BOT_GuildUser}
          */
-        static updateGuildUserStatut = async (guildId, userId, hasLeft) => {
+        static async updateGuildUserStatut(guildId, userId, hasLeft) {
             const aGuildUser = await this.getGuildUserByUserId(guildId, userId);
             if (!aGuildUser) {
                 throw new InvalidEntityException([guildId, userId], 'BOT_GuildUsers', 'Guild user doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
@@ -107,11 +98,10 @@ module.exports = (sequelize, context) => {
                 } else if (hasLeft == true) {
                     // Guild is left
                     aGuildUser.set({
-                        aGuildUser: Date.now(),
+                        leftAt: Date.now(),
                     });
                     return await aGuildUser.save();
                 }
-                console.verbose(`GuildUser state change, hasLeft : ${hasLeft} for **(${guildId}, ${userId})**.`);
             }
         };
 

@@ -6,8 +6,8 @@ process.env.DB_NAME = 'bedybot_mochaTest';
 const { BedyAPIConst } = require('../src/BedyAPIConst');
 const { generateUnsignedBigInt64 } = require('../src/services/TestService');
 const { models, controller } = require('../src/BedyContext');
-const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController } = controller;
-const { MOD_Notifications, BOT_Guilds, BOT_GuildOptions, BOT_Users, BOT_Channels } = models;
+const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController, BOT_UsersDetailsController, BOT_GuildUsersController } = controller;
+const { MOD_Notifications, BOT_Guilds, BOT_GuildOptions, BOT_Users, BOT_Channels, BOT_UserDetails, BOT_GuildUser } = models;
 
 class PrepareData {
     static guildId = null;
@@ -17,6 +17,7 @@ class PrepareData {
     static userID = null;
     static username = 'TestUser';
     static globalUsername = 'Usager Test';
+    static guildUsername = 'GuildTest UserTest';
 
     static tmpGuildId = null;
     static tmpGuildName = 'Tmp Test Guild';
@@ -71,10 +72,18 @@ class PrepareData {
     /**
      * Create user for test
      */
-    static async UserInitialization() {
+    static async UserInitialization(userDetail = false, guildUser = false) {
         this.initialize();
         await BOT_UsersController.createNewUser(this.userID, this.username, this.globalUsername, null, null, null, null, null);
+
+        if (userDetail) {
+            await BOT_UsersDetailsController.initializeUserDetails(this.userID);
+        }
+        if (guildUser) {
+            await BOT_GuildUsersController.initGuildUser(this.guildId, this.userID, guildUsername, null);      
+        }    
     };
+
 }
 
 class ResetData {
@@ -109,16 +118,25 @@ class ResetData {
     };
 
     static async CleanAllUsers() {
-        await BOT_Users.findAll()
-            .then((users) => {
-                if (users.length === 0) {
-                    console.log('No users records to delete');
-                    return;
-                }
-                return BOT_Users.destroy({ truncate: true });
-            })
-            .then(() => console.log('All records users deleted'))
-            .catch((err) => console.error(err));
+        await BOT_Users.destroy({
+            where: {},
+            include: [ BOT_UserDetails, BOT_GuildUser],
+        }).then(() => {
+                console.log('All users records deleted');
+            }).catch((err) => {
+                console.error(err);
+            });
+            
+        // await BOT_Users.findAll()
+        //     .then((users) => {
+        //         if (users.length === 0) {
+        //             console.log('No users records to delete');
+        //             return;
+        //         }
+        //         return BOT_Users.destroy({ truncate: true });
+        //     })
+        //     .then(() => console.log('All records users deleted'))
+        //     .catch((err) => console.error(err));
 
     };
 

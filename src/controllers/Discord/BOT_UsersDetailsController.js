@@ -3,12 +3,12 @@ const InvalidEntityException = require('../../declarations/InvalidEntityExceptio
 module.exports = (sequelize, context) => {
     class BOT_UsersDetailsController {
 
-        /**
+    /**
       * Initialize a BOT_UserDetails
-      * @param {BIGINT} userId
+      * @param {BigInt} userId
       * @returns
       */
-        static initializeUserDetails = async (userId) => {
+        static async initializeUserDetails(userId) {
             return await context.models.BOT_UserDetails.create({
                 userId: userId,
                 switchFriendCode: null,
@@ -17,7 +17,13 @@ module.exports = (sequelize, context) => {
             });
         };
 
-        static getUserDetailsByUserId = async (userId, withInclude = true) => {
+        /**
+         * Get user details for a specific user
+         * @param {BigInt} userId 
+         * @param {boolean} withInclude 
+         * @returns 
+         */
+        static async getUserDetailsByUserId(userId, withInclude) {
             if (withInclude) {
                 return await context.models.BOT_UserDetails.findOne({ where: { userId: userId }, include: context.models.BOT_Users });
             } else {
@@ -25,11 +31,17 @@ module.exports = (sequelize, context) => {
             }
         };
 
-        static updateUserDetails = async (userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) => {
-            const aUserDetails = await this.getUserDetailsByUserId(userId);
+        /**
+         * Update the userDetails
+         * @param {BigInt} userId 
+         * @param {string} switchFriendCode 
+         * @param {string} switchUsername 
+         * @param {string} twitchUsername 
+         */
+        static async updateUserDetails(userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) {
+            const aUserDetails = await this.getUserDetailsByUserId(userId, false);
             if (!aUserDetails) {
                 throw new InvalidEntityException(userId, 'BOT_UserDetails', 'User doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
-                // throw new Error(`User details for userId ${userId} doesn't exist.`);
 
             } else {
                 if (switchFriendCode != null && switchFriendCode !== aUserDetails.switchFriendCode) {
@@ -48,10 +60,11 @@ module.exports = (sequelize, context) => {
                     });
                 }
 
-
                 if (aUserDetails.changed() && aUserDetails.changed.length > 0) {
                     await aUserDetails.save();
                 }
+
+                return aUserDetails;
             }
         };
 
