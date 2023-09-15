@@ -18,7 +18,9 @@ describe('01.02 - BOT_UsersDetailsController', () => {
     // Hook
     before(async () => {
         console.log('============== Setup (Before on BOT_UsersDetailsController) ==============');
+        await ResetData.CleanAllUsers();
         await ResetData.CleanAllGuilds();
+        
         await PrepareData.GuildInitialization();
         await PrepareData.UserInitialization();
     });
@@ -67,10 +69,10 @@ describe('01.02 - BOT_UsersDetailsController', () => {
             expect(userDetail.switchFriendCode).to.equal(SwitchFriendCode);
             expect(userDetail.switchUsername).to.equal(SwitchUsername);
             expect(userDetail.twitchUsername).to.equal(TwitchUsername);
-            expect(userDetail.BOT_User).not.to.be.undefined;
+            expect(userDetail.BOT_User).to.be.undefined;
         });
 
-        it('should get a user details for a existing user, without include User', async () => {
+        it('should get a user details for a existing user, with include User', async () => {
             const userDetail = await BOT_UsersDetailsController.getUserDetailsByUserId(PrepareData.userID, true);
 
             expect(userDetail).to.be.an('object');
@@ -78,7 +80,7 @@ describe('01.02 - BOT_UsersDetailsController', () => {
             expect(userDetail.switchFriendCode).to.equal(SwitchFriendCode);
             expect(userDetail.switchUsername).to.equal(SwitchUsername);
             expect(userDetail.twitchUsername).to.equal(TwitchUsername);
-            expect(userDetail.BOT_User).to.be.undefined;
+            expect(userDetail.BOT_User).not.to.be.undefined;
         });
 
     }); // End context « Crud Action »

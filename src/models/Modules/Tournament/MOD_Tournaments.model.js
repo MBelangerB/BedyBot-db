@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             MOD_Tournaments.belongsTo(models.BOT_Users, {
                 foreignKey: 'ownerId', // Set FK name on SOURCE
                 targetKey: 'userId', // Key name on TARGET
-                onDelete: 'set NULL',
+                onDelete: 'CASCADE',
                 onUpdate: 'CASCADE',
             });
 

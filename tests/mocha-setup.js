@@ -109,7 +109,7 @@ class ResetData {
     static async CleanAllGuilds() {
         await BOT_Guilds.destroy({
             where: {},
-            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels, models.BOT_Users],
+            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels, models.BOT_Users, models.BOT_GuildUser],
         }).then(() => {
                 console.log('All guilds records deleted');
             }).catch((err) => {
@@ -120,24 +120,12 @@ class ResetData {
     static async CleanAllUsers() {
         await BOT_Users.destroy({
             where: {},
-            include: [ BOT_UserDetails, BOT_GuildUser],
+            include: [ models.BOT_UserDetails, models.BOT_GuildUser],
         }).then(() => {
                 console.log('All users records deleted');
             }).catch((err) => {
                 console.error(err);
             });
-            
-        // await BOT_Users.findAll()
-        //     .then((users) => {
-        //         if (users.length === 0) {
-        //             console.log('No users records to delete');
-        //             return;
-        //         }
-        //         return BOT_Users.destroy({ truncate: true });
-        //     })
-        //     .then(() => console.log('All records users deleted'))
-        //     .catch((err) => console.error(err));
-
     };
 
     static async CleanAllChannels() {
