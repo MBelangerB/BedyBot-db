@@ -24,6 +24,9 @@ on:
   # Manual action
   workflow_dispatch:
   
+# ref: feature/treeRefactor
+# path: .github/workflows/BedyBot_TestCoverage.yml
+
 env:
      NODE_ENV:  "test"
      DB_NAME:  "bedyapi-dbtest"
