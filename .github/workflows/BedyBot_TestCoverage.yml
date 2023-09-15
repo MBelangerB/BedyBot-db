@@ -12,6 +12,9 @@
 name: BedyBotDB Test Coverage
 
 on:
+  # Manual action
+  workflow_dispatch:
+  
   pull_request:
     branches:
     - feature/treeRefactor
@@ -20,9 +23,6 @@ on:
     types: [created, edited]
     branches:
     - feature/treeRefactor 
-
-  # Manual action
-  workflow_dispatch:
   
 env:
      NODE_ENV:  "test"
@@ -44,36 +44,35 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    services:
-      mariadb:
-        image: mariadb:latest
-        env:
-              MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWD }}
-              MYSQL_DATABASE: "bedyapi-dbtest"
-        ports:
-              - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3.5.2
-    #   with:
-    #       ref: ${{ github.event.pull_request.head.sha }}
-    #       fetch-depth: 1000
-    
-    #  - name: Fetch base
-    #   run: git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1000
-     
+  
+    - name: Create test config file
+      uses: "finnp/create-file-action@master"
+      env:
+        FILE_NAME: "src/config/config.js"
+        FILE_DATA: ${{ secrets.CONFIG_CONTENT }} 
+        
+    - name: Shutdown Ubuntu MySQL (SUDO)
+      run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary,
+
+    # https://github.com/marketplace/actions/start-mariadb
     - name: Start MariaDB
-      # uses: docker://ghcr.io/marketplace-actions/start-mariadb:latest
-      uses: shogo82148/actions-setup-mysql@v1.23.0
+      uses: getong/mariadb-action@v1.1
       with:
-        root-password: ${{ secrets.DB_PASSWD }}
-        # mysql-root-password: ${{ secrets.DB_PASSWD }}
-        # mysql-database: "bedyapi-dbtest"
+        host port: 3306 # Optional, default value is 3306. The port of host
+        container port: 3306 # Optional, default value is 3306. The port of container
+        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+        collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+        # mariadb version: '10.4.10' # Optional, default value is "latest". The version of the MariaDB
+        mysql database: "bedyapi-dbtest" # Optional, default value is "test". The specified database which will be create
+        mysql root password: ${{ secrets.DB_PASSWD }} # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql user: 'developer' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: ${{ secrets.DB_PASSWD }} # Required if "mysql user" exists. The password for the "mysql user"
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -81,11 +80,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    # - name: Install Typescript
-    #   run: npm install typescript@4.8.4 -g
-      
     - name: Install dependencies
       run: npm ci
+
+    - name: Debugging with ssh
+      uses: lhotari/action-upterm@v1
 
 # ---------------------------------------
 # On Pull request
@@ -93,7 +92,7 @@ jobs:
 # ---------------------------------------
     - name: Run Test Coverage
       if: ${{ github.event_name == 'pull_request' }}
-      run: npm run test:ts_json_coverage 
+      run: npm run test:git_json 
 
     # https://github.com/marketplace/actions/report-nyc-coverage
     - name: Report NYC coverage
@@ -110,7 +109,7 @@ jobs:
 # ---------------------------------------
     - name: Run Test Coverage
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      run: npm run test:ts_html_coverage
+      run: npm run test:git_html
       
     - name: Upload coverage artifact
       if: ${{ github.event_name == 'workflow_dispatch' }}
