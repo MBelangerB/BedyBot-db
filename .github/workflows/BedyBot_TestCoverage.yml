@@ -82,7 +82,10 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
-
+      
+    - name: Install nyc
+      run: npm install nyc -g
+      
     - name: Debugging with ssh
       uses: lhotari/action-upterm@v1
 
