@@ -5,16 +5,16 @@ module.exports = (sequelize, context) => {
 
         /**
          * Create a new guild Channel
-         * @param {*} guildId
-         * @param {*} channelId
-         * @param {*} channelName
-         * @param {*} channelType
-         * @param {*} parentId
-         * @param {*} channelTopic
+         * @param {BigInt} guildId
+         * @param {BigInt} channelId
+         * @param {string} channelName
+         * @param {BedyAPIConst.DiscordChannelTypes} channelType
+         * @param {BigInt} parentId
+         * @param {string} channelTopic
          * @param {*} permission
          * @returns
          */
-        static createGuildChannel = async (guildId, channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
+        static async createGuildChannel(guildId, channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) {
             return await context.models.BOT_Channels.create({
                 guildId: guildId,
                 channelId: channelId,
@@ -28,24 +28,25 @@ module.exports = (sequelize, context) => {
 
         /**
          * Get discord Channel by ChannelId
-         * @param {*} channelId
+         * TOOD: Include models
+         * @param {BigInt} channelId
          * @returns
          */
-        static getChannelById = async (channelId) => {
+        static async getChannelById(channelId) {
             return await context.models.BOT_Channels.findOne({ where: { channelId: channelId } });
         };
 
         /**
          * Update discord channel
-         * @param {*} channelId
-         * @param {*} channelName
-         * @param {*} channelType
-         * @param {*} parentId
-         * @param {*} channelTopic
+         * @param {BigInt} channelId
+         * @param {string} channelName
+         * @param {BedyAPIConst.DiscordChannelTypes} channelType
+         * @param {BigInt} parentId
+         * @param {string} channelTopic
          * @param {*} permission
          * @returns
          */
-        static updateChannel = async (channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) => {
+        static async updateChannel(channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null) {
             const aChannel = await this.getChannelById(channelId);
             if (!aChannel) {
                 throw new InvalidEntityException(channelId, 'BOT_Channels', 'Channel doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
@@ -80,17 +81,19 @@ module.exports = (sequelize, context) => {
                 if (aChannel.changed() && aChannel.changed.length > 0) {
                     return await aChannel.save();
                 }
+
+                return aChannel;
             }
         };
 
         /**
          * Delete a discord channel
-         * @param {*} channelId
+         * @param {BigInt} channelId
          */
-        static deleteChannel = async (channelId) => {
+        static async deleteChannel(channelId) {
             const aChannel = await this.getChannelById(channelId);
             if (!aChannel) {
-                throw new Error(`Channel ${channelId} doesn't exist.`);
+                throw new InvalidEntityException(channelId, 'BOT_Channels', 'Channel doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
 
             } else {
                 await aChannel.destroy();

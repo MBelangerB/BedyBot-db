@@ -25,6 +25,9 @@ class PrepareData {
     static channelId = null;
     static channelName = 'My channel';
 
+    static channelCategoryId = null;
+    static channelCategoryName = 'My Category';
+
     static initialize() {
         if (!this.guildId) {
             this.guildId = generateUnsignedBigInt64();
@@ -44,6 +47,10 @@ class PrepareData {
 
         if (!this.channelId) {
             this.channelId = generateUnsignedBigInt64();
+        }
+
+        if (!this.channelCategoryId) {
+            this.channelCategoryId = generateUnsignedBigInt64();
         }
     }
 
@@ -67,6 +74,9 @@ class PrepareData {
     static async GuildChannelInitialization() {
         this.initialize();
         await BOT_ChannelsController.createGuildChannel(this.guildId, this.channelId, this.channelName, BedyAPIConst.DiscordChannelTypes.GUILD_TEXT);
+   
+        await BOT_ChannelsController.createGuildChannel(this.guildId, this.channelCategoryId, this.channelCategoryName, BedyAPIConst.DiscordChannelTypes.GUILD_CATEGORY);
+ 
     };
 
     /**
