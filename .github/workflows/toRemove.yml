@@ -9,7 +9,7 @@
 #       uses: lhotari/action-upterm@v1
 # --------------------------------------
 
-name: BedyBotDB Test Coverage
+name: BedyBotDB Test Coverage_DEV
 
 on:
   # Manual action
