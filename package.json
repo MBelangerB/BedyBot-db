@@ -23,7 +23,9 @@
     "test:downDB": "set NODE_ENV=test&& npm run migrate:undoAll",
     "test:updateDb": "set NODE_ENV=test&& npm run migrate:up && npm run migrate:seed",
     "test:restoreDB": "set NODE_ENV=test&& npm run test:downDB && npm run test:updateDb && npm run test:noRestore",
-    "test:noRestore": "set NODE_ENV=test&& nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000"
+    "test:noRestore": "set NODE_ENV=test&& nyc --nycrc-path=./tests/config/.nycrc_base.json mocha --timeout=10000",
+    "test:git_json": "npm run test:downDB && npm run test:updateDb && nyc --nycrc-path=./tests/config/.nycrc_git_json.json mocha --timeout=10000",
+    "test:git_html":"npm run test:downDB && npm run test:updateDb && nyc --nycrc-path=./tests/config/.nycrc_git_html.json mocha --timeout=10000"
   },
   "engines": {
     "node": ">=18.0.0"
