@@ -86,8 +86,8 @@ jobs:
     - name: Install nyc
       run: npm install nyc -g
       
-    - name: Debugging with ssh
-      uses: lhotari/action-upterm@v1
+   # - name: Debugging with ssh
+   #   uses: lhotari/action-upterm@v1
 
 # ---------------------------------------
 # On Pull request
