@@ -9,7 +9,7 @@ module.exports = (sequelize, context) => {
          * @param {*} withInclude
          * @returns
          */
-        static getAllRolesByGuildId = async (guildId, withInclude = true) => {
+        static async getAllRolesByGuildId(guildId, withInclude) {
             if (withInclude) {
                 return await context.models.BOT_Roles.findAll({ where: { guildId: guildId }, include: [context.models.BOT_Guilds] });
             } else {
@@ -23,7 +23,7 @@ module.exports = (sequelize, context) => {
          * @param {*} withInclude
          * @returns
          */
-        static getRolesById = async (roleId, withInclude = true) => {
+        static async getRolesById(roleId, withInclude) {
             if (withInclude) {
                 return await context.models.BOT_Roles.findOne({ where: { roleId: roleId }, include: [context.models.BOT_Guilds] });
             } else {
@@ -33,16 +33,16 @@ module.exports = (sequelize, context) => {
 
         /**
          * Add a new discord role on DB
-         * @param {string} guildId (mandatory)
-         * @param {string} roleId (mandatory)
+         * @param {BigInt} guildId (mandatory)
+         * @param {BigInt} roleId (mandatory)
          * @param {string} roleName (mandatory)
-         * @param {*} permission (mandatory)
-         * @param {*} color
-         * @param {*} type
-         * @param {*} position
+         * @param {int32} permission (mandatory)
+         * @param {int32} color (can be null)
+         * @param {int32} type (can be null)
+         * @param {int32} position (can be null)
          * @returns
          */
-        static createRoleOnDB = async (guildId, roleId, roleName, permission, color = null, type = null, position = null) => {
+        static async createRoleOnDB(guildId, roleId, roleName, permission, color, type, position) {
             return await context.models.BOT_Roles.create({
                 guildId: guildId,
                 roleId: roleId,
@@ -55,53 +55,78 @@ module.exports = (sequelize, context) => {
         };
 
         /**
-         * Update DB Role
-         * @param {*} roleId (mandatory)
-         * @param {*} roleName
-         * @param {*} color
-         * @param {*} permission
-         * @param {*} type
-         * @param {*} position
+         * Update DB Role. If NULL value, the parameters isn't updated
+         * @param {BigInt} roleId (mandatory)
+         * @param {string} roleName (can be null)
+         * @param {int32} color (can be null)
+         * @param {int32} permission (can be null)
+         * @param {int32} type (can be null)
+         * @param {int32} position (can be null)
          */
-        static updateRole = async (roleId, roleName = null, permission = null, color = null, type = null, position = null) => {
+        static async updateRole(roleId, roleName = null, permission = null, color = null, type = null, position = null) {
             const aRole = await this.getRolesById(roleId, false);
             if (!aRole) {
                 throw new InvalidEntityException(roleId, 'BOT_Roles', 'Roles doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
             }
 
-            if (roleName !== aRole.roleName) {
+            /* istanbul ignore else */
+            if (roleName != null && roleName !== aRole.roleName) {
                 aRole.set({
                     roleName: roleName,
                 });
             }
-            if (permission !== aRole.rolePermission) {
+
+            /* istanbul ignore else */
+            if (permission != null && permission !== aRole.rolePermission) {
                 aRole.set({
                     rolePermission: permission,
                 });
             }
-            if (color !== aRole.roleColor) {
+
+            /* istanbul ignore else */
+            if (color != null && color !== aRole.roleColor) {
                 aRole.set({
                     roleColor: color,
                 });
             }
 
-            if (!position && position !== aRole.rolePosition) {
+            /* istanbul ignore else */
+            if (position != null && position !== aRole.rolePosition) {
                 aRole.set({
                     rolePosition: position,
                 });
             }
-            if (type !== aRole.type) {
+
+            /* istanbul ignore else */
+            if (type != null && type !== aRole.type) {
                 aRole.set({
                     type: type,
                 });
             }
 
+            /* istanbul ignore else */
             if (aRole.changed() && aRole.changed.length > 0) {
                 aRole.set({
                     lastUpdate: Date.now(),
                 });
 
                 await aRole.save();
+            }
+
+            return aRole;
+        };
+
+        /**
+        * Delete a discord role
+        * @param {BigInt} roleId
+        */
+        static async deleteRole(roleId) {
+            const aRole = await this.getRolesById(roleId, false);
+            if (!aRole) {
+                throw new InvalidEntityException(roleId, 'BOT_Roles', 'Roles doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
+            }
+            else {
+                await aRole.destroy();
             }
         };
 

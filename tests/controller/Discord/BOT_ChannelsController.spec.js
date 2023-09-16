@@ -34,7 +34,6 @@ describe('01.01 - BOT_ChannelsController', () => {
 
     context('1.1 - valid CRUD action', () => {
         it('should create a new channel', async () => {
-            // createGuildChannel(guildId, channelId, channelName, channelType, parentId = null, channelTopic = null, permission = null)
             const createdChannel = await BOT_ChannelsController.createGuildChannel(PrepareData.guildId, PrepareData.channelId, PrepareData.channelName, 
                                                             BedyAPIConst.DiscordChannelTypes.GUILD_TEXT, null, 'Topic message', null);
 

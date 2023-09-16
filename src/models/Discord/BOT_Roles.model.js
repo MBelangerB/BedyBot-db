@@ -58,11 +58,14 @@ module.exports = (sequelize, DataTypes) => {
             field: 'roleName',
             allowNull: false,
         },
+        // https://bit-calculator.com/bit-shift-calculator
+        // https://discordapi.com/permissions.html#8
         rolePermission: {
             type: DataTypes.STRING(255),
             field: 'permissionLevel',
             allowNull: false,
         },
+        // INT value
         roleColor: {
             type: DataTypes.INTEGER,
             field: 'color',

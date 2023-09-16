@@ -6,8 +6,8 @@ process.env.DB_NAME = 'bedybot_mochaTest';
 const { BedyAPIConst } = require('../src/BedyAPIConst');
 const { generateUnsignedBigInt64 } = require('../src/services/TestService');
 const { models, controller } = require('../src/BedyContext');
-const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController, BOT_UsersDetailsController, BOT_GuildUsersController } = controller;
-const { MOD_Notifications, BOT_Guilds, BOT_GuildOptions, BOT_Users, BOT_Channels, BOT_UserDetails, BOT_GuildUser } = models;
+const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController, BOT_UsersDetailsController, BOT_GuildUsersController, BOT_RolesController } = controller;
+const { MOD_Notifications, BOT_Guilds, BOT_Users, BOT_Channels } = models;
 
 class PrepareData {
     static guildId = null;
@@ -27,6 +27,12 @@ class PrepareData {
 
     static channelCategoryId = null;
     static channelCategoryName = 'My Category';
+
+    static roleId = null;
+    static roleName = 'Test Role';
+
+    static tmpRoleId = null;
+    static tmpRoleName = 'Tmp RoleName';
 
     static initialize() {
         if (!this.guildId) {
@@ -52,20 +58,24 @@ class PrepareData {
         if (!this.channelCategoryId) {
             this.channelCategoryId = generateUnsignedBigInt64();
         }
+
+        if (!this.roleId) {
+            this.roleId = generateUnsignedBigInt64();
+        }
+
+        if (!this.tmpRoleId) {
+            this.tmpRoleId = generateUnsignedBigInt64();
+        }      
     }
 
     /**
      * Create guild for test
      */
-    static async GuildInitialization(guildIsEnabled, createGuildChannel = false) {;
+    static async GuildInitialization(guildIsEnabled) {;
         this.initialize();
 
         await BOT_GuildsController.createGuild(this.guildId, this.guildName, this.guildOwnerId, null, null, null, null, guildIsEnabled, false);
         await BOT_GuildsController.createGuild(this.tmpGuildId, this.tmpGuildName, this.guildOwnerId, null, null, null, null, guildIsEnabled, true);
-    
-        // if (createGuildChannel) {
-        //     await this.GuildChannelInitialization();
-        // }
     };
 
     /**
@@ -94,6 +104,12 @@ class PrepareData {
         }    
     };
 
+    static async RoleInitialization() {;
+        this.initialize();
+
+        await BOT_RolesController.createRoleOnDB(this.guildId, this.roleId, this.roleName, '1', '94945', null, 8);
+    };
+
 }
 
 class ResetData {
@@ -119,7 +135,8 @@ class ResetData {
     static async CleanAllGuilds() {
         await BOT_Guilds.destroy({
             where: {},
-            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels, models.BOT_Users, models.BOT_GuildUser],
+            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels, 
+                     models.BOT_Users, models.BOT_GuildUser, models.BOT_Roles],
         }).then(() => {
                 console.log('All guilds records deleted');
             }).catch((err) => {
@@ -148,6 +165,18 @@ class ResetData {
             })
             .catch(err => console.error(err));
     };
+
+    static async CleanAllRoles() {
+        await BOT_Roles.destroy({
+            where: {},
+            // include: [ models.BOT_UserDetails, models.BOT_GuildUser],
+        }).then(() => {
+                console.log('All roles records deleted');
+            }).catch((err) => {
+                console.error(err);
+            });
+    };
+
 }
 
 
