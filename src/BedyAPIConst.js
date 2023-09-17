@@ -132,21 +132,23 @@ BedyAPIConst.DiscordChannelTypes = {
  * The different users ROLES
  */
 BedyAPIConst.BedyBotRoleType = {
+    UNKNOWN : 0,
+
     /**
      * Guild owner
      */
-    OWNER: 0,
+    OWNER: 1,
 
     /**
      * Guild admninistrator
      */
-    ADMINNISTRATOR: 1,
+    ADMINNISTRATOR: 2,
 
     /**
      * Guild User
     */
-    USER: 2,
-    
+    USER: 3,
+
     /**
      * Tournament Manager
      */
