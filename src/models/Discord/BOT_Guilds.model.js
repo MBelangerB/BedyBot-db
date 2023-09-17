@@ -92,11 +92,11 @@ module.exports = (sequelize, DataTypes) => {
             field: 'guildOwnerId',
             allowNull: false,
         },
-        guildRegion: {
-            type: DataTypes.STRING(10),
-            field: 'guildRegion',
-            allowNull: true,
-        },
+        // guildRegion: {
+        //     type: DataTypes.STRING(10),
+        //     field: 'guildRegion',
+        //     allowNull: true,
+        // },
         guildPreferredLocale: {
             type: DataTypes.STRING(10),
             field: 'guildPreferredLocale',

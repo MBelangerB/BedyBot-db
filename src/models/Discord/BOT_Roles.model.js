@@ -1,6 +1,7 @@
 'use strict';
 
 const { Model, Sequelize } = require('sequelize');
+const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
     class BOT_Roles extends Model {
@@ -76,6 +77,10 @@ module.exports = (sequelize, DataTypes) => {
             field: 'position',
             allowNull: true,
         },
+        /**
+         * User TYPE
+         * @param {BedyAPIConst.BedyBotRoleType}
+         */
         type: {
             type: DataTypes.INTEGER,
             field: 'type',

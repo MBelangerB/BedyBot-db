@@ -1,4 +1,5 @@
 const InvalidEntityException = require('../../declarations/InvalidEntityException');
+const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, context) => {
     class BOT_RolesController {
@@ -38,7 +39,7 @@ module.exports = (sequelize, context) => {
          * @param {string} roleName (mandatory)
          * @param {int32} permission (mandatory)
          * @param {int32} color (can be null)
-         * @param {int32} type (can be null)
+         * @param {BedyAPIConst.BedyBotRoleType} type (can be null)
          * @param {int32} position (can be null)
          * @returns
          */
@@ -60,7 +61,7 @@ module.exports = (sequelize, context) => {
          * @param {string} roleName (can be null)
          * @param {int32} color (can be null)
          * @param {int32} permission (can be null)
-         * @param {int32} type (can be null)
+         * @param {BedyAPIConst.BedyBotRoleType} type (can be null)
          * @param {int32} position (can be null)
          */
         static async updateRole(roleId, roleName = null, permission = null, color = null, type = null, position = null) {

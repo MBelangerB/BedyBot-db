@@ -93,40 +93,67 @@ BedyAPIConst.DiscordChannelTypes = {
     /**
      * 	a direct message between multiple users
      */
-    GROUP_DM:	3,
+    GROUP_DM: 3,
     /**
      * 	an organizational category that contains up to 50 channels
      */
-    GUILD_CATEGORY:	4,
+    GUILD_CATEGORY: 4,
     /**
      * a channel that users can follow and crosspost into their own server (formerly news channels)
      */
-    GUILD_ANNOUNCEMENT:	5,
+    GUILD_ANNOUNCEMENT: 5,
     /**
      * a temporary sub-channel within a GUILD_ANNOUNCEMENT channel
      */
-    ANNOUNCEMENT_THREAD:	10,
+    ANNOUNCEMENT_THREAD: 10,
     /**
      * a temporary sub-channel within a GUILD_TEXT or GUILD_FORUM channel
      */
-    PUBLIC_THREAD:	11,
+    PUBLIC_THREAD: 11,
     /**
      * a temporary sub-channel within a GUILD_TEXT channel that is only viewable by those invited and those with the MANAGE_THREADS permission
      */
-    PRIVATE_THREAD:	12,
+    PRIVATE_THREAD: 12,
     /**
      * 	a voice channel for hosting events with an audience
      */
-    GUILD_STAGE_VOICE:	13,
+    GUILD_STAGE_VOICE: 13,
     /**
      * 	the channel in a hub containing the listed servers
      */
-    GUILD_DIRECTORY:	14,
+    GUILD_DIRECTORY: 14,
     /**
      * 	Channel that can only contain threads
      */
-    GUILD_FORUM	:15,
+    GUILD_FORUM: 15,
 };
+
+/**
+ * The different users ROLES
+ */
+BedyAPIConst.BedyBotRoleType = {
+    /**
+     * Guild owner
+     */
+    OWNER: 0,
+
+    /**
+     * Guild admninistrator
+     */
+    ADMINNISTRATOR: 1,
+
+    /**
+     * Guild User
+    */
+    USER: 2,
+    
+    /**
+     * Tournament Manager
+     */
+    MANAGER: 10,
+
+};
+
 /**
  * Discord application command type (Global or guild command)
  */

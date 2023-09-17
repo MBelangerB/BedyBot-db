@@ -48,7 +48,6 @@ module.exports = (sequelize, context) => {
          * @param {BigInt} guildId (mandatory)
          * @param {String} guildName (mandatory)
          * @param {BigInt} ownerId (mandatory)
-         * @param {string|null} region
          * @param {string|null} preferredLocal
          * @param {string|null} iconUrl
          * @param {string|null} bannerUrl
@@ -56,14 +55,14 @@ module.exports = (sequelize, context) => {
          * @param {boolean} initOption
          * @returns
          */
-        static async createGuild(guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null, isActive = true, initOption = false) {
+        static async createGuild(guildId, guildName, ownerId, preferredLocal = null, iconUrl = null, bannerUrl = null, isActive = true, initOption = false) {
             const aGuild = await context.models.BOT_Guilds.create({
                 guildId: guildId,
                 guildName: guildName,
                 guildIconUrl: iconUrl,
                 guildBannerUrl: bannerUrl,
                 guildOwnerId: ownerId,
-                guildRegion: region,
+                // guildRegion: region,
                 guildPreferredLocale: preferredLocal,
                 isActive: isActive,
             });
@@ -73,7 +72,7 @@ module.exports = (sequelize, context) => {
                     guildId: guildId,
                     maxPlayerPerLobby: 12,
                     addEveryone: false,
-                    CRONConfiguration: null,
+                    CRONConfiguration: "*/3 * * * *",
                 });
             }
 
@@ -82,16 +81,15 @@ module.exports = (sequelize, context) => {
 
         /**
          * Update a new discord guild on DB
-         * @param {*} guildId
-         * @param {*} guildName
-         * @param {*} ownerId
-         * @param {*} region
-         * @param {*} preferredLocal
-         * @param {*} iconUrl
-         * @param {*} bannerUrl
+         * @param {BigInt} guildId
+         * @param {string} guildName
+         * @param {BigInt} ownerId
+         * @param {string} preferredLocal
+         * @param {string} iconUrl
+         * @param {string} bannerUrl
          * @returns
          */
-        static async updateGuild(guildId, guildName, ownerId, region = null, preferredLocal = null, iconUrl = null, bannerUrl = null) {
+        static async updateGuild(guildId, guildName, ownerId, preferredLocal = null, iconUrl = null, bannerUrl = null) {
             const aGuild = await this.getGuildByGuildId(guildId);
             if (!aGuild) {
                 throw new InvalidEntityException(guildId, 'BOT_Guilds', 'Guild doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
@@ -108,12 +106,6 @@ module.exports = (sequelize, context) => {
                     });
                 }
 
-                if (region != null && aGuild.guildRegion !== region) {
-                    aGuild.set({
-                        guildRegion: region,
-                    });
-                }
-
                 if (preferredLocal != null && aGuild.guildPreferredLocale !== preferredLocal) {
                     aGuild.set({
                         guildPreferredLocale: preferredLocal,
@@ -125,13 +117,13 @@ module.exports = (sequelize, context) => {
                         guildIconUrl: iconUrl,
                     });
                 }
+
                 if (bannerUrl != null && aGuild.guildBannerUrl !== bannerUrl) {
                     aGuild.set({
                         guildBannerUrl: bannerUrl,
                     });
                 }
 
-                // TODO: If no changed, what we do ?
                 if (aGuild.changed() && aGuild.changed.length > 0) {
                     return await aGuild.save();
                 }

@@ -74,8 +74,8 @@ class PrepareData {
     static async GuildInitialization(guildIsEnabled) {;
         this.initialize();
 
-        await BOT_GuildsController.createGuild(this.guildId, this.guildName, this.guildOwnerId, null, null, null, null, guildIsEnabled, false);
-        await BOT_GuildsController.createGuild(this.tmpGuildId, this.tmpGuildName, this.guildOwnerId, null, null, null, null, guildIsEnabled, true);
+        await BOT_GuildsController.createGuild(this.guildId, this.guildName, this.guildOwnerId, null, null, null, guildIsEnabled, false);
+        await BOT_GuildsController.createGuild(this.tmpGuildId, this.tmpGuildName, this.guildOwnerId, null, null, null, guildIsEnabled, true);
     };
 
     /**
@@ -100,7 +100,7 @@ class PrepareData {
             await BOT_UsersDetailsController.initializeUserDetails(this.userID);
         }
         if (guildUser) {
-            await BOT_GuildUsersController.initGuildUser(this.guildId, this.userID, guildUsername, null);      
+            await BOT_GuildUsersController.initializeGuildUser(this.guildId, this.userID, guildUsername, null);      
         }    
     };
 
