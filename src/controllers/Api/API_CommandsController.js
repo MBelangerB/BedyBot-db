@@ -15,7 +15,7 @@ module.exports = (sequelize, context) => {
                 name: name,
                 description: description,
                 commandType: commandType,
-                applicationCommandType: applicationCommandType
+                applicationCommandType: applicationCommandType,
             });
         };
 

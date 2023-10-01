@@ -9,7 +9,7 @@ const { generateUnsignedBigInt64 } = require('../../../src/services/TestService'
 const { controller } = require('../../../src/BedyContext');
 const { BOT_UsersDetailsController } = controller;
 
-describe('01.02 - BOT_UsersDetailsController', () => {
+describe('01.02.01 - BOT_UsersDetailsController', () => {
     // Const
     const SwitchFriendCode = '2023-0914-1652';
     const SwitchUsername = 'Switch TestUser';

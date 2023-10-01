@@ -9,7 +9,7 @@ const { generateUnsignedBigInt64 } = require('../../../src/services/TestService'
 const { models, controller } = require('../../../src/BedyContext');
 const { BOT_UsersController } = controller;
 
-describe('01.01 - BOT_UsersController', () => {
+describe('01.02.00 - BOT_UsersController', () => {
     // Const
     const userId = generateUnsignedBigInt64();
     const username = 'TestUser';

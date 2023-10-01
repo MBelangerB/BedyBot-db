@@ -10,7 +10,7 @@ const { BedyAPIConst } = require('../../../src/BedyAPIConst');
 const { models, controller } = require('../../../src/BedyContext');
 const { BOT_ChannelsController } = controller;
 
-describe('01.01 - BOT_ChannelsController', () => {
+describe('01.01.00 - BOT_ChannelsController', () => {
     // Const
 
 

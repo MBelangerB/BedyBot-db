@@ -11,7 +11,7 @@ const { MOD_NotificationsController } = controller;
 const { PrepareData, ResetData } = require('../../../mocha-setup');
 const { BedyAPIConst } = require('../../../../src/BedyAPIConst');
 
-describe('03.01 - MOD_Notifications', () => {
+describe('03.01.00 - MOD_Notifications', () => {
     // Const
     let newNotificationId = null;
     const notificationId = uuidv4();

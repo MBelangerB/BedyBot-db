@@ -11,7 +11,7 @@ const { controller } = require('../../../src/BedyContext');
 const { BOT_GuildsController, BOT_GuildOptionsController } = controller;
 
 
-describe('01.02 - BOT_GuildOptionsController', () => {
+describe('01.00.01 - BOT_GuildOptionsController', () => {
 
     before(async () => {
         console.log('============== Setup (Before on BOT_GuildOptionsController) ==============');

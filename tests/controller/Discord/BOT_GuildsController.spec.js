@@ -10,7 +10,7 @@ const { models, controller } = require('../../../src/BedyContext');
 const { BOT_GuildsController } = controller;
 
 
-describe('01.00 - BOT_GuildsController', () => {
+describe('01.00.00 - BOT_GuildsController', () => {
 
     // Declare const
     const newGuildName = 'Guild BedyBot';
@@ -118,7 +118,7 @@ describe('01.00 - BOT_GuildsController', () => {
         });
 
         it('should update the optional guild field for a existing guild', async () => {
-            const updatedGuild = await BOT_GuildsController.updateGuild(PrepareData.guildId, null, 'fr', '1', '2');
+            const updatedGuild = await BOT_GuildsController.updateGuild(PrepareData.guildId, null, newOwnerId, 'fr', '1', '2');
 
             expect(updatedGuild).to.be.an('object');
             // expect(updatedGuild.guildRegion).to.equal('na');

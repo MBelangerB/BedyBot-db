@@ -1,3 +1,4 @@
+const InvalidEntityException = require('../../declarations/InvalidEntityException');
 
 module.exports = (sequelize, context) => {
     class API_ModulesController {
@@ -5,11 +6,31 @@ module.exports = (sequelize, context) => {
         /**
          * @NotImplemented
          */
-        static createModule = async () => {
-            throw new Error('createModule isn\'t implemetend.');
+        static async createModule() {
+            throw new Error('createModule isn\'t implemented.');
         };
 
-        static getModuleById = async (moduleId, includeCommands = false, includeGuildModule = false) => {
+        /**
+         * Get All enabled modules
+         * @param {context.models[]} includeModels 
+         * @returns {context.models.API_Modules[]}
+         */
+        static async GetAllModules(includeModels = []) {
+            if (includeModels && includeModels.length > 0) {
+                return await context.models.API_Modules.findAll({ where: { isEnabled: true }, include: includeModels });
+            } else {
+                return await context.models.API_Modules.findAll({ where: { isEnabled: true } });
+            }
+        }
+
+        /**
+         * Get module details by ModuleId
+         * @param {*} moduleId 
+         * @param {*} includeCommands 
+         * @param {*} includeGuildModule 
+          * @returns {context.models.API_Modules}
+         */
+        static async getModuleById(moduleId, includeCommands = false, includeGuildModule = false) {
             const includes = [];
             if (includeCommands) {
                 includes.push(context.models.API_Commands);
@@ -24,15 +45,15 @@ module.exports = (sequelize, context) => {
         /**
          * @NotImplemented
          */
-        static updateModule = async () => {
-            throw new Error('updateModule isn\'t implemetend.');
+        static async updateModule() {
+            throw new Error('updateModule isn\'t implemented.');
         };
 
         /**
          * @NotImplemented
          */
-        static deleteModule = async () => {
-            throw new Error('deleteModule isn\'t implemetend.');
+        static async deleteModule() {
+            throw new Error('deleteModule isn\'t implemented.');
         };
 
     } // End Class
