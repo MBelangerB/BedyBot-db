@@ -22,6 +22,7 @@ if (process.env.DB_DRIVER == 'sqlite') {
     host: config.host,
     port: config.port,
     dialect: config.dialect,
+    // logging: config.logging
   });
 }
 

@@ -68,10 +68,12 @@ class SequelizeSchema {
 
             files.forEach(file => {
                 const subFilePath = path.join(fullPath, file);
-                if (fs.statSync(subFilePath).isDirectory()) {
-                    this.readSequelizeFileContent(sequelize, dbContext, type, subFilePath, fileExt, sliceLength, sliceValue);
 
-                } else if (sliceLength > 0 && type == SequelizeSchema.ReadingType.MODELS) {
+                try {
+                    if (fs.statSync(subFilePath).isDirectory()) {
+                        this.readSequelizeFileContent(sequelize, dbContext, type, subFilePath, fileExt, sliceLength, sliceValue);
+
+                    } else if (sliceLength > 0 && type == SequelizeSchema.ReadingType.MODELS) {
 
                         if (path.extname(subFilePath) === fileExt && subFilePath.slice(sliceLength) === sliceValue) {
                             const model = require(path.join(fullPath, file))(sequelize, Sequelize.DataTypes);
@@ -106,6 +108,11 @@ class SequelizeSchema {
                                 break;
                         }
                     }
+
+                } catch (ex) {
+                    console.error('An error occured in SequelizeSchema.readSequelizeFileContent');
+                    console.error(ex);
+                }
             });
 
         }
