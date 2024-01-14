@@ -1,0 +1,18 @@
+{
+    "check-coverage": false,
+    "all": true,
+    "include": [
+        "src/controllers/**/*.js"
+    ],
+    "exclude": [
+        "_tests_/**/*.*",
+        "src/config/**/*.*",
+        "src/migrations/**/*.*",
+        "src/seeders/**/*.*",
+        "src/oldMigration/**/*.*"
+    ],
+    "reporter": [
+        "html"
+    ],
+    "report-dir": "coverageHtml"
+}

@@ -19,7 +19,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-coverage
+coverage**
 *.lcov
 
 # nyc test coverage
@@ -30,9 +30,6 @@ coverage
 
 # Bower dependency directory (https://bower.io/)
 bower_components
-
-# node-waf configuration
-.lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
@@ -106,4 +103,14 @@ dist
 # Config folder
 config/*.json
 
+# Other
 /test
+/Backup
+/src/OldMigration
+src/config/config.js
+/bin
+/build
+*.bak
+
+# Jetbrain 
+.idea/

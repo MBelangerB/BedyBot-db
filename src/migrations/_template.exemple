@@ -1,0 +1,26 @@
+'use strict';
+
+const Sequelize = require('sequelize');
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  name: 'InitialCreate_TournamentModules',
+  
+  async up(queryInterface, DataTypes) {
+    return queryInterface.sequelize.transaction(async (t) => {
+
+            // ******************************************
+            // MOD_TournamentSessions
+            // ******************************************
+            await queryInterface.createTable('MOD_TournamentSessions', {
+                // Content
+            }, { transaction: t });
+
+    });
+
+  },
+
+  async down(queryInterface, DataTypes) {
+    // await queryInterface.dropTable('BOT_GuildOptions');
+  },
+};

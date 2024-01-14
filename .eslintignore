@@ -1,0 +1,5 @@
+build/
+coverage/
+bin/
+Backup/
+src/OldMigration
