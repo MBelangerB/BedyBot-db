@@ -16,7 +16,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Roles.findAll({ where: { guildId: guildId } });
             }
-        };
+        }
 
         /**
          * Get BOT_Roles by roleId
@@ -30,7 +30,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Roles.findOne({ where: { roleId: roleId } });
             }
-        };
+        }
 
         /**
          * Add a new discord role on DB
@@ -53,7 +53,7 @@ module.exports = (sequelize, context) => {
                 rolePosition: position,
                 type: type,
             });
-        };
+        }
 
         /**
          * Update DB Role. If NULL value, the parameters isn't updated
@@ -115,7 +115,7 @@ module.exports = (sequelize, context) => {
             }
 
             return aRole;
-        };
+        }
 
         /**
         * Delete a discord role
@@ -125,11 +125,10 @@ module.exports = (sequelize, context) => {
             const aRole = await this.getRolesById(roleId, false);
             if (!aRole) {
                 throw new InvalidEntityException(roleId, 'BOT_Roles', 'Roles doesn\'t exist.', InvalidEntityException.ErrorType.INVALID_PK);
-            }
-            else {
+            } else {
                 await aRole.destroy();
             }
-        };
+        }
 
 
     } // End Class

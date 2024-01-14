@@ -15,13 +15,13 @@ module.exports = (sequelize, context) => {
                 switchUsername: null,
                 twitchUsername: null,
             });
-        };
+        }
 
         /**
          * Get user details for a specific user
-         * @param {BigInt} userId 
-         * @param {boolean} withInclude 
-         * @returns 
+         * @param {BigInt} userId
+         * @param {boolean} withInclude
+         * @returns
          */
         static async getUserDetailsByUserId(userId, withInclude) {
             if (withInclude) {
@@ -29,14 +29,14 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_UserDetails.findOne({ where: { userId: userId } });
             }
-        };
+        }
 
         /**
          * Update the userDetails
-         * @param {BigInt} userId 
-         * @param {string} switchFriendCode 
-         * @param {string} switchUsername 
-         * @param {string} twitchUsername 
+         * @param {BigInt} userId
+         * @param {string} switchFriendCode
+         * @param {string} switchUsername
+         * @param {string} twitchUsername
          */
         static async updateUserDetails(userId, switchFriendCode = null, switchUsername = null, twitchUsername = null) {
             const aUserDetails = await this.getUserDetailsByUserId(userId, false);
@@ -66,7 +66,7 @@ module.exports = (sequelize, context) => {
 
                 return aUserDetails;
             }
-        };
+        }
 
     } // End Class
 

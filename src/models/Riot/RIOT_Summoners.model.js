@@ -4,7 +4,7 @@ const { Model, Sequelize } = require('sequelize');
 const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
-  class RIOT_Summoner extends Model {
+  class RIOT_Summoners extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
     /* eslint-disable-next-line no-unused-vars */
     static associate(models) {
       // define association here
-      RIOT_Summoner.belongsTo(models.RIOT_Account, {
+      RIOT_Summoners.belongsTo(models.RIOT_Accounts, {
         foreignKey: 'puuid', // Set FK name on SOURCE
         targetKey: 'puuid', // Key name on TARGET
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
 
-      RIOT_Summoner.hasMany(models.RIOT_LeagueEntry, {
+      RIOT_Summoners.hasMany(models.RIOT_LeagueEntries, {
         foreignKey: 'summonerId', // FK name on TARGET
         sourceKey: 'id', // Key name on SOURCE
         onDelete: 'CASCADE',
@@ -28,12 +28,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  RIOT_Summoner.getModels = function () {
+  RIOT_Summoners.getModels = function () {
     return this.sequelize.models;
   };
 
   // https://support-leagueoflegends.riotgames.com/hc/en-us/articles/360041788533-Riot-ID-FAQ
-  RIOT_Summoner.init({
+  RIOT_Summoners.init({
     // internal key
     summonerId: {
       type: DataTypes.UUID,
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
     accountId: {
       type: DataTypes.STRING(56),
       field: 'accountId',
-      primaryKey: true,
+      // primaryKey: true,
       allowNull: false,
     },
     profileIconId: {
@@ -76,9 +76,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       references: {
-        model: 'RIOT_Account', // This is a reference to another model
+        model: 'RIOT_Accounts', // This is a reference to another model
         key: 'puuid', // This is the column name of the referenced model
-      },    
+      },
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     },
@@ -96,9 +96,9 @@ module.exports = (sequelize, DataTypes) => {
   },
     {
       sequelize,
-      modelName: 'RIOT_Summoner',
-      tableName: 'RIOT_Summoner',
+      modelName: 'RIOT_Summoners',
+      tableName: 'RIOT_Summoners',
     });
 
-  return RIOT_Summoner;
+  return RIOT_Summoners;
 };

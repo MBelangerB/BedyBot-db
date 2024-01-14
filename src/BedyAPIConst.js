@@ -4,6 +4,14 @@ class BedyAPIConst {
     static name = 'BedyApi';
 }
 
+BedyAPIConst.LeagueOfLegendSeasons = {
+    S2024: {
+        Split1: 'a94b892f-0012-4063-bd14-5721fb7dcf71',
+        Split2: 'a02b2399-6d82-4e7e-9d4e-e6df3c0ac520',
+        Split3: '837ccd04-d30d-4d28-8868-e0c11b344f61',
+    },
+};
+
 /**
  *  Default GUID for Module
  */

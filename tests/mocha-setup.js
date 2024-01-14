@@ -6,8 +6,12 @@ process.env.DB_NAME = 'bedybot_mochaTest';
 const { BedyAPIConst } = require('../src/BedyAPIConst');
 const { generateUnsignedBigInt64 } = require('../src/services/TestService');
 const { models, controller } = require('../src/BedyContext');
-const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController, BOT_UsersDetailsController, BOT_GuildUsersController, BOT_RolesController } = controller;
-const { MOD_Notifications, BOT_Guilds, BOT_Users, BOT_Channels } = models;
+const { Op } = require('sequelize');
+
+const { BOT_GuildsController, BOT_UsersController, BOT_ChannelsController, BOT_UsersDetailsController,
+        BOT_GuildUsersController, BOT_RolesController, RIOT_ConfigController } = controller;
+const { MOD_Notifications, BOT_Guilds, BOT_Users, BOT_Channels, BOT_Roles } = models;
+const { RIOT_Config } = models;
 
 class PrepareData {
     static guildId = null;
@@ -33,6 +37,9 @@ class PrepareData {
 
     static tmpRoleId = null;
     static tmpRoleName = 'Tmp RoleName';
+
+    // Riot
+    static tmpConfigId = 2;
 
     static initialize() {
         if (!this.guildId) {
@@ -65,18 +72,18 @@ class PrepareData {
 
         if (!this.tmpRoleId) {
             this.tmpRoleId = generateUnsignedBigInt64();
-        }      
+        }
     }
 
     /**
      * Create guild for test
      */
-    static async GuildInitialization(guildIsEnabled) {;
+    static async GuildInitialization(guildIsEnabled) {
         this.initialize();
 
         await BOT_GuildsController.createGuild(this.guildId, this.guildName, this.guildOwnerId, null, null, null, guildIsEnabled, false);
         await BOT_GuildsController.createGuild(this.tmpGuildId, this.tmpGuildName, this.guildOwnerId, null, null, null, guildIsEnabled, true);
-    };
+    }
 
     /**
      * Create guild channel for test
@@ -84,10 +91,10 @@ class PrepareData {
     static async GuildChannelInitialization() {
         this.initialize();
         await BOT_ChannelsController.createGuildChannel(this.guildId, this.channelId, this.channelName, BedyAPIConst.DiscordChannelTypes.GUILD_TEXT);
-   
+
         await BOT_ChannelsController.createGuildChannel(this.guildId, this.channelCategoryId, this.channelCategoryName, BedyAPIConst.DiscordChannelTypes.GUILD_CATEGORY);
- 
-    };
+
+    }
 
     /**
      * Create user for test
@@ -100,15 +107,19 @@ class PrepareData {
             await BOT_UsersDetailsController.initializeUserDetails(this.userID);
         }
         if (guildUser) {
-            await BOT_GuildUsersController.initializeGuildUser(this.guildId, this.userID, guildUsername, null);      
-        }    
-    };
+            await BOT_GuildUsersController.initializeGuildUser(this.guildId, this.userID, this.guildUsername, null);
+        }
+    }
 
-    static async RoleInitialization() {;
+    static async RoleInitialization() {
         this.initialize();
 
         await BOT_RolesController.createRoleOnDB(this.guildId, this.roleId, this.roleName, '1', '94945', null, 8);
-    };
+    }
+
+    static async ConfigInitialization() {
+        await RIOT_ConfigController.createConfig(this.tmpConfigId, BedyAPIConst.LeagueOfLegendSeasons.S2024.Split2);
+    }
 
 }
 
@@ -130,19 +141,19 @@ class ResetData {
                 console.error(err);
             });
 
-    };
+    }
 
     static async CleanAllGuilds() {
         await BOT_Guilds.destroy({
             where: {},
-            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels, 
+            include: [models.BOT_GuildOptions, models.MOD_Notifications, models.BOT_Channels,
                      models.BOT_Users, models.BOT_GuildUser, models.BOT_Roles],
         }).then(() => {
                 console.log('All guilds records deleted');
             }).catch((err) => {
                 console.error(err);
             });
-    };
+    }
 
     static async CleanAllUsers() {
         await BOT_Users.destroy({
@@ -153,7 +164,7 @@ class ResetData {
             }).catch((err) => {
                 console.error(err);
             });
-    };
+    }
 
     static async CleanAllChannels() {
         await BOT_Channels.destroy({
@@ -164,7 +175,7 @@ class ResetData {
                 console.log('All channels records deleted');
             })
             .catch(err => console.error(err));
-    };
+    }
 
     static async CleanAllRoles() {
         await BOT_Roles.destroy({
@@ -175,10 +186,33 @@ class ResetData {
             }).catch((err) => {
                 console.error(err);
             });
-    };
+    }
+
+    static async CleannAllNewConfig() {
+        await RIOT_Config.destroy({
+            where: {
+                id: { [Op.ne] : 1 },
+            },
+        }).then(() => {
+                console.log('All new config records deleted');
+            }).catch((err) => {
+                console.error(err);
+            });
+
+        // Restore initial value
+        // const aConfig = await context.models.RIOT_Config.findOne({ where: { id: 1 } });
+        // if (aConfig) {
+        //     aConfig.set({
+        //         seasonId: BedyAPIConst.LeagueOfLegendSeasons.S2024.Split1,
+        //     });
+        //     await aConfig.save();
+        // }
+
+    }
 
 }
 
+// console.log(`TZ : ${process.env.TZ}`);
 
 module.exports = {
     PrepareData,

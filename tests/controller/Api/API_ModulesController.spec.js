@@ -16,7 +16,7 @@ describe('04.01.01 - API_ModulesController', () => {
     // Hook
     before(async () => {
         console.log('============== Setup (Before on API_ModulesController) ==============');
-        await ResetData.CleanAllGuilds();       
+        await ResetData.CleanAllGuilds();
         await PrepareData.GuildInitialization();
     });
 

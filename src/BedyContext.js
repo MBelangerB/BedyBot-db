@@ -12,6 +12,10 @@ const schema = new SequelizeSchema();
 const dbConfigFilePath = schema.getConfigFilePath();
 const config = require(dbConfigFilePath)[env];
 
+// Set timezone
+// process.env.TZ = 'Etc/UTC';
+console.log(`TZ : ${process.env.TZ}`);
+
 // Initialize Sequelize constructor
 let sequelize = null;
 if (process.env.DB_DRIVER == 'sqlite') {

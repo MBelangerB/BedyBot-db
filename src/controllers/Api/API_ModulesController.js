@@ -8,11 +8,11 @@ module.exports = (sequelize, context) => {
          */
         static async createModule() {
             throw new Error('createModule isn\'t implemented.');
-        };
+        }
 
         /**
          * Get All enabled modules
-         * @param {context.models[]} includeModels 
+         * @param {context.models[]} includeModels
          * @returns {context.models.API_Modules[]}
          */
         static async GetAllModules(includeModels = []) {
@@ -25,9 +25,9 @@ module.exports = (sequelize, context) => {
 
         /**
          * Get module details by ModuleId
-         * @param {*} moduleId 
-         * @param {*} includeCommands 
-         * @param {*} includeGuildModule 
+         * @param {*} moduleId
+         * @param {*} includeCommands
+         * @param {*} includeGuildModule
           * @returns {context.models.API_Modules}
          */
         static async getModuleById(moduleId, includeCommands = false, includeGuildModule = false) {
@@ -40,21 +40,21 @@ module.exports = (sequelize, context) => {
             }
 
             return await context.models.API_Modules.findOne({ where: { moduleId: moduleId }, include: includes });
-        };
+        }
 
         /**
          * @NotImplemented
          */
         static async updateModule() {
             throw new Error('updateModule isn\'t implemented.');
-        };
+        }
 
         /**
          * @NotImplemented
          */
         static async deleteModule() {
             throw new Error('deleteModule isn\'t implemented.');
-        };
+        }
 
     } // End Class
 

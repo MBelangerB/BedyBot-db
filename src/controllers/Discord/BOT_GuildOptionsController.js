@@ -17,7 +17,7 @@ module.exports = (sequelize, context) => {
                 addEveryone: false,
                 CRONConfiguration: null,
             });
-        };
+        }
 
         /**
          * Update GuildOption
@@ -67,7 +67,7 @@ module.exports = (sequelize, context) => {
 
                 return aGuildOption;
             }
-        };
+        }
 
         /**
          * Get BOT_GuildOptions by id
@@ -81,7 +81,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_GuildOptions.findOne({ where: { guildId: guildId } });
             }
-        };
+        }
 
     } // End class
 

@@ -15,7 +15,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Guilds.findOne({ where: { guildId: guildId } });
             }
-        };
+        }
 
         /**
          * Return all active guilds
@@ -28,7 +28,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Guilds.findAll({ where: { isActive: true } });
             }
-        };
+        }
 
         /**
          * Return all guilds
@@ -41,7 +41,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Guilds.findAll();
             }
-        };
+        }
 
         /**
          * Add a new discord guild on DB
@@ -72,12 +72,12 @@ module.exports = (sequelize, context) => {
                     guildId: guildId,
                     maxPlayerPerLobby: 12,
                     addEveryone: false,
-                    CRONConfiguration: "*/3 * * * *",
+                    CRONConfiguration: '*/3 * * * *',
                 });
             }
 
             return aGuild;
-        };
+        }
 
         /**
          * Update a new discord guild on DB
@@ -130,7 +130,7 @@ module.exports = (sequelize, context) => {
 
                 return aGuild;
             }
-        };
+        }
 
         /**
          * Update the guildName
@@ -157,7 +157,7 @@ module.exports = (sequelize, context) => {
             }
 
             return aGuild;
-        };
+        }
 
         /**
          * Update guild owner
@@ -184,7 +184,7 @@ module.exports = (sequelize, context) => {
             }
 
             return aGuild;
-        };
+        }
 
         /**
          * Update the guild statut and date param.
@@ -225,7 +225,7 @@ module.exports = (sequelize, context) => {
 
             console.log(`Guild status and date for **${aGuild.guildId}** has been updated.`);
             return aGuild;
-        };
+        }
 
         /**
          * Delete a guild
@@ -238,7 +238,7 @@ module.exports = (sequelize, context) => {
             }
 
             await aGuild.destroy();
-        };
+        }
 
     } // End class
 

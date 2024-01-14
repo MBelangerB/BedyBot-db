@@ -17,7 +17,7 @@ services:
       - E:/database/mariadb:/var/lib/mysql
       
     environment:
-      - TZ=America/Montreal
+      - TZ=Etc/UTC # America/Montreal
       - MARIADB_USER=bedybot
       - MARIADB_PASSWORD=adamra
       - MARIADB_ROOT_PASSWORD=root
@@ -37,7 +37,7 @@ services:
     networks:
       - bedyapi-networks
     environment:
-      - TZ=America/Montreal
+      - TZ=Etc/UTC # America/Montreal
       - PMA_ARBITRARY=1
       - PMA_HOST=bedyapi-db
       - PMA_USER=root

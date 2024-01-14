@@ -34,7 +34,7 @@ describe('01.01.00 - BOT_ChannelsController', () => {
 
     context('1.1 - valid CRUD action', () => {
         it('should create a new channel', async () => {
-            const createdChannel = await BOT_ChannelsController.createGuildChannel(PrepareData.guildId, PrepareData.channelId, PrepareData.channelName, 
+            const createdChannel = await BOT_ChannelsController.createGuildChannel(PrepareData.guildId, PrepareData.channelId, PrepareData.channelName,
                                                             BedyAPIConst.DiscordChannelTypes.GUILD_TEXT, null, 'Topic message', null);
 
             expect(createdChannel).to.be.an('object');
@@ -51,7 +51,7 @@ describe('01.01.00 - BOT_ChannelsController', () => {
 
         it('should create and delete a channel', async () => {
             const tmpChannelGuid = generateUnsignedBigInt64();
-            const tmpChannel = await BOT_ChannelsController.createGuildChannel(PrepareData.guildId, tmpChannelGuid, PrepareData.channelName, 
+            const tmpChannel = await BOT_ChannelsController.createGuildChannel(PrepareData.guildId, tmpChannelGuid, PrepareData.channelName,
                                                                 BedyAPIConst.DiscordChannelTypes.GUILD_TEXT, null, 'Channel to Remove', null);
 
             expect(tmpChannel).to.be.an('object');
@@ -62,7 +62,7 @@ describe('01.01.00 - BOT_ChannelsController', () => {
         });
 
         it('should update a channel, without change entity', async () => {
-            const updatedChannel = await BOT_ChannelsController.updateChannel(PrepareData.channelId, PrepareData.channelName, 
+            const updatedChannel = await BOT_ChannelsController.updateChannel(PrepareData.channelId, PrepareData.channelName,
                                                                             BedyAPIConst.DiscordChannelTypes.GUILD_TEXT, null, 'Topic message', null);
 
             expect(updatedChannel).to.be.an('object');
@@ -72,7 +72,7 @@ describe('01.01.00 - BOT_ChannelsController', () => {
         });
 
         it('should update a existing channel', async () => {
-            const updatedChannel = await BOT_ChannelsController.updateChannel(PrepareData.channelId, 'New Channel Name', 
+            const updatedChannel = await BOT_ChannelsController.updateChannel(PrepareData.channelId, 'New Channel Name',
                                                                             BedyAPIConst.DiscordChannelTypes.GUILD_VOICE, PrepareData.channelCategoryId,
                                                                             'New Topic', '1');
 
@@ -87,7 +87,7 @@ describe('01.01.00 - BOT_ChannelsController', () => {
     context('1.2 - error action', () => {
         it('should throw a exception for update a invalid channel', async () => {
             try {
-                await BOT_ChannelsController.updateChannel(generateUnsignedBigInt64(), PrepareData.channelName, 
+                await BOT_ChannelsController.updateChannel(generateUnsignedBigInt64(), PrepareData.channelName,
                                                 BedyAPIConst.DiscordChannelTypes.GUILD_TEXT, null, null, null);
                 assert.fail('Error ! BOT_ChannelsController.updateChannel has\' return a error.');
             } catch (error) {

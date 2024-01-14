@@ -24,7 +24,7 @@ module.exports = (sequelize, context) => {
                 channelTopic: channelTopic,
                 permission: permission,
             });
-        };
+        }
 
         /**
          * Get discord Channel by ChannelId
@@ -34,7 +34,7 @@ module.exports = (sequelize, context) => {
          */
         static async getChannelById(channelId) {
             return await context.models.BOT_Channels.findOne({ where: { channelId: channelId } });
-        };
+        }
 
         /**
          * Update discord channel
@@ -84,7 +84,7 @@ module.exports = (sequelize, context) => {
 
                 return aChannel;
             }
-        };
+        }
 
         /**
          * Delete a discord channel
@@ -98,7 +98,7 @@ module.exports = (sequelize, context) => {
             } else {
                 await aChannel.destroy();
             }
-        };
+        }
 
     } // End class
 

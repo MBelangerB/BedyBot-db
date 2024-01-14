@@ -4,7 +4,7 @@ const { Model, Sequelize } = require('sequelize');
 const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
-  class RIOT_LeagueEntry extends Model {
+  class RIOT_LeagueEntries extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,21 +13,28 @@ module.exports = (sequelize, DataTypes) => {
     /* eslint-disable-next-line no-unused-vars */
     static associate(models) {
       // define association here
-      RIOT_LeagueEntry.belongsTo(models.RIOT_Summoner, {
+      RIOT_LeagueEntries.belongsTo(models.RIOT_Summoners, {
           foreignKey: 'summonerId', // Set FK name on SOURCE
           targetKey: 'id', // Key name on TARGET
           onDelete: 'CASCADE',
           onUpdate: 'CASCADE',
       });
+
+      RIOT_LeagueEntries.belongsTo(models.RIOT_Seasons, {
+        foreignKey: 'seasonId', // Set FK name on SOURCE
+        targetKey: 'seasonId', // Key name on TARGET
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    });
     }
   }
 
-  RIOT_LeagueEntry.getModels = function () {
+  RIOT_LeagueEntries.getModels = function () {
     return this.sequelize.models;
   };
 
   // https://support-leagueoflegends.riotgames.com/hc/en-us/articles/360041788533-Riot-ID-FAQ
-  RIOT_LeagueEntry.init({
+  RIOT_LeagueEntries.init({
     // internal key
     leagueEntryId: {
       type: DataTypes.UUID,
@@ -47,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       references: {
-        model: 'RIOT_Summoner', // This is a reference to another model
+        model: 'RIOT_Summoners', // This is a reference to another model
         key: 'id', // This is the column name of the referenced model
       },
       onDelete: 'CASCADE',
@@ -93,25 +100,25 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       field: 'hotStreak',
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     veteran: {
       type: DataTypes.BOOLEAN,
       field: 'veteran',
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     freshBlood: {
       type: DataTypes.BOOLEAN,
       field: 'freshBlood',
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     inactive: {
       type: DataTypes.BOOLEAN,
       field: 'inactive',
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
 
     // Internal
@@ -120,18 +127,25 @@ module.exports = (sequelize, DataTypes) => {
       field: 'lastUpdated',
       allowNull: false,
     },
-    season: {
-      type: Sequelize.STRING,
-      field: 'season',
+    seasonId: {
+      type: DataTypes.UUID,
+      field: 'seasonId',
       allowNull: true,
+      defaultValue: Sequelize.UUIDV4,
+      references: {
+        model: 'RIOT_Seasons', // This is a reference to another model
+        key: 'seasonId', // This is the column name of the referenced model
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
 
   },
     {
       sequelize,
-      modelName: 'RIOT_LeagueEntry',
-      tableName: 'RIOT_LeagueEntry',
+      modelName: 'RIOT_LeagueEntries',
+      tableName: 'RIOT_LeagueEntries',
     });
 
-  return RIOT_LeagueEntry;
+  return RIOT_LeagueEntries;
 };

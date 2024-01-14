@@ -15,7 +15,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.MOD_Notifications.findAll({ where: { guildId: guildId } });
             }
-        };
+        }
 
         /**
          * Get notification by ID
@@ -29,7 +29,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.MOD_Notifications.findOne({ where: { notificationId: notificationId } });
             }
-        };
+        }
 
         /**
          * Create new notification
@@ -50,7 +50,7 @@ module.exports = (sequelize, context) => {
                 notificationTarget: notificationTarget,
                 enabled: enabled,
             });
-        };
+        }
 
         /**
          * Update a notification
@@ -108,7 +108,7 @@ module.exports = (sequelize, context) => {
 
                 return aNotification;
             }
-        };
+        }
 
         /**
          * Delete all guild notification
@@ -126,7 +126,7 @@ module.exports = (sequelize, context) => {
             });/* .catch((err) => {
                 throw new InvalidEntityException(guildId, 'MOD_Notifications', 'Notification doesn\'t exist for this guild.', InvalidEntityException.ErrorType.INVALID_PK);
             });*/
-        };
+        }
 
         /**
          * Delete all guild notification
@@ -139,7 +139,7 @@ module.exports = (sequelize, context) => {
             }
 
             await aNotification.destroy();
-        };
+        }
 
     } // End Class
 

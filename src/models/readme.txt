@@ -26,4 +26,8 @@ API_    => API Table
     GuildModuleRoles
 
 LOL_    => League of legend table
-    Summoner
+    Accounts
+    Summoners
+    LeagueEntries
+    Seasons
+

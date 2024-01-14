@@ -18,7 +18,7 @@ module.exports = (sequelize, context) => {
                 nickname: nickname,
                 avatar: avatar,
             });
-        };
+        }
 
         /**
          * Get a GuildUser (by UserId,GuildId)
@@ -38,7 +38,7 @@ module.exports = (sequelize, context) => {
             }
 
             return await context.models.BOT_GuildUser.findOne({ where: { guildId: guildId, userId: userId }, include: includeList });
-        };
+        }
 
         /**
          * Update the guildUser info
@@ -72,7 +72,7 @@ module.exports = (sequelize, context) => {
 
                 return aGuildUser;
             }
-        };
+        }
 
         /**
          * Change the guid user presence.
@@ -105,7 +105,7 @@ module.exports = (sequelize, context) => {
                     return await aGuildUser.save();
                 }
             }
-        };
+        }
 
     } // End class
 

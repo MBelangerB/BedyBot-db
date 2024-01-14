@@ -73,7 +73,7 @@ describe('01.03.00 - BOT_RolesController', () => {
             const aEntity = await BOT_RolesController.getRolesById(PrepareData.roleId, true);
             expect(aEntity).to.be.an('object');
             expect(BigInt(aEntity.roleId)).to.equal(PrepareData.roleId);
-            expect(aEntity.BOT_Guild).not.to.be.undefined;        
+            expect(aEntity.BOT_Guild).not.to.be.undefined;
         });
 
         it('should update a role, without change entity', async () => {
@@ -109,7 +109,7 @@ describe('01.03.00 - BOT_RolesController', () => {
     context('1.2 - error action', () => {
         it('should throw a exception for update a invalid role', async () => {
             try {
-                await  await BOT_RolesController.updateRole(generateUnsignedBigInt64(), PrepareData.tmpRoleName, 8, '94945', 1, 2);
+                await await BOT_RolesController.updateRole(generateUnsignedBigInt64(), PrepareData.tmpRoleName, 8, '94945', 1, 2);
                 assert.fail('Error ! BOT_RolesController.updateRole has\' return a error.');
             } catch (error) {
                 if (error instanceof InvalidEntityException) {
@@ -134,5 +134,5 @@ describe('01.03.00 - BOT_RolesController', () => {
         });
 
     }); // End context « error action »
- 
+
 });

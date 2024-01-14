@@ -15,7 +15,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Users.findOne({ where: { userId: userId } });
             }
-        };
+        }
 
         /**
          * Get a user including GuildUser
@@ -34,7 +34,7 @@ module.exports = (sequelize, context) => {
                     required: false,
                 },
             });
-        };
+        }
 
         /**
          * Get all BOT_Users
@@ -47,7 +47,7 @@ module.exports = (sequelize, context) => {
             } else {
                 return await context.models.BOT_Users.findAll();
             }
-        };
+        }
 
         /**
          * Create a new discord user
@@ -72,7 +72,7 @@ module.exports = (sequelize, context) => {
                 banner: banner,
                 accentColor: accentColor,
             });
-        };
+        }
 
         /**
          * Update DB Role
@@ -150,7 +150,7 @@ module.exports = (sequelize, context) => {
 
                 return aUser;
             }
-        };
+        }
 
         /**
        * Delete a user
@@ -163,7 +163,7 @@ module.exports = (sequelize, context) => {
             }
 
             await aUser.destroy();
-        };
+        }
 
     } // End Class
 

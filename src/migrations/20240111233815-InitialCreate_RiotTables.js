@@ -10,9 +10,33 @@ module.exports = {
     return queryInterface.sequelize.transaction(async (t) => {
 
       // ******************************************
-      // RIOT_Account
+      // RIOT_Config
       // ******************************************
-      await queryInterface.createTable('RIOT_Account', {
+      await queryInterface.createTable('RIOT_Config', {
+        id: {
+          type: DataTypes.INTEGER,
+          field: 'id',
+          primaryKey: true,
+          allowNull: false,
+          autoIncrement: true,
+        },
+        currentSeasonId: {
+          type: DataTypes.UUID,
+          field: 'seasonId',
+          allowNull: true,
+        },
+      }, // end queryInterface.createTable
+
+        {
+          transaction: t,
+          comment: 'Riot configuration',
+        });
+
+
+      // ******************************************
+      // RIOT_Accounts
+      // ******************************************
+      await queryInterface.createTable('RIOT_Accounts', {
         accountId: {
           type: DataTypes.UUID,
           field: 'accountId',
@@ -44,9 +68,9 @@ module.exports = {
         });
 
       // ******************************************
-      // RIOT_Summoner
+      // RIOT_Summoners
       // ******************************************
-      await queryInterface.createTable('RIOT_Summoner', {
+      await queryInterface.createTable('RIOT_Summoners', {
         // internal key
         summonerId: {
           type: DataTypes.UUID,
@@ -65,7 +89,7 @@ module.exports = {
         accountId: {
           type: DataTypes.STRING(56),
           field: 'accountId',
-          primaryKey: true,
+          // primaryKey: true,
           allowNull: false,
         },
         profileIconId: {
@@ -89,7 +113,7 @@ module.exports = {
           allowNull: false,
           unique: true,
           references: {
-            model: 'RIOT_Account', // This is a reference to another model
+            model: 'RIOT_Accounts', // This is a reference to another model
             key: 'puuid', // This is the column name of the referenced model
           },
           onDelete: 'CASCADE',
@@ -112,10 +136,50 @@ module.exports = {
         comment: 'Riot summoner information.',
       });
 
+
       // ******************************************
-      // RIOT_LeagueEntry
+      // RIOT_Seasons
       // ******************************************
-      await queryInterface.createTable('RIOT_LeagueEntry', {
+      await queryInterface.createTable('RIOT_Seasons', {
+        // internal key
+        seasonId: {
+          type: DataTypes.UUID,
+          field: 'seasonId',
+          primaryKey: true,
+          allowNull: false,
+          defaultValue: Sequelize.UUIDV4,
+        },
+        seasonName: {
+          type: DataTypes.STRING(10),
+          field: 'seasonName',
+          allowNull: false,
+        },
+        splitNumber: {
+          type: DataTypes.INTEGER,
+          field: 'splitNumber',
+          allowNull: false,
+        },
+        startDateTime: {
+          type: Sequelize.DATE,
+          field: 'startDateTime',
+          allowNull: true,
+        },
+        endDateTime: {
+          type: Sequelize.DATE,
+          field: 'endDateTime',
+          allowNull: true,
+        },
+      }, // end queryInterface.createTable
+
+        {
+          transaction: t,
+          comment: 'Riot seasons details.',
+        });
+
+      // ******************************************
+      // RIOT_LeagueEntries
+      // ******************************************
+      await queryInterface.createTable('RIOT_LeagueEntries', {
         // internal key
         leagueEntryId: {
           type: DataTypes.UUID,
@@ -135,11 +199,11 @@ module.exports = {
           allowNull: false,
           unique: true,
           references: {
-            model: 'RIOT_Summoner', // This is a reference to another model
+            model: 'RIOT_Summoners', // This is a reference to another model
             key: 'id', // This is the column name of the referenced model
           },
-          onDelete: 'CASCADE',
-          onUpdate: 'CASCADE',
+          // onDelete: 'CASCADE',
+          // onUpdate: 'CASCADE',
         },
         summonerName: {
           type: DataTypes.STRING(16),
@@ -181,25 +245,25 @@ module.exports = {
           type: DataTypes.BOOLEAN,
           field: 'hotStreak',
           allowNull: false,
-          defaultValue: false
+          defaultValue: false,
         },
         veteran: {
           type: DataTypes.BOOLEAN,
           field: 'veteran',
           allowNull: false,
-          defaultValue: false
+          defaultValue: false,
         },
         freshBlood: {
           type: DataTypes.BOOLEAN,
           field: 'freshBlood',
           allowNull: false,
-          defaultValue: false
+          defaultValue: false,
         },
         inactive: {
           type: DataTypes.BOOLEAN,
           field: 'inactive',
           allowNull: false,
-          defaultValue: false
+          defaultValue: false,
         },
 
         // Internal
@@ -209,10 +273,17 @@ module.exports = {
           allowNull: false,
           defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
         },
-        season: {
-          type: Sequelize.STRING,
-          field: 'season',
+        seasonId: {
+          type: DataTypes.UUID,
+          field: 'seasonId',
           allowNull: true,
+          defaultValue: Sequelize.UUIDV4,
+          references: {
+            model: 'RIOT_Seasons', // This is a reference to another model
+            key: 'seasonId', // This is the column name of the referenced model
+          },
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE',
         },
       },
         {
@@ -220,14 +291,18 @@ module.exports = {
           comment: 'Summoner league entry.',
         });
 
+
     }); // End transaction
+
 
   },
 
   /* eslint-disable-next-line no-unused-vars */
   async down(queryInterface, DataTypes) {
-    await queryInterface.dropTable('RIOT_LeagueEntry');
-    await queryInterface.dropTable('RIOT_Summoner');
-    await queryInterface.dropTable('RIOT_Account');
+    await queryInterface.dropTable('RIOT_LeagueEntries');
+    await queryInterface.dropTable('RIOT_Seasons');
+    await queryInterface.dropTable('RIOT_Summoners');
+    await queryInterface.dropTable('RIOT_Accounts');
+    await queryInterface.dropTable('RIOT_Config');
   },
 };

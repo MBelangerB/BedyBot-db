@@ -20,7 +20,7 @@ describe('01.02.01 - BOT_UsersDetailsController', () => {
         console.log('============== Setup (Before on BOT_UsersDetailsController) ==============');
         await ResetData.CleanAllUsers();
         await ResetData.CleanAllGuilds();
-        
+
         await PrepareData.GuildInitialization();
         await PrepareData.UserInitialization();
     });

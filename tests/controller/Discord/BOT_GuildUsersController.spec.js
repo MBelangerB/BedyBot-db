@@ -11,7 +11,7 @@ const { BOT_UsersController, BOT_GuildUsersController } = controller;
 
 describe('01.02.02 - BOT_GuildUsersController', () => {
     // Const
-    const userAvatarHash = '6182729096ea3675442027381ff52dfe'; 
+    const userAvatarHash = '6182729096ea3675442027381ff52dfe';
     const guildNickName = 'TestGuild TestUser';
 
     // Hook

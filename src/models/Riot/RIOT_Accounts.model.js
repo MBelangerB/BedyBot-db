@@ -4,7 +4,7 @@ const { Model, Sequelize } = require('sequelize');
 const { BedyAPIConst } = require('../../BedyAPIConst');
 
 module.exports = (sequelize, DataTypes) => {
-    class RIOT_Account extends Model {
+    class RIOT_Accounts extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         /* eslint-disable-next-line no-unused-vars */
         static associate(models) {
             // define association here
-            RIOT_Account.hasOne(models.RIOT_Summoner, {
+            RIOT_Accounts.hasOne(models.RIOT_Summoners, {
                 foreignKey: 'puuid', // Set FK name on TARGET
                 sourceKey: 'puuid', // Source Key In SOURCE
                 onDelete: 'CASCADE',
@@ -22,12 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
 
-    RIOT_Account.getModels = function () {
+    RIOT_Accounts.getModels = function () {
         return this.sequelize.models;
     };
 
     // https://support-leagueoflegends.riotgames.com/hc/en-us/articles/360041788533-Riot-ID-FAQ
-    RIOT_Account.init({
+    RIOT_Accounts.init({
         // internal key
         accountId: {
             type: DataTypes.UUID,
@@ -55,9 +55,9 @@ module.exports = (sequelize, DataTypes) => {
     },
         {
             sequelize,
-            modelName: 'RIOT_Account',
-            tableName: 'RIOT_Account',
+            modelName: 'RIOT_Accounts',
+            tableName: 'RIOT_Accounts',
         });
 
-    return RIOT_Account;
+    return RIOT_Accounts;
 };
