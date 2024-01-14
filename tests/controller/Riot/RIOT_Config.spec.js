@@ -14,8 +14,7 @@ describe('01.02 - RIOT_ConfigController', () => {
 
     // Const
     const configId = 1; // uuidv4();
-    const tmpConfigId = 2;
-    const newConfigId = 3;
+    const newConfigId = 11; // ConfigInitialization 
     const invalidConfigId = 999;
 
     // Hook
@@ -26,7 +25,7 @@ describe('01.02 - RIOT_ConfigController', () => {
 
     after(async () => {
         console.log('============== Setup (After on RIOT_Config) ==============');
-        await ResetData.CleannAllNewConfig();
+        await ResetData.CleanAllNewConfig();
     });
 
     context('1.0 - without data', () => {
@@ -57,11 +56,11 @@ describe('01.02 - RIOT_ConfigController', () => {
         });
 
         it('should update the seasonId for a existing guild', async () => {
-            const aConfig = await RIOT_ConfigController.getConfigById(tmpConfigId);
+            const aConfig = await RIOT_ConfigController.getConfigById(PrepareData.tmpConfigId);
             expect(aConfig).to.be.an('object');
             expect(aConfig.seasonId).to.equal(BedyAPIConst.LeagueOfLegendSeasons.S2024.Split2);
 
-            const updatedConfig = await RIOT_ConfigController.updateConfig(tmpConfigId, BedyAPIConst.LeagueOfLegendSeasons.S2024.Split3);
+            const updatedConfig = await RIOT_ConfigController.updateConfig(PrepareData.tmpConfigId, BedyAPIConst.LeagueOfLegendSeasons.S2024.Split3);
             expect(updatedConfig).to.be.an('object');
             expect(updatedConfig.seasonId).to.equal(BedyAPIConst.LeagueOfLegendSeasons.S2024.Split3);
             expect(updatedConfig.seasonId).not.be.equal(aConfig.seasonId);

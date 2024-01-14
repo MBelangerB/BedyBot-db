@@ -39,7 +39,7 @@ class PrepareData {
     static tmpRoleName = 'Tmp RoleName';
 
     // Riot
-    static tmpConfigId = 2;
+    static tmpConfigId = 10;
 
     static initialize() {
         if (!this.guildId) {
@@ -188,10 +188,10 @@ class ResetData {
             });
     }
 
-    static async CleannAllNewConfig() {
+    static async CleanAllNewConfig() {
         await RIOT_Config.destroy({
             where: {
-                id: { [Op.ne] : 1 },
+                id: { [Op.gt] : 3 },
             },
         }).then(() => {
                 console.log('All new config records deleted');

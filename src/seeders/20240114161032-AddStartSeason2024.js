@@ -14,6 +14,20 @@ module.exports = {
           startDateTime: '2024-01-10 12:00:00',
           endDateTime: null,
         },
+        {
+          seasonId: BedyAPIConst.LeagueOfLegendSeasons.S2024.Split2,
+          seasonName: '2024',
+          splitNumber: 2,
+          startDateTime: null,
+          endDateTime: null,
+        },
+        {
+          seasonId: BedyAPIConst.LeagueOfLegendSeasons.S2024.Split3,
+          seasonName: '2024',
+          splitNumber: 3,
+          startDateTime: null,
+          endDateTime: null,
+        },
       ]);
 
       await queryInterface.bulkInsert('RIOT_Config',
